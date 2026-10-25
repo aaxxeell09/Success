@@ -1,36 +1,42 @@
-# Directives Claude Code — Success
+# Directives Claude Code : Success
 
 ## Destination unique
-- Dépôt : `https://github.com/aaxxeell09/Success.git`.
-- Branche principale : `main`.
+- Dépôt : `https://github.com/aaxxeell09/Success.git`, branche `main`.
 - Ne JAMAIS publier dans `spicyx9`, ni créer un nouveau dépôt.
-- Ce projet utilise **Übersicht**, pas un fond d’écran statique ni un widget natif Apple.
+- Ce projet utilise **Übersicht**, pas un fond d'écran statique ni un widget natif Apple.
 
 ## Objectif produit
-Widget permanent sur le bureau macOS, une personnalité à la fois : vraie photo, nom, récit du point le plus bas, récit du retournement. Flèches précédent/suivant, tailles S/M/L, rotation 20 minutes, pause. `stories.json` sur `main` est la source de vérité ; lecture depuis GitHub toutes les 5 minutes avec repli local en cas d’indisponibilité.
+Widget permanent sur le bureau macOS, une personnalité à la fois : vraie photo, nom, épreuve (« Au plus bas »), retournement. Flèches précédent/suivant, tailles S/M/L, rotation 20 minutes, pause, préférences mémorisées. `stories.json` sur `main` est la source de vérité : lecture depuis GitHub toutes les 5 minutes, cache local et copie embarquée en repli hors connexion.
+
+## Architecture (détails : docs/ARCHITECTURE.md)
+- `widget/mur-des-retournements.widget/mur-des-retournements.jsx` : point d'entrée Übersicht (UI, bloc CONFIG personnalisable).
+- `widget/.../lib/state.js` : réducteur pur, préférences, ordre des photos. `lib/sync.js` : synchronisation GitHub, validation, cache. Modules ES purs testables sous Node (Übersicht ignore les dossiers `lib/` comme widgets et les assemble avec browserify + babel).
+- `widget/.../stories.json` : copie embarquée, strictement identique à `stories.json`.
+- `widget/.../photos/<id>.jpg` : photos authentiques (Wikimedia Commons), attributions dans `CREDITS.md`.
+- `installer.command`, `mettre-a-jour.command`, `desinstaller.command` : scripts Mac (bash 3.2). Guide : `docs/INSTALLATION.md`.
+- `docs/SYNCHRONISATION.md`, `schema/stories.schema.json`.
+- Tests : `tests/` (node:test, Python, shell, rendu Playwright via `tests/harness/`), CI `.github/workflows/tests.yml`.
 
 ## Exigences
 1. Vérifier `git remote -v` avant tout push : origin doit viser `aaxxeell09/Success`.
-2. Préserver l’historique et tous les fichiers existants. Aucune commande destructrice, pas de force push.
-3. Contrôler l’URL des données dans le widget : `https://raw.githubusercontent.com/aaxxeell09/Success/main/stories.json`.
-4. Utiliser des **photographies authentiques** correctement attribuées, jamais de portrait IA de personnes réelles.
-5. Vérifier l’interaction Übersicht : les clics sur le bureau requièrent son raccourci d’interaction et des permissions Accessibilité. Ne pas présenter les boutons comme utilisables sans cela.
-6. Lancement à la session et installation via `installer.command`, sans supposer qu'Übersicht est déjà installé.
-7. Chaque modification logique = un commit Git atomique ; exécuter les tests avant push.
-8. Écrire les corrections réelles, pas seulement une recommandation. Signaler explicitement tout test macOS impossible dans l’environnement.
+2. Préserver l'historique. Aucune commande destructrice, pas de force push.
+3. URL des données : `https://raw.githubusercontent.com/aaxxeell09/Success/main/stories.json` (dans `lib/sync.js`).
+4. **Photographies authentiques** correctement attribuées (auteur, licence, source), jamais de portrait IA.
+5. Les clics sur le bureau requièrent le raccourci d'interaction d'Übersicht et l'autorisation Accessibilité. Ne pas présenter les boutons comme utilisables sans cela.
+6. Installation via `installer.command`, sans supposer qu'Übersicht est installé. Übersicht 1.6.82 exige macOS 12+.
+7. Chaque modification logique = un commit atomique ; `npm test` avant push.
+8. Aucun tiret cadratin ni demi-cadratin dans les textes (le validateur le refuse).
+9. Signaler explicitement tout test macOS impossible dans l'environnement.
 
-## Validation minimale
+## Validation
 ```sh
-python3 tests/validate_stories.py
-bash -n installer.command publier-sur-github.command
-rg 'aaxxeell09/Success' widget/mur-des-retournements.widget/mur-des-retournements.jsx README.md
-rg 'spicyx9' . && exit 1 || true
+npm install && npm test
 ```
+(`node --test 'tests/*.test.*js'`, `python3 tests/validate_stories.py`, `tests/static_checks.sh`, `tests/install.test.sh`). Le test de rendu est sauté si esbuild, React ou Playwright manquent.
 
-## Publication initiale
-Si GitHub est réellement vide : cloner ou initialiser le dossier du projet, écrire les fichiers, committer par étape (données, widget, scripts/docs), puis `git push -u origin main`. Si la branche distante contient déjà des commits : la récupérer et réconcilier avant tout push. Ne jamais faire de push --force.
+## Ajouter une histoire
+Modifier `stories.json` ET la copie du widget (identiques), photo dans `widget/.../photos/<id>.jpg` avec crédit et licence, puis `npm test`. Une histoire ajoutée seulement dans `stories.json` sur GitHub apparaît quand même sur les Mac installés (photo via `image_url` ou le chemin `photo` lu sur GitHub).
 
 ## Suites
 - Tester affichage et clics sur un vrai Mac avec Übersicht.
-- Tester création d’une personne dans `stories.json` depuis GitHub, puis constater sa présence dans le widget après la synchronisation.
-- Corriger toute photo manquante et documenter sa provenance/licence.
+- Tester l'ajout d'une personne depuis GitHub et sa présence après synchronisation (CDN raw : jusqu'à environ 10 minutes).

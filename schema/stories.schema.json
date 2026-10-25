@@ -52,6 +52,12 @@
           "maxLength": 200,
           "examples": ["Politique · Afrique du Sud"]
         },
+        "headline": {
+          "description": "Accroche courte affichée sous le nom.",
+          "type": "string",
+          "maxLength": 120,
+          "examples": ["8 ans de galère"]
+        },
         "lesson": {
           "description": "Une phrase à retenir.",
           "type": "string",

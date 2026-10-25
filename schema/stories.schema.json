@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/aaxxeell09/Success/main/schema/stories.schema.json",
+  "title": "Histoires du mur des retournements",
+  "description": "Contenu de stories.json : un tableau d'histoires. Ce schéma décrit le format éditorial attendu. Le widget est plus tolérant (voir docs/SYNCHRONISATION.md) : il ignore une entrée invalide, retire un champ optionnel invalide et tronque un texte de plus de 2000 caractères. L'unicité des « id » ne peut pas s'exprimer en JSON Schema : elle est vérifiée par le widget (validateStories) et par tests/validate_stories.py.",
+  "type": "array",
+  "minItems": 1,
+  "items": { "$ref": "#/$defs/story" },
+  "$defs": {
+    "nonEmptyText": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "httpsUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://[^\\s/?#]+[^\\s]*$",
+      "maxLength": 2000
+    },
+    "story": {
+      "type": "object",
+      "required": ["id", "name", "lowest", "comeback"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Identifiant unique : minuscules sans accent, chiffres et tirets. Ne jamais le modifier une fois publié (il sert à mémoriser la personne affichée).",
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "maxLength": 100,
+          "examples": ["nelson-mandela"]
+        },
+        "name": {
+          "description": "Prénom Nom.",
+          "$ref": "#/$defs/nonEmptyText",
+          "maxLength": 200,
+          "examples": ["Nelson Mandela"]
+        },
+        "lowest": {
+          "description": "L'épreuve, le point le plus bas.",
+          "$ref": "#/$defs/nonEmptyText",
+          "maxLength": 400
+        },
+        "comeback": {
+          "description": "Le retournement.",
+          "$ref": "#/$defs/nonEmptyText",
+          "maxLength": 400
+        },
+        "category": {
+          "description": "Domaine · Pays.",
+          "type": "string",
+          "maxLength": 200,
+          "examples": ["Politique · Afrique du Sud"]
+        },
+        "lesson": {
+          "description": "Une phrase à retenir.",
+          "type": "string",
+          "maxLength": 400
+        },
+        "wikipedia": {
+          "description": "Titre exact de la page Wikipédia anglaise (repli pour la photo).",
+          "type": "string",
+          "maxLength": 300,
+          "examples": ["Nelson Mandela"]
+        },
+        "photo": {
+          "description": "Chemin relatif au dossier du widget, sans « .. » ni « / » initial.",
+          "type": "string",
+          "pattern": "^(?!/)(?!.*//)(?!(.*/)?\\.\\.?(/|$))[A-Za-z0-9._/-]+$",
+          "maxLength": 300,
+          "examples": ["photos/nelson-mandela.jpg"]
+        },
+        "image_url": {
+          "description": "Adresse https d'une vraie photographie (repli distant).",
+          "$ref": "#/$defs/httpsUrl"
+        },
+        "image_credit": {
+          "description": "Auteur, Licence.",
+          "type": "string",
+          "maxLength": 400
+        },
+        "image_license": {
+          "description": "Licence de la photo, ex. CC BY-SA 4.0 ou Domaine public.",
+          "type": "string",
+          "maxLength": 200
+        },
+        "image_source": {
+          "description": "Page de fichier Wikimedia Commons de la photo.",
+          "$ref": "#/$defs/httpsUrl"
+        },
+        "sources": {
+          "description": "Adresses justifiant les faits.",
+          "type": "array",
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https?://[^\\s/?#]+[^\\s]*$",
+            "maxLength": 2000
+          }
+        }
+      }
+    }
+  }
+}

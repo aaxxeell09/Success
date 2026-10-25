@@ -600,3 +600,24 @@ describe('réseau réel (ignoré si SYNC_LIVE n\'est pas défini)', { skip: !pro
     assert.ok(stories.length > 0);
   });
 });
+
+describe('cohérence avec schema/stories.schema.json', () => {
+  const schema = JSON.parse(readFileSync(join(root, 'schema/stories.schema.json'), 'utf8'));
+  const def = schema.$defs.story;
+
+  test('schéma draft 2020-12, champs requis identiques au module', () => {
+    assert.equal(schema.$schema, 'https://json-schema.org/draft/2020-12/schema');
+    assert.equal(schema.type, 'array');
+    assert.deepEqual(def.required, ['id', 'name', 'lowest', 'comeback']);
+    assert.equal(def.properties.id.pattern, '^[a-z0-9-]+$');
+  });
+
+  test('tout champ conservé par validateStories est décrit dans le schéma', () => {
+    const all = story('x', {
+      category: 'c', lesson: 'l', wikipedia: 'w', photo: 'photos/x.jpg', image_url: 'https://a.org/x.jpg',
+      image_credit: 'c', image_license: 'l', image_source: 'https://a.org/f', sources: ['https://a.org'],
+    });
+    const kept = Object.keys(validateStories([all]).stories[0]).sort();
+    assert.deepEqual(kept, Object.keys(def.properties).sort());
+  });
+});

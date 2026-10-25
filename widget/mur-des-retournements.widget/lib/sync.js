@@ -26,7 +26,7 @@ export const MAX_SOURCES = 20;
 
 const ID_PATTERN = /^[a-z0-9-]+$/;
 const REQUIRED_FIELDS = ['name', 'lowest', 'comeback'];
-const OPTIONAL_TEXT_FIELDS = ['category', 'lesson', 'wikipedia', 'image_credit', 'image_license', 'at25'];
+const OPTIONAL_TEXT_FIELDS = ['category', 'headline', 'lesson', 'wikipedia', 'image_credit', 'image_license', 'at25'];
 // Tableaux d'adresses http(s) : `sources` justifie l'histoire, `at25_sources` le texte « À 25 ans ».
 const URL_LIST_FIELDS = ['sources', 'at25_sources'];
 const HTTPS_URL_FIELDS = ['image_url', 'image_source'];

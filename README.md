@@ -10,10 +10,10 @@ Ouvrez [`preview/index.html`](./preview/index.html) dans un navigateur pour voir
 
 ## Fonctionnalités
 
-- **Neuf personnalités choisies**, une à la fois : grande photo, nom, accroche, « Au plus bas », « Le retournement », « À 25 ans ». Compteur et indicateur de synchronisation discrets sur la photo. Aucun titre, aucun crédit affiché sur la carte (attributions dans [CREDITS.md](./CREDITS.md)).
+- **Neuf personnalités choisies**, une à la fois : grande photo, nom, catégorie, accroche, puis « LOWEST POINT », « TURNAROUND », « AT 25 ». **Interface et textes en anglais.** Compteur et indicateur de synchronisation discrets sur la photo. Aucun titre, aucun crédit affiché sur la carte (attributions dans [CREDITS.md](./CREDITS.md)).
 - **Liste blanche** : seules les personnes présentes dans `stories.json` s'affichent ; les 11 histoires retirées sont archivées dans `archive/stories-retirees.json`.
 - **‹ / ›** : personne précédente ou suivante (navigation circulaire).
-- **Largeur fixe de 420 px**, réduite automatiquement si l'écran est plus étroit.
+- **Taille fixe et compacte de 350 × 490 px**, pensée pour se placer sous les widgets macOS : la hauteur ne change jamais, seul le texte défile (photo et boutons fixes). La largeur est réduite si l'écran est plus étroit.
 - **Pause / reprise** de la rotation automatique, qui change de personne toutes les **20 minutes**.
 - **Synchronisation** avec [`stories.json`](./stories.json) sur la branche `main`, toutes les **5 minutes**.
 - **Mode hors connexion** : la dernière liste téléchargée reste affichée, un indicateur signale l'absence de connexion.
@@ -36,7 +36,7 @@ Par défaut, Übersicht laisse passer les clics vers le bureau : **les boutons d
 
 1. Menu Übersicht, **Preferences**, **Interaction Shortcut** : choisir une touche (par exemple Commande ou Option).
 2. Réglages Système, **Confidentialité et sécurité**, **Accessibilité** : activer **Übersicht**. macOS peut le demander au premier usage du raccourci.
-3. Pour cliquer sur ‹, › ou pause : **maintenir la touche choisie** pendant le clic.
+3. Pour cliquer sur ‹, › ou pause, ou faire défiler le texte : **maintenir la touche choisie** pendant le clic ou le défilement.
 
 Sans ces deux réglages, le widget s'affiche et tourne seul toutes les 20 minutes, mais les boutons restent inactifs.
 
@@ -50,10 +50,10 @@ Sans ces deux réglages, le widget s'affiche et tourne seul toutes les 20 minute
   "id": "marie-curie",
   "name": "Marie Curie",
   "category": "Science · France",
-  "lowest": "Épreuve précise et vérifiable, 400 caractères au plus.",
-  "comeback": "Retournement précis et vérifiable, 400 caractères au plus.",
-  "headline": "Accroche courte, 120 caractères au plus",
-  "at25": "Ce que faisait la personne à 25 ans, factuel et sourcé.",
+  "lowest": "Precise, verifiable hardship, in English, 400 characters max.",
+  "comeback": "Precise, verifiable turnaround, in English, 400 characters max.",
+  "headline": "Short hook, 120 characters max",
+  "at25": "What the person was doing at 25, factual and sourced.",
   "at25_sources": ["https://fr.wikipedia.org/wiki/Marie_Curie"],
   "wikipedia": "Marie Curie",
   "photo": "photos/marie-curie.jpg",
@@ -89,11 +89,11 @@ Comptez **jusqu'à 10 minutes environ** entre le commit et l'affichage : le cach
 
 ### Mode hors connexion
 
-Si GitHub est inaccessible (pas de réseau, panne, fichier cassé), le widget **garde les histoires déjà affichées**, indique « hors connexion » et réessaie seul. Au démarrage sans réseau, il utilise la dernière liste téléchargée (cache local), sinon la copie embarquée `widget/mur-des-retournements.widget/stories.json`.
+Si GitHub est inaccessible (pas de réseau, panne, fichier cassé), le widget **garde les histoires déjà affichées**, indique « offline » et réessaie seul. Au démarrage sans réseau, il utilise la dernière liste téléchargée (cache local), sinon la copie embarquée `widget/mur-des-retournements.widget/stories.json`.
 
 ## Personnalisation
 
-Ouvrir `mur-des-retournements.jsx` dans le dossier des widgets (menu Übersicht, **Open Widgets Folder**) et modifier uniquement le bloc `CONFIG` en haut du fichier : position sur le bureau, opacité et flou du fond, rayon des coins, largeur (420 px), rotation activée ou non au premier lancement, couleurs du thème. Übersicht recharge le widget dès l'enregistrement. Une mise à jour remplace ce fichier : notez vos réglages.
+Ouvrir `mur-des-retournements.jsx` dans le dossier des widgets (menu Übersicht, **Open Widgets Folder**) et modifier uniquement le bloc `CONFIG` en haut du fichier : position sur le bureau, opacité et flou du fond, rayon des coins, taille (350 × 490 px), rotation activée ou non au premier lancement, couleurs du thème. Übersicht recharge le widget dès l'enregistrement. Une mise à jour remplace ce fichier : notez vos réglages.
 
 ## Mise à jour et désinstallation
 
@@ -116,7 +116,7 @@ npm test
 - `bash tests/static_checks.sh` : syntaxe des scripts `.command`, URL du dépôt ;
 - `bash tests/install.test.sh` s'il est présent : scripts d'installation.
 
-Le test de rendu de `tests/widget.test.js` bundle le JSX avec esbuild, le rend avec React 18 dans Chromium via Playwright, en reproduisant le cycle Übersicht (`tests/harness/`) : titre et crédit absents, 9 cartes de la liste blanche, section À 25 ANS, largeur 420 px, flèches, pause, rotation, hors connexion, ajout d'une histoire sur GitHub. Il est **sauté** si esbuild, React ou Playwright manquent. Playwright n'est pas une dépendance du projet : la CI l'installe (`.github/workflows/tests.yml`) ; en local, `npm install --no-save playwright` puis `npx playwright install chromium`.
+Le test de rendu de `tests/widget.test.js` bundle le JSX avec esbuild, le rend avec React 18 dans Chromium via Playwright, en reproduisant le cycle Übersicht (`tests/harness/`) : titre et crédit absents, 9 cartes de la liste blanche, sections LOWEST POINT / TURNAROUND / AT 25, taille fixe 350 × 490 px sur les 9 cartes, défilement du texte, interface sans français, flèches, pause, rotation, hors connexion, ajout d'une histoire sur GitHub. Il est **sauté** si esbuild, React ou Playwright manquent. Playwright n'est pas une dépendance du projet : la CI l'installe (`.github/workflows/tests.yml`) ; en local, `npm install --no-save playwright` puis `npx playwright install chromium`.
 
 ## Structure du dépôt
 

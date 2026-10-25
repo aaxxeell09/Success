@@ -2,11 +2,11 @@
   {
     "id": "valdas",
     "name": "Valdas Dambrauskas",
-    "headline": "8 ans de galère",
-    "category": "Football · Lituanie",
-    "lowest": "À 25 ans, il part à Londres pour devenir entraîneur. Pendant 8 ans, il enchaîne les petits boulots : livreur de journaux, jardinier, employé de pub, parfois trois ou quatre emplois à la fois. Il entraîne en parallèle, sans décrocher de poste professionnel à temps plein.",
-    "comeback": "En 2026, après plus de 20 ans de parcours, il mène Sabah en Ligue des champions, jusqu'à Old Trafford.",
-    "lesson": "Les années d’apprentissage invisibles finissent par compter.",
+    "headline": "8 years of struggle",
+    "category": "Football · Lithuania",
+    "lowest": "At 25, he moves to London to become a coach. For 8 years, he takes one odd job after another: newspaper delivery, gardening, pub work, sometimes three or four jobs at once. He coaches on the side, without landing a full-time professional post.",
+    "comeback": "In 2026, after more than 20 years on the road, he leads Sabah into the Champions League, all the way to Old Trafford.",
+    "lesson": "The invisible years of learning end up counting.",
     "wikipedia": "Valdas Dambrauskas",
     "photo": "photos/valdas.jpg",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Valdas_Dambrauskas.jpg/500px-Valdas_Dambrauskas.jpg",
@@ -18,7 +18,7 @@
       "https://www.uefa.com/uefachampionsleague/news/02a9-218a9ecd5f83-091799d07d42-1000--different-roads-same-dream-how-sabah-and-coach-dambrauskas-reached-the-champions-league/",
       "https://www.malaymail.com/news/sports/2026/09/11/manchester-united-mark-champions-league-return-with-4-0-win-over-debutants-sabah/234775"
     ],
-    "at25": "En 2002, à 25 ans, Valdas Dambrauskas gagne 4 000 litas à la version lituanienne d'un jeu télévisé type « Qui veut gagner des millions ? ». Il s'en sert pour partir en Angleterre avec sa compagne et devenir entraîneur.",
+    "at25": "In 2002, at 25, Valdas Dambrauskas wins 4,000 litas on the Lithuanian version of a quiz show like \"Who Wants to Be a Millionaire?\". He uses it to move to England with his partner and become a coach.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Valdas_Dambrauskas",
       "https://www.uefa.com/uefachampionsleague/news/02a9-218a9ecd5f83-091799d07d42-1000--different-roads-same-dream-how-sabah-and-coach-dambrauskas-reached-the-champions-league/"
@@ -27,11 +27,11 @@
   {
     "id": "elon",
     "name": "Elon Musk",
-    "headline": "À quelques jours de tout perdre",
-    "category": "Entrepreneuriat · États-Unis",
-    "lowest": "En 2008, SpaceX vient d'échouer trois fois à lancer sa fusée. Tesla est au bord de la faillite. Musk a engagé une grande partie de sa fortune et les financements s'effondrent.",
-    "comeback": "En décembre 2008, SpaceX décroche un contrat majeur de la NASA et Tesla obtient un financement de dernière minute. Les deux entreprises survivent et poursuivent leur développement.",
-    "lesson": "Le point de rupture peut précéder le retournement.",
+    "headline": "Days away from losing everything",
+    "category": "Entrepreneurship · United States",
+    "lowest": "In 2008, SpaceX has just failed to launch its rocket three times. Tesla is on the brink of bankruptcy. Musk has put much of his fortune on the line and funding is drying up.",
+    "comeback": "In December 2008, SpaceX wins a major NASA contract and Tesla secures last-minute funding. Both companies survive and keep growing.",
+    "lesson": "The breaking point can come right before the turnaround.",
     "wikipedia": "Elon Musk",
     "photo": "photos/elon.jpg",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Elon_Musk_-_54820081119_%28cropped%29.jpg/500px-Elon_Musk_-_54820081119_%28cropped%29.jpg",
@@ -43,7 +43,7 @@
       "https://en.wikipedia.org/wiki/Commercial_Resupply_Services",
       "https://en.wikipedia.org/wiki/Elon_Musk"
     ],
-    "at25": "En 1996, Elon Musk développe Zip2, un guide urbain en ligne pour les journaux, cofondé en 1995 avec son frère Kimbal. Après une levée de 3 millions de dollars, il en devient directeur technique. Compaq rachètera Zip2 en 1999.",
+    "at25": "In 1996, Elon Musk is building Zip2, an online city guide for newspapers he co-founded in 1995 with his brother Kimbal. After a $3 million funding round, he becomes its chief technology officer. Compaq will buy Zip2 in 1999.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Elon_Musk",
       "https://en.wikipedia.org/wiki/Zip2"
@@ -52,11 +52,11 @@
   {
     "id": "mandela",
     "name": "Nelson Mandela",
-    "headline": "27 années en prison",
-    "category": "Politique · Afrique du Sud",
-    "lowest": "À 44 ans, il est emprisonné pour son combat contre l'apartheid. Il passe plus de 27 ans derrière les barreaux, dont une grande partie à Robben Island, et refuse plusieurs offres de libération conditionnelle.",
-    "comeback": "Libéré en 1990, à 71 ans, il devient quatre ans plus tard le premier président démocratiquement élu de l'Afrique du Sud.",
-    "lesson": "Une vie ne se résume pas à ses années d’enfermement.",
+    "headline": "27 years in prison",
+    "category": "Politics · South Africa",
+    "lowest": "At 44, he is imprisoned for his fight against apartheid. He spends more than 27 years behind bars, much of it on Robben Island, and turns down several offers of conditional release.",
+    "comeback": "Released in 1990, at 71, he becomes South Africa's first democratically elected president four years later.",
+    "lesson": "A life is not defined by its years of confinement.",
     "wikipedia": "Nelson Mandela",
     "photo": "photos/mandela.jpg",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Nelson_Mandela_1994.jpg/500px-Nelson_Mandela_1994.jpg",
@@ -67,7 +67,7 @@
       "https://en.wikipedia.org/wiki/Nelson_Mandela",
       "https://www.nobelprize.org/prizes/peace/1993/mandela/biographical/"
     ],
-    "at25": "En 1943 et 1944, Nelson Mandela étudie le droit à l'université du Witwatersrand, seul étudiant noir africain, tout en étant clerc dans un cabinet d'avocats de Johannesburg. À Pâques 1944, il cofonde la Ligue de la jeunesse de l'ANC.",
+    "at25": "In 1943 and 1944, Nelson Mandela studies law at the University of the Witwatersrand, the only Black African student, while working as a clerk at a Johannesburg law firm. At Easter 1944, he co-founds the ANC Youth League.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Nelson_Mandela",
       "https://www.nelsonmandela.org/content/page/biography"
@@ -76,10 +76,11 @@
   {
     "id": "trump",
     "name": "Donald Trump",
-    "category": "Politique · États-Unis",
-    "lowest": "Le 30 mai 2024, un jury new-yorkais le déclare coupable de 34 chefs de falsification de documents comptables : il devient le premier ancien président américain condamné au pénal.",
-    "comeback": "Il remporte l’élection présidentielle du 5 novembre 2024 et prête serment le 20 janvier 2025 pour un second mandat. Dix jours plus tôt, il avait été condamné à une dispense de peine inconditionnelle.",
-    "lesson": "Un retournement politique peut être spectaculaire.",
+    "headline": "Convicted, then re-elected",
+    "category": "Politics · United States",
+    "lowest": "On May 30, 2024, a New York jury finds him guilty on 34 counts of falsifying business records: he becomes the first former US president convicted of a crime.",
+    "comeback": "He wins the presidential election on November 5, 2024 and is sworn in on January 20, 2025 for a second term. Ten days earlier, he had been sentenced to an unconditional discharge.",
+    "lesson": "A political comeback can be spectacular.",
     "wikipedia": "Donald Trump",
     "photo": "photos/trump.jpg",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Official_Presidential_Portrait_of_President_Donald_J._Trump_%282025%29.jpg/500px-Official_Presidential_Portrait_of_President_Donald_J._Trump_%282025%29.jpg",
@@ -90,7 +91,7 @@
       "https://en.wikipedia.org/wiki/Prosecution_of_Donald_Trump_in_New_York",
       "https://en.wikipedia.org/wiki/2024_United_States_presidential_election"
     ],
-    "at25": "En 1971, Donald Trump, diplômé de l'université de Pennsylvanie en 1968, devient président de Trump Management, la société immobilière de son père dans les quartiers périphériques de New York. Il s'installe à Manhattan et adopte le nom Trump Organization.",
+    "at25": "In 1971, Donald Trump, a 1968 graduate of the University of Pennsylvania, becomes president of Trump Management, his father's real estate company in New York's outer boroughs. He moves to Manhattan and adopts the name Trump Organization.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Donald_Trump"
     ]
@@ -98,11 +99,11 @@
   {
     "id": "chesky",
     "name": "Brian Chesky",
-    "headline": "Endetté, presque aucun client",
-    "category": "Entrepreneuriat · Airbnb",
-    "lowest": "En 2008, Airbnb ne décolle pas. Chesky et ses cofondateurs accumulent les dettes de cartes bancaires. Les investisseurs refusent leur projet et l'entreprise n'a presque aucune activité.",
-    "comeback": "Pour survivre, ils vendent des boîtes de céréales à l'effigie des candidats à la présidentielle américaine. En 2009, Airbnb entre chez Y Combinator et trouve ses premiers signes de croissance durable.",
-    "lesson": "Survivre assez longtemps pour trouver ce qui marche.",
+    "headline": "In debt, almost no customers",
+    "category": "Entrepreneurship · Airbnb",
+    "lowest": "In 2008, Airbnb is not taking off. Chesky and his co-founders pile up credit card debt. Investors turn the project down and the company has almost no activity.",
+    "comeback": "To survive, they sell cereal boxes themed on the US presidential candidates. In 2009, Airbnb joins Y Combinator and sees its first signs of lasting growth.",
+    "lesson": "Survive long enough to find what works.",
     "wikipedia": "Brian Chesky",
     "photo": "photos/chesky.jpg",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Brian_Chesky_2025.jpg/500px-Brian_Chesky_2025.jpg",
@@ -113,19 +114,19 @@
       "https://en.wikipedia.org/wiki/Airbnb",
       "https://en.wikipedia.org/wiki/Brian_Chesky"
     ],
-    "at25": "En 2006 et 2007, Brian Chesky, diplômé en design industriel de la RISD en 2004, est designer chez 3DID à Los Angeles, où il dessine jouets et équipements médicaux. Déçu, il réduit ses heures en 2007. Airbnb n'existe pas encore.",
+    "at25": "In 2006 and 2007, Brian Chesky, a 2004 industrial design graduate of RISD, is a designer at 3DID in Los Angeles, where he designs toys and medical equipment. Disappointed, he cuts back his hours in 2007. Airbnb does not exist yet.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Brian_Chesky"
     ]
   },
   {
     "id": "collison",
-    "name": "Patrick et John Collison",
-    "headline": "2 ans pour seulement 50 utilisateurs",
-    "category": "Entrepreneuriat · Stripe",
-    "lowest": "En 2009, les deux frères commencent à construire Stripe. Pendant près de 2 ans, ils développent leur infrastructure de paiement, négocient avec les acteurs financiers et améliorent leur produit.",
-    "comeback": "Lors du lancement public en septembre 2011, Stripe ne compte qu'environ 50 utilisateurs, selon John Collison. Ils continuent à améliorer le service, qui devient ensuite une infrastructure majeure du paiement mondial.",
-    "lesson": "Reconnaître une erreur de cap permet de repartir.",
+    "name": "Patrick and John Collison",
+    "headline": "2 years for just 50 users",
+    "category": "Entrepreneurship · Stripe",
+    "lowest": "In 2009, the two brothers start building Stripe. For nearly 2 years, they develop their payments infrastructure, negotiate with financial players and refine their product.",
+    "comeback": "At its public launch in September 2011, Stripe has only about 50 users, according to John Collison. They keep improving the service, which goes on to become a major piece of global payments infrastructure.",
+    "lesson": "Recognizing a wrong course lets you start again.",
     "wikipedia": "Patrick Collison",
     "photo": "photos/collison.jpg",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Patrick_Collison_%28cropped%29.jpg/500px-Patrick_Collison_%28cropped%29.jpg",
@@ -137,7 +138,7 @@
       "https://en.wikipedia.org/wiki/Stripe,_Inc.",
       "https://stripe.com/newsroom/news/ceo-patrick-collisons-email-to-stripe-employees"
     ],
-    "at25": "Patrick, né en 1988, a 25 ans en 2013 et 2014 : il dirige Stripe, cofondée en 2010 avec son frère et valorisée 1,75 milliard de dollars lors d'une levée en 2014. John, né en 1990, a 25 ans en 2015 et 2016 : il est président de Stripe, qui lance Atlas en février 2016.",
+    "at25": "Patrick, born in 1988, is 25 in 2013 and 2014: he runs Stripe, co-founded in 2010 with his brother and valued at $1.75 billion in a 2014 funding round. John, born in 1990, is 25 in 2015 and 2016: he is president of Stripe, which launches Atlas in February 2016.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Patrick_Collison",
       "https://en.wikipedia.org/wiki/John_Collison",
@@ -146,12 +147,12 @@
   },
   {
     "id": "pope",
-    "name": "Léon XIV (Robert Prevost)",
-    "headline": "Prêtre au Pérou à 40 ans, pape à 69 ans",
-    "category": "Religieux · Vatican",
-    "lowest": "À 40 ans, Robert Prevost vit au Pérou, où il forme de futurs prêtres et exerce des responsabilités pastorales. Pendant de nombreuses années, il travaille loin des plus hautes fonctions du Vatican.",
-    "comeback": "Il devient évêque à 59 ans, cardinal à 68 ans, puis est élu pape le 8 mai 2025, à 69 ans.",
-    "lesson": "Une longue vie de terrain peut mener au sommet.",
+    "name": "Leo XIV (Robert Prevost)",
+    "headline": "Priest in Peru at 40, pope at 69",
+    "category": "Religion · Vatican",
+    "lowest": "At 40, Robert Prevost lives in Peru, where he trains future priests and holds pastoral responsibilities. For many years, he works far from the Vatican's highest offices.",
+    "comeback": "He becomes a bishop at 59, a cardinal at 68, and is elected pope on May 8, 2025, at 69.",
+    "lesson": "A long life in the field can lead to the top.",
     "wikipedia": "Pope Leo XIV",
     "photo": "photos/pope.jpg",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Pope_Leo_XIV_3_%283x4_cropped%29.png/500px-Pope_Leo_XIV_3_%283x4_cropped%29.png",
@@ -162,7 +163,7 @@
       "https://en.wikipedia.org/wiki/Pope_Leo_XIV",
       "https://www.vatican.va/content/leo-xiv/en.html"
     ],
-    "at25": "En 1980 et 1981, Robert Prevost, frère augustin depuis 1978, étudie la théologie à la Catholic Theological Union de Chicago. Il prononce ses vœux solennels le 29 août 1981 et sera ordonné prêtre à Rome en 1982.",
+    "at25": "In 1980 and 1981, Robert Prevost, an Augustinian friar since 1978, studies theology at the Catholic Theological Union in Chicago. He takes his solemn vows on August 29, 1981 and will be ordained a priest in Rome in 1982.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Pope_Leo_XIV",
       "https://www.osservatoreromano.va/en/news/2025-05/ing-006/biography-of-his-holiness-leo-xiv.html"
@@ -171,10 +172,11 @@
   {
     "id": "jose",
     "name": "José Hernández",
-    "category": "Astronautique · États-Unis",
-    "lowest": "Enfant d’une famille d’ouvriers agricoles mexicains, il travaille dans les champs de Californie entre deux écoles. Devenu ingénieur, il postule pour devenir astronaute et essuie onze refus successifs de la NASA.",
-    "comeback": "En mai 2004, à sa douzième candidature, il est sélectionné dans la promotion 19 de la NASA. Le 28 août 2009, il s’envole à bord de la navette Discovery (mission STS-128) vers la Station spatiale internationale.",
-    "lesson": "Onze refus ne décident pas du douzième.",
+    "headline": "Rejected 11 times by NASA",
+    "category": "Spaceflight · United States",
+    "lowest": "The child of Mexican migrant farmworkers, he works in California's fields between schools. After becoming an engineer, he applies to be an astronaut and is turned down by NASA eleven times in a row.",
+    "comeback": "In May 2004, on his twelfth application, he is selected for NASA Astronaut Group 19. On August 28, 2009, he flies aboard the space shuttle Discovery (mission STS-128) to the International Space Station.",
+    "lesson": "Eleven rejections do not decide the twelfth.",
     "wikipedia": "José M. Hernández",
     "photo": "photos/jose.jpg",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Jose_Hernandez_v2.jpg/500px-Jose_Hernandez_v2.jpg",
@@ -185,7 +187,7 @@
       "https://en.wikipedia.org/wiki/Jos%C3%A9_M._Hern%C3%A1ndez",
       "https://magazine.ucsb.edu/fall-winter-2023/jose-hernandez-86"
     ],
-    "at25": "En 1987, José Hernández, titulaire depuis 1986 d'un master de l'université de Californie à Santa Barbara, entre au Lawrence Livermore National Laboratory comme ingénieur en électronique (traitement du signal et de l'image). La NASA ne le sélectionnera qu'en 2004.",
+    "at25": "In 1987, José Hernández, who earned a master's degree from the University of California, Santa Barbara in 1986, joins Lawrence Livermore National Laboratory as an electrical engineer (signal and image processing). NASA will not select him until 2004.",
     "at25_sources": [
       "https://www.nasa.gov/wp-content/uploads/2016/01/hernandez_jose.Pdf",
       "https://en.wikipedia.org/wiki/Jos%C3%A9_M._Hern%C3%A1ndez"
@@ -194,11 +196,11 @@
   {
     "id": "thatcher",
     "name": "Margaret Thatcher",
-    "headline": "Fille d'épicier, Première ministre",
-    "category": "Politique · Royaume-Uni",
-    "lowest": "Elle grandit dans un appartement au-dessus de l'épicerie familiale, dans la petite ville de Grantham. Après ses études de chimie, elle tente d'entrer au Parlement mais perd les élections de 1950 et 1951.",
-    "comeback": "Élue députée en 1959, elle poursuit son ascension pendant vingt ans. En 1979, à 53 ans, elle devient la première femme Première ministre du Royaume-Uni et reste au pouvoir plus de 11 ans.",
-    "lesson": "Une impopularité record n’achève pas nécessairement un parcours.",
+    "headline": "Grocer's daughter, Prime Minister",
+    "category": "Politics · United Kingdom",
+    "lowest": "She grows up in a flat above the family grocery in the small town of Grantham. After studying chemistry, she tries to enter Parliament but loses the 1950 and 1951 elections.",
+    "comeback": "Elected an MP in 1959, she keeps rising for twenty years. In 1979, at 53, she becomes the UK's first woman Prime Minister and stays in power for more than 11 years.",
+    "lesson": "Record unpopularity does not necessarily end a career.",
     "wikipedia": "Margaret Thatcher",
     "photo": "photos/thatcher.jpg",
     "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Margaret_Thatcher_stock_portrait_%28cropped%29.jpg/500px-Margaret_Thatcher_stock_portrait_%28cropped%29.jpg",
@@ -210,7 +212,7 @@
       "https://www.ipsos.com/en-uk/margaret-thatcher-1925-2013",
       "https://en.wikipedia.org/wiki/1983_United_Kingdom_general_election"
     ],
-    "at25": "En 1950 et 1951, Margaret Roberts, future Thatcher, est chimiste chez J. Lyons and Co. à Hammersmith et vit à Dartford, où elle est candidate conservatrice. Battue en février 1950, elle s'y représente en octobre 1951 et perd à nouveau.",
+    "at25": "In 1950 and 1951, Margaret Roberts, the future Thatcher, is a chemist at J. Lyons and Co. in Hammersmith and lives in Dartford, where she is the Conservative candidate. Beaten in February 1950, she runs again in October 1951 and loses again.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Margaret_Thatcher"
     ]

@@ -8,8 +8,9 @@
 <style>
 /* Self-contained preview, faithful to the widget (same colours, sizes and
    behaviour as the CONFIG block of widget/mur-des-retournements.widget/mur-des-retournements.jsx).
-   Fixed size 350 x 490 px (CARD_WIDTH x CARD_HEIGHT); the width shrinks only on a
-   narrow window. Only the text area scrolls; photo and buttons never move. */
+   Fixed size 350 x 490 px (CARD_WIDTH x CARD_HEIGHT): photo 150 px, text area
+   294 px, buttons 46 px. The width shrinks only on a narrow window. Nothing
+   scrolls: the word limits keep every text whole inside the card. */
 :root {
   --bg: 16, 22, 36;
   --bg-opacity: 0.72;
@@ -25,8 +26,8 @@
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --card-width: 350px; --card-height: 490px;
-  --name: 21px; --category: 10.5px; --headline: 11.5px; --body: 12px; --eyebrow: 9px;
-  --photo: 172px; --pad: 14px; --gap: 11px; --btn: 26px;
+  --name: 20px; --category: 10px; --headline: 11px; --body: 11.5px; --eyebrow: 9px; --line: 1.35;
+  --photo: 150px; --content: 294px; --nav: 46px; --pad: 14px; --pad-y: 9px; --gap: 8px; --btn: 26px;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -43,7 +44,8 @@ body {
 #card {
   flex: none; width: min(var(--card-width), calc(100vw - 32px)); height: var(--card-height);
   display: flex; flex-direction: column; overflow: hidden;
-  border-radius: 24px; border: 1px solid var(--border);
+  /* Outline drawn inwards rather than a border: the three blocks keep exactly 150 + 294 + 46 px. */
+  border-radius: 24px; outline: 1px solid var(--border); outline-offset: -1px;
   background: rgba(var(--bg), var(--bg-opacity));
   -webkit-backdrop-filter: blur(30px) saturate(160%); backdrop-filter: blur(30px) saturate(160%);
   box-shadow: 0 22px 50px rgba(0,0,0,.34), 0 2px 8px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.08);
@@ -56,19 +58,17 @@ body {
 .initials { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding-bottom: calc(var(--photo) * .24); font-family: var(--display); font-size: calc(var(--photo) * .3); font-weight: 700; letter-spacing: 2px; color: rgba(255,255,255,.30); }
 .hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
 .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, rgba(var(--bg), .96) 0%, rgba(var(--bg), .55) 32%, rgba(var(--bg), 0) 62%); }
-.identity { position: absolute; left: var(--pad); right: var(--pad); bottom: 11px; }
-.category { font-size: var(--category); font-weight: 600; letter-spacing: .4px; color: var(--title); margin-bottom: 3px; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
-.name { font-family: var(--display); font-size: var(--name); font-weight: 760; line-height: 1.08; letter-spacing: -.3px; text-shadow: 0 2px 16px rgba(0,0,0,.55); }
-.headline { margin-top: 3px; font-size: var(--headline); font-weight: 600; line-height: 1.3; color: var(--text); opacity: .9; text-shadow: 0 1px 10px rgba(0,0,0,.6); }
-.content { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: calc(var(--pad) * .85) var(--pad); }
-.content::-webkit-scrollbar { width: 4px; }
-.content::-webkit-scrollbar-track { background: transparent; }
-.content::-webkit-scrollbar-thumb { background: rgba(255,255,255,.22); border-radius: 4px; }
+.identity { position: absolute; left: var(--pad); right: var(--pad); bottom: 10px; }
+.category { font-size: var(--category); font-weight: 600; line-height: 1.25; letter-spacing: .4px; color: var(--title); margin-bottom: 2px; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
+.name { font-family: var(--display); font-size: var(--name); font-weight: 760; line-height: 1.1; letter-spacing: -.3px; text-shadow: 0 2px 16px rgba(0,0,0,.55); }
+.headline { margin-top: 2px; font-size: var(--headline); font-weight: 600; line-height: 1.3; color: var(--text); opacity: .9; text-shadow: 0 1px 10px rgba(0,0,0,.6); }
+/* Fixed height, no scrolling: overflow hidden is only a safeguard. */
+.content { flex: none; height: var(--content); overflow: hidden; padding: var(--pad-y) var(--pad); }
 .content section + section:not([hidden]) { margin-top: var(--gap); }
-.eyebrow { font-size: var(--eyebrow); font-weight: 800; letter-spacing: 1.6px; margin-bottom: 4px; }
+.eyebrow { font-size: var(--eyebrow); font-weight: 800; line-height: 1; letter-spacing: 1.6px; margin-bottom: 3px; }
 .eyebrow.low { color: var(--low); } .eyebrow.high { color: var(--high); } .eyebrow.at25 { color: var(--at25); }
-.content p { font-size: var(--body); line-height: 1.45; margin: 0; }
-nav.bar { flex: none; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 12px; border-top: 1px solid var(--border); background: rgba(0,0,0,.14); }
+.content p { font-size: var(--body); line-height: var(--line); margin: 0; }
+nav.bar { flex: none; height: var(--nav); display: flex; align-items: center; justify-content: center; gap: 8px; padding: 0 12px; border-top: 1px solid var(--border); background: rgba(0,0,0,.14); }
 button {
   appearance: none; -webkit-appearance: none; display: inline-flex; align-items: center; justify-content: center;
   min-width: var(--btn); height: var(--btn); padding: 0 7px; border-radius: calc(var(--btn) / 2.4);
@@ -163,7 +163,6 @@ button#pause svg { width: calc(var(--btn) * .46); height: calc(var(--btn) * .46)
     paused: saved.paused === true, lastAdvanceAt: Date.now(), source: 'built-in', syncError: null, lastSync: null,
   };
   const failed = new Set();
-  let shownId = null;
 
   const index = () => Math.max(0, state.stories.findIndex((s) => s.id === state.currentId));
   const move = (d) => {
@@ -190,8 +189,6 @@ button#pause svg { width: calc(var(--btn) * .46); height: calc(var(--btn) * .46)
 
   function render() {
     const s = state.stories[index()]; if (!s) return;
-    // Like the widget (content keyed by id): back to the top when the person changes.
-    if (shownId !== s.id) { $('content').scrollTop = 0; shownId = s.id; }
     $('count').textContent = `${index() + 1} / ${state.stories.length}`;
     const status = state.syncError
       ? { dot: '#ff9f0a', title: 'Sync failed: no stories source could be reached. Showing: built-in stories.' }

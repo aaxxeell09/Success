@@ -9,7 +9,7 @@
 
 import localStories from './stories.json';
 import {
-  CARD_WIDTH, CARD_HEIGHT, ROTATION_MS, createInitialState, reducer, loadPrefs, savePrefs, photoCandidates, currentIndex,
+  CARD_WIDTH, CARD_HEIGHT, PHOTO_HEIGHT, NAV_HEIGHT, CONTENT_HEIGHT, ROTATION_MS, createInitialState, reducer, loadPrefs, savePrefs, photoCandidates, currentIndex,
 } from './lib/state.js';
 import { DATA_URL, SYNC_INTERVAL_MS, createSyncer } from './lib/sync.js';
 
@@ -32,7 +32,8 @@ const CONFIG = {
 
   // Taille fixe de la carte en pixels (350 x 490 par défaut, CARD_WIDTH et
   // CARD_HEIGHT de lib/state.js). La largeur est réduite si l'écran est plus
-  // étroit ; la hauteur ne varie jamais, seul le texte défile.
+  // étroit ; la hauteur ne varie jamais et rien ne défile : tout le texte tient
+  // dans la carte (voir les limites de mots dans docs/ARCHITECTURE.md).
   width: CARD_WIDTH,
   height: CARD_HEIGHT,
   // Rotation automatique toutes les 20 minutes activée au premier lancement.
@@ -58,8 +59,18 @@ const CONFIG = {
     syncIdle: '#8e8e93',
   },
 
-  // Typographie et espacements (tailles de police, hauteur de photo, marges, boutons), en pixels.
-  layout: { name: 21, category: 10.5, headline: 11.5, body: 12, eyebrow: 9, photo: 172, pad: 14, gap: 11, button: 26 },
+  // Typographie et espacements, en pixels : tailles de police (name, category,
+  // headline, body, eyebrow), interligne du texte (lineHeight), hauteurs fixes
+  // de la photo, de la zone de texte et de la barre de boutons (150 + 294 + 46
+  // = 490), marges latérales (pad) et verticales (padY) de la zone de texte,
+  // écart entre sections (gap) et taille des boutons. Valeurs mesurées pour
+  // que les textes les plus longs autorisés (24 + 24 + 18 mots de 8 à 10
+  // lettres) tiennent entiers : la zone de texte ne défile pas, agrandir une
+  // police ou une marge peut couper la fin du texte.
+  layout: {
+    name: 20, category: 10, headline: 11, body: 11.5, eyebrow: 9, lineHeight: 1.35,
+    photo: PHOTO_HEIGHT, content: CONTENT_HEIGHT, nav: NAV_HEIGHT, pad: 14, padY: 9, gap: 8, button: 26,
+  },
 };
 
 const FONT = "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif";
@@ -86,11 +97,6 @@ export const className = `
   -webkit-font-smoothing: antialiased;
   user-select: none;
   -webkit-user-select: none;
-
-  /* Barre de défilement discrète de la zone de texte. */
-  [data-role="content"]::-webkit-scrollbar { width: 4px; }
-  [data-role="content"]::-webkit-scrollbar-track { background: transparent; }
-  [data-role="content"]::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.22); border-radius: 4px; }
 `;
 
 export const initialState = {
@@ -321,7 +327,9 @@ export const render = (state, dispatch) => {
     <article lang="en" aria-label="Success stories" style={{
       width, height: CONFIG.height, boxSizing: 'border-box', overflow: 'hidden',
       display: 'flex', flexDirection: 'column',
-      borderRadius: CONFIG.radius, border: `1px solid ${T.border}`,
+      // Contour en outline (dessiné vers l'intérieur) plutôt qu'en border : les
+      // trois blocs gardent exactement 150 + 294 + 46 px.
+      borderRadius: CONFIG.radius, outline: `1px solid ${T.border}`, outlineOffset: -1,
       background: `rgba(${T.background}, ${CONFIG.backgroundOpacity})`,
       backdropFilter: `blur(${CONFIG.blur}px) saturate(160%)`, WebkitBackdropFilter: `blur(${CONFIG.blur}px) saturate(160%)`,
       boxShadow: '0 22px 50px rgba(0, 0, 0, 0.34), 0 2px 8px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
@@ -350,30 +358,32 @@ export const render = (state, dispatch) => {
             objectPosition: 'center 25%' }} />}
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
           background: `linear-gradient(0deg, rgba(${T.background}, 0.96) 0%, rgba(${T.background}, 0.55) 32%, rgba(${T.background}, 0) 62%)` }} />
-        <div style={{ position: 'absolute', left: L.pad, right: L.pad, bottom: 11 }}>
-          {story.category && <div style={{ fontSize: L.category, fontWeight: 600, letterSpacing: 0.4, color: T.title,
-            marginBottom: 3, textShadow: '0 1px 8px rgba(0, 0, 0, 0.5)', ...wrapText }}>{clean(story.category)}</div>}
-          <div style={{ fontFamily: DISPLAY_FONT, fontSize: L.name, fontWeight: 760, lineHeight: 1.08,
+        <div style={{ position: 'absolute', left: L.pad, right: L.pad, bottom: 10 }}>
+          {story.category && <div style={{ fontSize: L.category, fontWeight: 600, lineHeight: 1.25, letterSpacing: 0.4, color: T.title,
+            marginBottom: 2, textShadow: '0 1px 8px rgba(0, 0, 0, 0.5)', ...wrapText }}>{clean(story.category)}</div>}
+          <div style={{ fontFamily: DISPLAY_FONT, fontSize: L.name, fontWeight: 760, lineHeight: 1.1,
             letterSpacing: -0.3, textShadow: '0 2px 16px rgba(0, 0, 0, 0.55)', ...wrapText }}>{clean(story.name)}</div>
           {clean(story.headline) && <div data-role="headline" style={{ fontSize: L.headline, fontWeight: 600, lineHeight: 1.3,
-            marginTop: 3, color: T.text, opacity: 0.9, textShadow: '0 1px 10px rgba(0, 0, 0, 0.6)', ...wrapText }}>{clean(story.headline)}</div>}
+            marginTop: 2, color: T.text, opacity: 0.9, textShadow: '0 1px 10px rgba(0, 0, 0, 0.6)', ...wrapText }}>{clean(story.headline)}</div>}
         </div>
       </div>
 
-      {/* Seule cette zone défile ; key = id : retour en haut à chaque changement de personne. */}
+      {/* Zone de texte de hauteur fixe, sans défilement : les limites de mots
+          garantissent que tout tient ; overflow hidden n'est qu'un garde-fou. */}
       <div key={`content-${story.id}`} data-role="content" style={{
-        flex: '1 1 auto', minHeight: 0, overflowY: 'auto', overflowX: 'hidden',
-        padding: `${L.pad * 0.85}px ${L.pad}px ${L.pad * 0.85}px`, boxSizing: 'border-box' }}>
+        flex: 'none', height: L.content, overflow: 'hidden', boxSizing: 'border-box',
+        padding: `${L.padY}px ${L.pad}px` }}>
         {sections.map((sec, i) => (
           <section key={sec.key} data-role={sec.key} style={{ marginBottom: i < sections.length - 1 ? L.gap : 0 }}>
-            <div style={{ fontSize: L.eyebrow, fontWeight: 800, letterSpacing: 1.6, color: sec.color, marginBottom: 4 }}>{sec.label}</div>
-            <p style={{ fontSize: L.body, lineHeight: 1.45, margin: 0, color: T.text, ...wrapText }}>{sec.text}</p>
+            <div style={{ fontSize: L.eyebrow, fontWeight: 800, lineHeight: 1, letterSpacing: 1.6, color: sec.color, marginBottom: 3 }}>{sec.label}</div>
+            <p style={{ fontSize: L.body, lineHeight: L.lineHeight, margin: 0, color: T.text, ...wrapText }}>{sec.text}</p>
           </section>
         ))}
       </div>
 
-      <nav aria-label="Widget controls" style={{ flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        gap: 8, padding: '8px 12px', borderTop: `1px solid ${T.border}`,
+      <nav aria-label="Widget controls" style={{ flex: 'none', height: L.nav, boxSizing: 'border-box',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        gap: 8, padding: '0 12px', borderTop: `1px solid ${T.border}`,
         background: 'rgba(0, 0, 0, 0.14)' }}>
         {button('Previous person', () => send({ type: 'PREV', now: Date.now() }), <Icon kind="prev" size={L.button * 0.5} />)}
         {button('Next person', () => send({ type: 'NEXT', now: Date.now() }), <Icon kind="next" size={L.button * 0.5} />)}

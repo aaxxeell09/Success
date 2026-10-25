@@ -3,9 +3,11 @@
 // implicite. Le temps (`now`) et le stockage (`storage`) sont toujours injectés,
 // ce qui permet de tester ce module sous Node 22 (`node --test`).
 
-// Largeur fixe de la carte, en pixels (ancienne taille M). Le widget la réduit
-// seulement si l'écran est plus étroit.
-export const CARD_WIDTH = 420;
+// Taille fixe et compacte de la carte, en pixels (tient sous les widgets macOS).
+// Le widget réduit la largeur seulement si l'écran est plus étroit ; la hauteur
+// ne varie jamais : seul le texte défile.
+export const CARD_WIDTH = 350;
+export const CARD_HEIGHT = 490;
 export const ROTATION_MS = 20 * 60 * 1000;
 export const PREFS_KEY = 'mur-des-retournements-settings-v3';
 

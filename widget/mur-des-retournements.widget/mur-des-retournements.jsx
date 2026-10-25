@@ -9,7 +9,7 @@
 
 import localStories from './stories.json';
 import {
-  CARD_WIDTH, ROTATION_MS, createInitialState, reducer, loadPrefs, savePrefs, photoCandidates, currentIndex,
+  CARD_WIDTH, CARD_HEIGHT, ROTATION_MS, createInitialState, reducer, loadPrefs, savePrefs, photoCandidates, currentIndex,
 } from './lib/state.js';
 import { DATA_URL, SYNC_INTERVAL_MS, createSyncer } from './lib/sync.js';
 
@@ -30,9 +30,11 @@ const CONFIG = {
   // Rayon des coins de la carte, en pixels.
   radius: 24,
 
-  // Largeur de la carte en pixels (420 par défaut, CARD_WIDTH de lib/state.js).
-  // Elle est réduite automatiquement si l'écran est plus étroit.
+  // Taille fixe de la carte en pixels (350 x 490 par défaut, CARD_WIDTH et
+  // CARD_HEIGHT de lib/state.js). La largeur est réduite si l'écran est plus
+  // étroit ; la hauteur ne varie jamais, seul le texte défile.
   width: CARD_WIDTH,
+  height: CARD_HEIGHT,
   // Rotation automatique toutes les 20 minutes activée au premier lancement.
   // false : le widget démarre en pause (le bouton pause/reprise reste disponible).
   rotationEnabledByDefault: true,
@@ -44,9 +46,9 @@ const CONFIG = {
     text: '#f5f7fa',
     muted: '#a9b8cc',
     title: '#c4d4ea',
-    low: '#ff9f9a',        // « AU PLUS BAS »
-    high: '#7fdcb4',       // « LE RETOURNEMENT »
-    at25: '#b9b8f2',       // « À 25 ANS »
+    low: '#ff9f9a',        // « LOWEST POINT »
+    high: '#7fdcb4',       // « TURNAROUND »
+    at25: '#b9b8f2',       // « AT 25 »
     photoFallback: 'linear-gradient(135deg, #2b4266 0%, #1a2a44 100%)',
     button: 'rgba(255, 255, 255, 0.10)',
     buttonActive: 'rgba(255, 255, 255, 0.30)',
@@ -57,7 +59,7 @@ const CONFIG = {
   },
 
   // Typographie et espacements (tailles de police, hauteur de photo, marges, boutons), en pixels.
-  layout: { name: 27, category: 12, body: 13.5, eyebrow: 10, photo: 230, pad: 20, gap: 16, button: 30 },
+  layout: { name: 21, category: 10.5, headline: 11.5, body: 12, eyebrow: 9, photo: 172, pad: 14, gap: 11, button: 26 },
 };
 
 const FONT = "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif";
@@ -84,6 +86,11 @@ export const className = `
   -webkit-font-smoothing: antialiased;
   user-select: none;
   -webkit-user-select: none;
+
+  /* Barre de défilement discrète de la zone de texte. */
+  [data-role="content"]::-webkit-scrollbar { width: 4px; }
+  [data-role="content"]::-webkit-scrollbar-track { background: transparent; }
+  [data-role="content"]::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.22); border-radius: 4px; }
 `;
 
 export const initialState = {
@@ -202,7 +209,7 @@ export const updateState = (event, previousState) => {
 // ---------------------------------------------------------------------------
 // Rendu
 // ---------------------------------------------------------------------------
-// Couleur d'étiquette de « À 25 ANS » (lavande sobre), remplaçable par CONFIG.theme.at25.
+// Couleur d'étiquette de « AT 25 » (lavande sobre), remplaçable par CONFIG.theme.at25.
 const AT25_COLOR = '#b9b8f2';
 
 // Largeur de la carte : CONFIG.width, réduite si l'écran (moins les marges
@@ -261,19 +268,21 @@ const Icon = ({ kind, size }) => {
 
 const syncInfo = (state) => {
   const time = (t) => {
-    try { return new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); } catch (_) { return ''; }
+    try { return new Date(t).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); } catch (_) { return ''; }
   };
+  // Textes visibles en anglais (le détail technique de l'erreur, en français
+  // dans lib/sync.js, n'est pas affiché).
   if (state.syncError) {
-    const shown = state.source === 'cache' ? 'copie en cache' : state.source === 'remote' ? 'dernières données reçues' : 'données embarquées';
-    return { color: CONFIG.theme.syncWarn, label: 'hors connexion',
-      title: `Synchronisation impossible (${clean(state.syncError)}). Affichage : ${shown}.` +
-        (state.lastSync ? ` Dernière synchronisation à ${time(state.lastSync)}.` : '') };
+    const shown = state.source === 'cache' ? 'cached copy' : state.source === 'remote' ? 'last data received' : 'built-in stories';
+    return { color: CONFIG.theme.syncWarn, label: 'offline',
+      title: `Sync failed: GitHub could not be reached. Showing: ${shown}.` +
+        (state.lastSync ? ` Last sync at ${time(state.lastSync)}.` : '') };
   }
   if (state.lastSync) {
     return { color: CONFIG.theme.syncOk, label: '',
-      title: `Synchronisé avec GitHub à ${time(state.lastSync)} (vérification toutes les 5 minutes).` };
+      title: `Synced with GitHub at ${time(state.lastSync)} (checked every 5 minutes).` };
   }
-  return { color: CONFIG.theme.syncIdle, label: '', title: 'Synchronisation en attente : affichage des données embarquées.' };
+  return { color: CONFIG.theme.syncIdle, label: '', title: 'Waiting for first sync: showing built-in stories.' };
 };
 
 export const render = (state, dispatch) => {
@@ -288,11 +297,11 @@ export const render = (state, dispatch) => {
   const send = (event) => { if (typeof dispatch === 'function') dispatch(event); };
   const candidates = photoCandidates(story, (state && state.photos) || {});
   const photo = candidates.find((u) => !failedPhotos.has(u));
-  // Sections du corps, dans l'ordre ; « À 25 ANS » n'existe que si at25 est renseigné.
+  // Sections du corps, dans l'ordre ; « AT 25 » n'existe que si at25 est renseigné.
   const sections = [
-    { key: 'low', label: 'AU PLUS BAS', color: T.low, text: clean(story.lowest) },
-    { key: 'high', label: 'LE RETOURNEMENT', color: T.high, text: clean(story.comeback) },
-    { key: 'at25', label: 'À 25 ANS', color: T.at25 || AT25_COLOR, text: clean(story.at25) },
+    { key: 'low', label: 'LOWEST POINT', color: T.low, text: clean(story.lowest) },
+    { key: 'high', label: 'TURNAROUND', color: T.high, text: clean(story.comeback) },
+    { key: 'at25', label: 'AT 25', color: T.at25 || AT25_COLOR, text: clean(story.at25) },
   ].filter((sec) => sec.text);
   const sync = syncInfo(state || {});
   const paused = !!(state && state.paused);
@@ -309,18 +318,19 @@ export const render = (state, dispatch) => {
   );
 
   return (
-    <article lang="fr" aria-label="Le mur des retournements" style={{
-      width, maxWidth: 'calc(100vw - 32px)', boxSizing: 'border-box', overflow: 'hidden',
+    <article lang="en" aria-label="Success stories" style={{
+      width, height: CONFIG.height, boxSizing: 'border-box', overflow: 'hidden',
+      display: 'flex', flexDirection: 'column',
       borderRadius: CONFIG.radius, border: `1px solid ${T.border}`,
       background: `rgba(${T.background}, ${CONFIG.backgroundOpacity})`,
       backdropFilter: `blur(${CONFIG.blur}px) saturate(160%)`, WebkitBackdropFilter: `blur(${CONFIG.blur}px) saturate(160%)`,
       boxShadow: '0 22px 50px rgba(0, 0, 0, 0.34), 0 2px 8px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
     }}>
-      <div style={{ position: 'relative', height: L.photo, overflow: 'hidden', background: T.photoFallback }}>
+      <div style={{ position: 'relative', flex: 'none', height: L.photo, overflow: 'hidden', background: T.photoFallback }}>
         <div title={sync.title} aria-label={sync.title} style={{
-          position: 'absolute', top: L.pad * 0.55, right: L.pad * 0.65, zIndex: 2,
-          display: 'flex', alignItems: 'center', gap: 7,
-          padding: '5px 9px', borderRadius: 99,
+          position: 'absolute', top: 10, right: 10, zIndex: 2,
+          display: 'flex', alignItems: 'center', gap: 6,
+          padding: '3px 8px', borderRadius: 99,
           background: 'rgba(16, 22, 36, 0.62)',
           backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
           fontSize: L.eyebrow + 1, color: T.text, fontVariantNumeric: 'tabular-nums',
@@ -333,38 +343,41 @@ export const render = (state, dispatch) => {
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center',
           justifyContent: 'center', paddingBottom: L.photo * 0.24, fontFamily: DISPLAY_FONT, fontSize: L.photo * 0.3, fontWeight: 700,
           letterSpacing: 2, color: 'rgba(255, 255, 255, 0.30)' }}>{initialsOf(story.name)}</div>
-        {photo && <img key={story.id} src={photo} alt={`Portrait de ${clean(story.name)}`}
+        {photo && <img key={story.id} src={photo} alt={`Portrait of ${clean(story.name)}`}
           data-src={photo} data-candidate={String(candidates.indexOf(photo))}
           data-candidates={JSON.stringify(candidates)} onError={onPhotoError}
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
             objectPosition: 'center 25%' }} />}
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
           background: `linear-gradient(0deg, rgba(${T.background}, 0.96) 0%, rgba(${T.background}, 0.55) 32%, rgba(${T.background}, 0) 62%)` }} />
-        <div style={{ position: 'absolute', left: L.pad, right: L.pad, bottom: L.pad * 0.8 }}>
+        <div style={{ position: 'absolute', left: L.pad, right: L.pad, bottom: 11 }}>
           {story.category && <div style={{ fontSize: L.category, fontWeight: 600, letterSpacing: 0.4, color: T.title,
-            marginBottom: 4, textShadow: '0 1px 8px rgba(0, 0, 0, 0.5)', ...wrapText }}>{clean(story.category)}</div>}
+            marginBottom: 3, textShadow: '0 1px 8px rgba(0, 0, 0, 0.5)', ...wrapText }}>{clean(story.category)}</div>}
           <div style={{ fontFamily: DISPLAY_FONT, fontSize: L.name, fontWeight: 760, lineHeight: 1.08,
             letterSpacing: -0.3, textShadow: '0 2px 16px rgba(0, 0, 0, 0.55)', ...wrapText }}>{clean(story.name)}</div>
-          {clean(story.headline) && <div data-role="headline" style={{ fontSize: L.category + 2, fontWeight: 600, lineHeight: 1.3,
-            marginTop: 5, color: T.text, opacity: 0.9, textShadow: '0 1px 10px rgba(0, 0, 0, 0.6)', ...wrapText }}>{clean(story.headline)}</div>}
+          {clean(story.headline) && <div data-role="headline" style={{ fontSize: L.headline, fontWeight: 600, lineHeight: 1.3,
+            marginTop: 3, color: T.text, opacity: 0.9, textShadow: '0 1px 10px rgba(0, 0, 0, 0.6)', ...wrapText }}>{clean(story.headline)}</div>}
         </div>
       </div>
 
-      <div style={{ padding: `${L.pad * 0.9}px ${L.pad}px ${L.pad * 0.8}px` }}>
+      {/* Seule cette zone défile ; key = id : retour en haut à chaque changement de personne. */}
+      <div key={`content-${story.id}`} data-role="content" style={{
+        flex: '1 1 auto', minHeight: 0, overflowY: 'auto', overflowX: 'hidden',
+        padding: `${L.pad * 0.85}px ${L.pad}px ${L.pad * 0.85}px`, boxSizing: 'border-box' }}>
         {sections.map((sec, i) => (
           <section key={sec.key} data-role={sec.key} style={{ marginBottom: i < sections.length - 1 ? L.gap : 0 }}>
-            <div style={{ fontSize: L.eyebrow, fontWeight: 800, letterSpacing: 1.8, color: sec.color, marginBottom: 6 }}>{sec.label}</div>
-            <p style={{ fontSize: L.body, lineHeight: 1.5, margin: 0, color: T.text, ...wrapText }}>{sec.text}</p>
+            <div style={{ fontSize: L.eyebrow, fontWeight: 800, letterSpacing: 1.6, color: sec.color, marginBottom: 4 }}>{sec.label}</div>
+            <p style={{ fontSize: L.body, lineHeight: 1.45, margin: 0, color: T.text, ...wrapText }}>{sec.text}</p>
           </section>
         ))}
       </div>
 
-      <nav aria-label="Commandes du widget" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center',
-        gap: 8, padding: `${L.pad * 0.55}px ${L.pad * 0.8}px`, borderTop: `1px solid ${T.border}`,
+      <nav aria-label="Widget controls" style={{ flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        gap: 8, padding: '8px 12px', borderTop: `1px solid ${T.border}`,
         background: 'rgba(0, 0, 0, 0.14)' }}>
-        {button('Personne précédente', () => send({ type: 'PREV', now: Date.now() }), <Icon kind="prev" size={L.button * 0.5} />)}
-        {button('Personne suivante', () => send({ type: 'NEXT', now: Date.now() }), <Icon kind="next" size={L.button * 0.5} />)}
-        {button(paused ? 'Reprendre la rotation automatique (toutes les 20 minutes)' : 'Mettre la rotation automatique en pause',
+        {button('Previous person', () => send({ type: 'PREV', now: Date.now() }), <Icon kind="prev" size={L.button * 0.5} />)}
+        {button('Next person', () => send({ type: 'NEXT', now: Date.now() }), <Icon kind="next" size={L.button * 0.5} />)}
+        {button(paused ? 'Resume automatic rotation (every 20 minutes)' : 'Pause automatic rotation',
           () => send({ type: 'TOGGLE_PAUSE', now: Date.now() }),
           <Icon kind={paused ? 'play' : 'pause'} size={L.button * 0.46} />,
           paused ? { background: T.buttonActive } : {})}

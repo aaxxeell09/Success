@@ -3,183 +3,364 @@
     "id": "valdas",
     "name": "Valdas Dambrauskas",
     "category": "Football · Lituanie",
-    "lowest": "Pendant huit ans à Londres, il enchaîne les petits boulots : livreur de journaux, jardinier, employé de pub, tout en poursuivant son rêve de devenir entraîneur professionnel.",
-    "comeback": "En 2026, il mène Sabah en Ligue des champions, jusqu’à Old Trafford.",
+    "lowest": "En 2002, il quitte la Lituanie pour Londres avec 4 000 litas gagnés à un jeu télévisé. Pendant huit ans, il est vendeur, livreur de journaux, puis garde d’enfants, et consacre ses revenus à ses diplômes d’entraîneur tout en encadrant des jeunes à Fulham et Manchester United.",
+    "comeback": "Recruté par Sabah (Azerbaïdjan) en juin 2025, il remporte le doublé championnat et coupe en 2026, qualifie le club pour la première phase de Ligue des champions de son histoire, puis dirige le match à Old Trafford contre Manchester United le 10 septembre 2026 (défaite 4-0).",
+    "lesson": "Les années d’apprentissage invisibles finissent par compter.",
     "wikipedia": "Valdas Dambrauskas",
-    "lesson": "La persévérance peut prendre huit ans.",
-    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Valdas_Dambrauskas.jpg",
-    "image_credit": "Biser Todorov — CC BY 4.0 (Wikimedia Commons)",
-    "image_source": "https://commons.wikimedia.org/wiki/File:Valdas_Dambrauskas.jpg"
+    "photo": "photos/valdas.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Valdas_Dambrauskas.jpg/500px-Valdas_Dambrauskas.jpg",
+    "image_credit": "Biser Todorov, CC BY 4.0",
+    "image_license": "CC BY 4.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Valdas_Dambrauskas.jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Valdas_Dambrauskas",
+      "https://www.uefa.com/uefachampionsleague/news/02a9-218a9ecd5f83-091799d07d42-1000--different-roads-same-dream-how-sabah-and-coach-dambrauskas-reached-the-champions-league/",
+      "https://www.malaymail.com/news/sports/2026/09/11/manchester-united-mark-champions-league-return-with-4-0-win-over-debutants-sabah/234775"
+    ]
   },
   {
     "id": "jose",
     "name": "José Hernández",
     "category": "Astronautique · États-Unis",
-    "lowest": "Enfant d’ouvriers agricoles migrants, il travaille dans les champs, puis essuie onze refus successifs de la NASA.",
-    "comeback": "Accepté à sa douzième candidature en 2004, il part dans l’espace en 2009.",
+    "lowest": "Enfant d’une famille d’ouvriers agricoles mexicains, il travaille dans les champs de Californie entre deux écoles. Devenu ingénieur, il postule pour devenir astronaute et essuie onze refus successifs de la NASA.",
+    "comeback": "En mai 2004, à sa douzième candidature, il est sélectionné dans la promotion 19 de la NASA. Le 28 août 2009, il s’envole à bord de la navette Discovery (mission STS-128) vers la Station spatiale internationale.",
+    "lesson": "Onze refus ne décident pas du douzième.",
     "wikipedia": "José M. Hernández",
-    "lesson": "Onze refus ne décident pas du douzième."
+    "photo": "photos/jose.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Jose_Hernandez_v2.jpg/500px-Jose_Hernandez_v2.jpg",
+    "image_credit": "NASA, Domaine public",
+    "image_license": "Domaine public",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Jose_Hernandez_v2.jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Jos%C3%A9_M._Hern%C3%A1ndez",
+      "https://magazine.ucsb.edu/fall-winter-2023/jose-hernandez-86"
+    ]
   },
   {
     "id": "mandela",
     "name": "Nelson Mandela",
     "category": "Politique · Afrique du Sud",
-    "lowest": "Il passe vingt-sept ans en prison pour son combat contre l’apartheid.",
-    "comeback": "Libéré en 1990, il devient président de l’Afrique du Sud en 1994.",
+    "lowest": "Arrêté en août 1962, il est condamné à la prison à vie en 1964 lors du procès de Rivonia. Il passe vingt-sept ans en détention, dont dix-huit au bagne de Robben Island.",
+    "comeback": "Libéré le 11 février 1990, il négocie la fin de l’apartheid, reçoit le prix Nobel de la paix en 1993 et devient, le 10 mai 1994, le premier président de l’Afrique du Sud élu au suffrage universel.",
+    "lesson": "Une vie ne se résume pas à ses années d’enfermement.",
     "wikipedia": "Nelson Mandela",
-    "lesson": "Une vie ne se résume pas à ses années d’enfermement."
+    "photo": "photos/mandela.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Nelson_Mandela_1994.jpg/500px-Nelson_Mandela_1994.jpg",
+    "image_credit": "Kingkongphoto & www.celebrity-photos.com, CC BY-SA 2.0",
+    "image_license": "CC BY-SA 2.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Nelson_Mandela_1994.jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Nelson_Mandela",
+      "https://www.nobelprize.org/prizes/peace/1993/mandela/biographical/"
+    ]
   },
   {
     "id": "elon",
     "name": "Elon Musk",
     "category": "Entrepreneuriat · États-Unis",
-    "lowest": "Fin 2008, SpaceX a essuyé trois échecs de lancement et Tesla manque de liquidités, à quelques jours d’une possible faillite.",
-    "comeback": "SpaceX obtient un contrat de la NASA et Tesla boucle un financement décisif en décembre 2008.",
+    "lowest": "Le 2 août 2008, la fusée Falcon 1 de SpaceX échoue pour la troisième fois. En pleine crise financière, Tesla manque de liquidités et Musk, qui y a engagé l’essentiel de sa fortune personnelle, risque la faillite des deux entreprises.",
+    "comeback": "Le 28 septembre 2008, le quatrième lancement de Falcon 1 atteint l’orbite. Le 23 décembre, la NASA attribue à SpaceX un contrat de ravitaillement de 1,6 milliard de dollars, et Tesla boucle un tour de financement la veille de Noël.",
+    "lesson": "Le point de rupture peut précéder le retournement.",
     "wikipedia": "Elon Musk",
-    "lesson": "Le point de rupture peut précéder le retournement."
+    "photo": "photos/elon.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Elon_Musk_-_54820081119_%28cropped%29.jpg/500px-Elon_Musk_-_54820081119_%28cropped%29.jpg",
+    "image_credit": "Gage Skidmore, CC BY-SA 4.0",
+    "image_license": "CC BY-SA 4.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Elon_Musk_-_54820081119_(cropped).jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Falcon_1",
+      "https://en.wikipedia.org/wiki/Commercial_Resupply_Services",
+      "https://en.wikipedia.org/wiki/Elon_Musk"
+    ]
   },
   {
     "id": "chesky",
     "name": "Brian Chesky",
     "category": "Entrepreneuriat · Airbnb",
-    "lowest": "En 2008, Airbnb a très peu de clients. Ses fondateurs s’endettent et vendent des boîtes de céréales pour continuer.",
-    "comeback": "Ils rejoignent Y Combinator, améliorent le produit et construisent Airbnb.",
+    "lowest": "En 2008, le site de location qu’il a lancé avec Joe Gebbia et Nathan Blecharczyk attire très peu de clients et les investisseurs déclinent. Pour tenir, les fondateurs vendent des boîtes de céréales aux couleurs des candidats à la présidentielle américaine.",
+    "comeback": "Les céréales rapportent environ 30 000 dollars. Admis chez Y Combinator en janvier 2009, ils obtiennent en avril 600 000 dollars de Sequoia Capital : Airbnb devient l’une des plus grandes plateformes d’hébergement au monde.",
+    "lesson": "Survivre assez longtemps pour trouver ce qui marche.",
     "wikipedia": "Brian Chesky",
-    "lesson": "Survivre assez longtemps pour trouver ce qui marche."
+    "photo": "photos/chesky.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Brian_Chesky_2025.jpg/500px-Brian_Chesky_2025.jpg",
+    "image_credit": "Celeste Sloman, CC BY-SA 4.0",
+    "image_license": "CC BY-SA 4.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Brian_Chesky_2025.jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Airbnb",
+      "https://en.wikipedia.org/wiki/Brian_Chesky"
+    ]
   },
   {
     "id": "collison",
     "name": "Patrick et John Collison",
     "category": "Entrepreneuriat · Stripe",
-    "lowest": "L’infrastructure bancaire rend les paiements en ligne compliqués à intégrer. Deux jeunes frères affrontent les réticences du secteur.",
-    "comeback": "Ils créent Stripe en 2010 et simplifient profondément les paiements pour les développeurs.",
+    "lowest": "En 2022, Stripe, fondée par les frères Collison, voit sa valorisation interne passer de 95 à 74 milliards de dollars. En novembre, ils licencient environ 14 % des effectifs en reconnaissant avoir trop recruté, puis la levée de mars 2023 se fait à 50 milliards.",
+    "comeback": "L’activité continue de croître : en février 2025, une offre de rachat d’actions valorise Stripe à 91,5 milliards de dollars, puis à 159 milliards en février 2026, pour 1 900 milliards de dollars de paiements traités en 2025.",
+    "lesson": "Reconnaître une erreur de cap permet de repartir.",
     "wikipedia": "Patrick Collison",
-    "lesson": "Changer les règles demande souvent de commencer petit."
+    "photo": "photos/collison.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Patrick_Collison_%28cropped%29.jpg/500px-Patrick_Collison_%28cropped%29.jpg",
+    "image_credit": "JD Lasica, CC BY 2.0",
+    "image_license": "CC BY 2.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Patrick_Collison_(cropped).jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Stripe,_Inc.",
+      "https://stripe.com/newsroom/news/ceo-patrick-collisons-email-to-stripe-employees"
+    ]
   },
   {
     "id": "pope",
     "name": "Léon XIV",
     "category": "Religieux · Vatican",
-    "lowest": "Vers quarante ans, Robert Prevost travaille au Pérou comme prêtre et formateur, loin du centre du pouvoir de l’Église.",
-    "comeback": "Il devient supérieur général, évêque, cardinal, puis pape en 2025 à 69 ans.",
+    "lowest": "Missionnaire augustinien au Pérou à partir de 1985, Robert Prevost passe l’essentiel des années 1988 à 1998 à Trujillo, pendant le conflit armé avec le Sentier lumineux et une grave crise économique. Il y forme des séminaristes et dénonce les abus du régime Fujimori.",
+    "comeback": "Prieur général des Augustins de 2001 à 2013, évêque de Chiclayo en 2015, cardinal en 2023, il est élu pape le 8 mai 2025 à 69 ans, sous le nom de Léon XIV : le premier pape né aux États-Unis.",
+    "lesson": "Une longue vie de terrain peut mener au sommet.",
     "wikipedia": "Pope Leo XIV",
-    "lesson": "L’ascension peut suivre une longue vie de terrain."
+    "photo": "photos/pope.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Pope_Leo_XIV_3_%283x4_cropped%29.png/500px-Pope_Leo_XIV_3_%283x4_cropped%29.png",
+    "image_credit": "Edgar Beltrán (The Pillar), CC BY-SA 4.0",
+    "image_license": "CC BY-SA 4.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Pope_Leo_XIV_3_(3x4_cropped).png",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Pope_Leo_XIV",
+      "https://www.vatican.va/content/leo-xiv/en.html"
+    ]
   },
   {
     "id": "kariko",
     "name": "Katalin Karikó",
     "category": "Recherche · Médecine",
-    "lowest": "En 1995, faute de financement pour ses travaux sur l’ARN messager, elle est rétrogradée à l’université de Pennsylvanie.",
-    "comeback": "Elle poursuit ses recherches et reçoit le prix Nobel de médecine en 2023.",
+    "lowest": "En 1995, après des refus répétés de subventions pour ses travaux sur l’ARN messager, l’université de Pennsylvanie la rétrograde. Sa découverte clé avec Drew Weissman, publiée en 2005, est d’abord refusée par Nature et Science. En 2013, l’université refuse de la réintégrer et elle part chez BioNTech.",
+    "comeback": "Leurs nucléosides modifiés rendent possibles les vaccins à ARN messager contre la Covid-19 en 2020. Le 2 octobre 2023, Karikó et Weissman reçoivent le prix Nobel de physiologie ou médecine.",
+    "lesson": "La reconnaissance n’arrive pas toujours à temps, mais elle peut arriver.",
     "wikipedia": "Katalin Karikó",
-    "lesson": "La reconnaissance n’arrive pas toujours à temps."
+    "photo": "photos/kariko.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Katalin_Karik%C3%B3_by_Christopher_Michel_in_2024_02.jpg/500px-Katalin_Karik%C3%B3_by_Christopher_Michel_in_2024_02.jpg",
+    "image_credit": "Christopher Michel, CC BY-SA 4.0",
+    "image_license": "CC BY-SA 4.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Katalin_Karik%C3%B3_by_Christopher_Michel_in_2024_02.jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Katalin_Karik%C3%B3",
+      "https://www.nobelprize.org/prizes/medicine/2023/press-release/"
+    ]
   },
   {
     "id": "rdj",
     "name": "Robert Downey Jr.",
     "category": "Cinéma · États-Unis",
-    "lowest": "Sa carrière s’effondre dans les années 1990, marquées par les addictions, des condamnations et une incarcération.",
-    "comeback": "Il revient avec Iron Man en 2008, puis remporte un Oscar en 2024.",
+    "lowest": "Arrêté en juin 1996 en possession d’héroïne, de cocaïne et d’une arme, il multiplie les rechutes. En 1999, il est condamné à trois ans de détention à la prison d’État de Corcoran, puis, après une nouvelle arrestation en 2001, il est renvoyé de la série Ally McBeal.",
+    "comeback": "Sobre, il obtient le rôle de Tony Stark dans Iron Man, sorti le 2 mai 2008, qui relance sa carrière. En mars 2024, il remporte l’Oscar du meilleur second rôle pour Oppenheimer.",
+    "lesson": "Une carrière peut se reconstruire.",
     "wikipedia": "Robert Downey Jr.",
-    "lesson": "Une carrière peut se reconstruire."
+    "photo": "photos/rdj.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/RobertDowneyJr-byPhilipRomano7_%28cropped%29.jpg/500px-RobertDowneyJr-byPhilipRomano7_%28cropped%29.jpg",
+    "image_credit": "PhilipRomano, CC BY-SA 4.0",
+    "image_license": "CC BY-SA 4.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:RobertDowneyJr-byPhilipRomano7_(cropped).jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Robert_Downey_Jr.",
+      "https://www.oscars.org/oscars/ceremonies/2024"
+    ]
   },
   {
     "id": "dej",
     "name": "John Paul DeJoria",
     "category": "Entrepreneuriat · Paul Mitchell",
-    "lowest": "Il connaît des périodes sans logement et vend des produits capillaires de porte en porte.",
-    "comeback": "Avec Paul Mitchell, il lance une marque avec 700 dollars de départ et construit un groupe mondial.",
+    "lowest": "Vendeur d’encyclopédies au porte-à-porte, concierge, il connaît deux périodes sans domicile. En 1980, il vit dans une vieille voiture lorsqu’il fonde avec le coiffeur Paul Mitchell une marque de soins capillaires, financée par un prêt de 700 dollars.",
+    "comeback": "John Paul Mitchell Systems devient un groupe mondial de produits capillaires. En 1989, il cofonde la marque de tequila Patrón, rachetée par Bacardi en 2018 sur la base d’une valorisation de 5,1 milliards de dollars.",
+    "lesson": "Partir sans capital ne signifie pas être sans avenir.",
     "wikipedia": "John Paul DeJoria",
-    "lesson": "Partir sans capital ne signifie pas être sans avenir."
+    "photo": "photos/dej.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/John_Paul_DeJoria_by_Gage_Skidmore.jpg/500px-John_Paul_DeJoria_by_Gage_Skidmore.jpg",
+    "image_credit": "Gage Skidmore, CC BY-SA 3.0",
+    "image_license": "CC BY-SA 3.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:John_Paul_DeJoria_by_Gage_Skidmore.jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/John_Paul_DeJoria",
+      "https://en.wikipedia.org/wiki/Patr%C3%B3n"
+    ]
   },
   {
     "id": "jensen",
     "name": "Jensen Huang",
     "category": "Entrepreneuriat · Nvidia",
-    "lowest": "Dans les années 1990, Nvidia se rapproche d’une impasse financière après l’échec de sa première stratégie produit.",
-    "comeback": "L’entreprise change d’architecture, lance la RIVA 128 et poursuit son ascension.",
+    "lowest": "La première puce de Nvidia, NV1 (1995), échoue : son rendu par quadrilatères est incompatible avec Direct3D. Sega, pour qui elle conçoit la puce d’une future console, choisit un autre fournisseur. En 1996, Jensen Huang licencie plus de la moitié du personnel (de 100 à 40 personnes).",
+    "comeback": "Sega investit tout de même 5 millions de dollars. Lancée en août 1997, alors qu’il ne reste qu’un mois de salaires en caisse, la RIVA 128 se vend à environ un million d’exemplaires en quatre mois et sauve l’entreprise.",
+    "lesson": "Reconnaître l’erreur peut sauver le projet.",
     "wikipedia": "Jensen Huang",
-    "lesson": "Reconnaître l’erreur peut sauver le projet."
+    "photo": "photos/jensen.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Jen-Hsun_Huang_2025.jpg/500px-Jen-Hsun_Huang_2025.jpg",
+    "image_credit": "Daniel Torok (Maison-Blanche), Domaine public",
+    "image_license": "Domaine public",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Jen-Hsun_Huang_2025.jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Nvidia",
+      "https://en.wikipedia.org/wiki/NV1"
+    ]
   },
   {
     "id": "dyson",
     "name": "James Dyson",
     "category": "Invention · Royaume-Uni",
-    "lowest": "Il travaille pendant des années sur des milliers de prototypes d’aspirateur et rencontre des refus industriels.",
-    "comeback": "Il lance son produit sous sa propre marque et bâtit Dyson.",
+    "lowest": "À partir de la fin des années 1970, il fabrique 5 127 prototypes d’aspirateur cyclonique en cinq ans. Aucun fabricant ni distributeur britannique n’en veut : son invention menace le marché lucratif des sacs à poussière de rechange.",
+    "comeback": "En 1983, son G-Force est vendu au Japon sur catalogue. Avec les redevances, il lance en 1993 le DC01 sous sa propre marque, qui devient en dix-huit mois l’aspirateur le plus vendu du Royaume-Uni et fonde l’essor du groupe Dyson.",
+    "lesson": "Chaque prototype raté apporte une information.",
     "wikipedia": "James Dyson",
-    "lesson": "Chaque prototype raté apporte une information."
+    "photo": "photos/dyson.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Sir_James_Dyson_CBE_FREng_FRS.jpg/500px-Sir_James_Dyson_CBE_FREng_FRS.jpg",
+    "image_credit": "The Royal Society, CC BY-SA 4.0",
+    "image_license": "CC BY-SA 4.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Sir_James_Dyson_CBE_FREng_FRS.jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/James_Dyson",
+      "https://en.wikipedia.org/wiki/Dyson_(company)"
+    ]
   },
   {
     "id": "melanie",
     "name": "Melanie Perkins",
     "category": "Entrepreneuriat · Canva",
-    "lowest": "Elle reçoit plus de cent refus d’investisseurs pour son idée de rendre le design accessible à tous.",
-    "comeback": "Elle trouve des soutiens, lance Canva et développe la plateforme à l’international.",
+    "lowest": "En 2012, à San Francisco, elle cherche des fonds pour une plateforme de design en ligne simple d’accès. Avec Cameron Adams et Cliff Obrecht, elle essuie plus de cent refus d’investisseurs.",
+    "comeback": "Soutenue par Blackbird Ventures, elle lance Canva en 2013 à Sydney. En avril 2025, la plateforme revendique 230 millions d’utilisateurs et environ 3 milliards de dollars de revenus annuels.",
+    "lesson": "Cent refus ne sont pas une preuve d’impossibilité.",
     "wikipedia": "Melanie Perkins",
-    "lesson": "Cent refus ne sont pas une preuve d’impossibilité."
+    "photo": "photos/melanie.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/M_Perkins.jpg/500px-M_Perkins.jpg",
+    "image_credit": "Melanie Perkins (Flickr), CC BY-SA 2.0",
+    "image_license": "CC BY-SA 2.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:M_Perkins.jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Melanie_Perkins",
+      "https://en.wikipedia.org/wiki/Canva"
+    ]
   },
   {
     "id": "jobs",
     "name": "Steve Jobs",
     "category": "Technologie · Apple",
-    "lowest": "En 1985, il est écarté d’Apple, l’entreprise qu’il a cofondée.",
-    "comeback": "Il crée NeXT, développe Pixar et revient chez Apple en 1997.",
+    "lowest": "En mai 1985, après un conflit avec le PDG John Sculley, le conseil d’administration lui retire toute responsabilité opérationnelle chez Apple, l’entreprise qu’il a cofondée. Il démissionne en septembre 1985.",
+    "comeback": "Il fonde NeXT et rachète Pixar en 1986, qui sort Toy Story en 1995. Apple acquiert NeXT fin 1996 ; Jobs en redevient le PDG par intérim en septembre 1997 et lance l’iMac en 1998.",
+    "lesson": "Une exclusion peut devenir un nouveau départ.",
     "wikipedia": "Steve Jobs",
-    "lesson": "Une exclusion peut devenir un nouveau départ."
+    "photo": "photos/jobs.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Steve_Jobs_Headshot_2010_%28cropped_4%29.jpg/500px-Steve_Jobs_Headshot_2010_%28cropped_4%29.jpg",
+    "image_credit": "Matthew Yohe, CC BY-SA 3.0",
+    "image_license": "CC BY-SA 3.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Steve_Jobs_Headshot_2010_(cropped_4).jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Steve_Jobs",
+      "https://en.wikipedia.org/wiki/NeXT"
+    ]
   },
   {
     "id": "tina",
     "name": "Tina Turner",
     "category": "Musique · États-Unis",
-    "lowest": "En 1976, elle quitte un mariage violent et doit reconstruire seule sa carrière musicale.",
-    "comeback": "Elle revient sur le devant de la scène avec Private Dancer en 1984.",
+    "lowest": "Le 1er juillet 1976, à Dallas, elle fuit son mari Ike Turner après des années de violences. Elle repart presque sans argent, fait face aux poursuites pour les concerts annulés du duo et doit remonter seule sur scène pour rembourser ses dettes.",
+    "comeback": "Son album Private Dancer, sorti en mai 1984, se vend à 10 millions d’exemplaires. Le 1er septembre 1984, What’s Love Got to Do with It atteint la première place aux États-Unis, et elle remporte trois Grammy Awards en 1985.",
+    "lesson": "Recommencer n’efface pas le talent.",
     "wikipedia": "Tina Turner",
-    "lesson": "Recommencer n’efface pas le talent."
+    "photo": "photos/tina.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Tina_Turner_Breaks_All_the_Rules.png/500px-Tina_Turner_Breaks_All_the_Rules.png",
+    "image_credit": "HBO, Domaine public",
+    "image_license": "Domaine public",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Tina_Turner_Breaks_All_the_Rules.png",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Tina_Turner",
+      "https://en.wikipedia.org/wiki/Private_Dancer"
+    ]
   },
   {
     "id": "knight",
     "name": "Phil Knight",
     "category": "Entrepreneuriat · Nike",
-    "lowest": "Au milieu des années 1970, la croissance de sa société provoque une grave crise de trésorerie et un conflit bancaire.",
-    "comeback": "Un nouveau soutien financier permet à Nike de traverser la crise et de poursuivre son développement.",
+    "lowest": "En 1975, Blue Ribbon Sports, sa société qui vend les chaussures Nike, croît plus vite que sa trésorerie. Sa banque, la Bank of California, rompt avec elle, et il apprend que le FBI enquête sur lui pour fraude.",
+    "comeback": "La maison de commerce japonaise Nissho Iwai rembourse la dette bancaire et l’enquête n’a pas de suite. L’entreprise, rebaptisée Nike, Inc. en 1978, entre en Bourse en décembre 1980.",
+    "lesson": "Grandir exige parfois de survivre à sa croissance.",
     "wikipedia": "Phil Knight",
-    "lesson": "Grandir exige parfois de survivre à sa croissance."
+    "photo": "photos/knight.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Philknightfootball.jpg/500px-Philknightfootball.jpg",
+    "image_credit": "Neon Tommy, CC BY-SA 2.0",
+    "image_license": "CC BY-SA 2.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Philknightfootball.jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Shoe_Dog",
+      "https://www.litcharts.com/lit/shoe-dog/15-1975",
+      "https://en.wikipedia.org/wiki/Nike,_Inc."
+    ]
   },
   {
     "id": "jan",
     "name": "Jan Koum",
     "category": "Entrepreneuriat · WhatsApp",
-    "lowest": "Arrivé adolescent aux États-Unis, il grandit dans une famille qui dépend des aides sociales.",
-    "comeback": "Il cofonde WhatsApp, racheté par Facebook en 2014 dans une opération annoncée à 19 milliards de dollars.",
+    "lowest": "En 1992, à 16 ans, il quitte l’Ukraine avec sa mère et sa grand-mère pour Mountain View, en Californie. Un programme d’aide sociale leur procure un petit logement ; il fait le ménage dans une épicerie et sa mère, gardienne d’enfants, meurt d’un cancer en 2000.",
+    "comeback": "En 2009, il fonde WhatsApp avec Brian Acton. En février 2014, Facebook annonce le rachat de l’application pour environ 19 milliards de dollars.",
+    "lesson": "Les débuts ne déterminent pas la destination.",
     "wikipedia": "Jan Koum",
-    "lesson": "Les débuts ne déterminent pas la destination."
+    "photo": "photos/jan.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Jan_Koum_-_Whatsapp_-_4_Years_from_Now_%2812791516533%29.jpg/500px-Jan_Koum_-_Whatsapp_-_4_Years_from_Now_%2812791516533%29.jpg",
+    "image_credit": "Dan Taylor (Tech.eu), CC BY 2.0",
+    "image_license": "CC BY 2.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Jan_Koum_-_Whatsapp_-_4_Years_from_Now_(12791516533).jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Jan_Koum",
+      "https://www.forbes.com/sites/parmyolson/2014/02/19/exclusive-inside-story-how-jan-koum-built-whatsapp-into-facebooks-new-19-billion-baby/"
+    ]
   },
   {
     "id": "thatcher",
     "name": "Margaret Thatcher",
     "category": "Politique · Royaume-Uni",
-    "lowest": "Fille d’épicier, elle perd deux élections législatives en 1950 et 1951, puis traverse une crise de popularité majeure en 1981.",
-    "comeback": "Elle devient Première ministre en 1979 et remporte une nouvelle élection en 1983.",
+    "lowest": "Première ministre depuis mai 1979, elle affronte en 1981 la récession, un chômage en forte hausse et des émeutes urbaines. Fin 1981, seuls 25 % des Britanniques se disent satisfaits de son action, le plus bas niveau alors mesuré pour un chef de gouvernement d’après-guerre.",
+    "comeback": "Après la victoire britannique aux Malouines (juin 1982) et la reprise économique, elle remporte les élections du 9 juin 1983 avec une large majorité de 144 sièges, puis gouverne jusqu’en 1990.",
+    "lesson": "Une impopularité record n’achève pas nécessairement un parcours.",
     "wikipedia": "Margaret Thatcher",
-    "lesson": "Une défaite n’achève pas nécessairement un parcours."
+    "photo": "photos/thatcher.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Margaret_Thatcher_stock_portrait_%28cropped%29.jpg/500px-Margaret_Thatcher_stock_portrait_%28cropped%29.jpg",
+    "image_credit": "Margaret Thatcher Foundation (recadrage : Begoon), Libre de droits (Copyrighted free use)",
+    "image_license": "Libre de droits (Copyrighted free use)",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Margaret_Thatcher_stock_portrait_(cropped).jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Margaret_Thatcher",
+      "https://www.ipsos.com/en-uk/margaret-thatcher-1925-2013",
+      "https://en.wikipedia.org/wiki/1983_United_Kingdom_general_election"
+    ]
   },
   {
     "id": "trump",
     "name": "Donald Trump",
     "category": "Politique · États-Unis",
-    "lowest": "En mai 2024, il est reconnu coupable de 34 chefs d’accusation à New York. Une peine de prison est alors légalement possible.",
-    "comeback": "Il remporte l’élection présidentielle de novembre 2024 et reprend ses fonctions en janvier 2025.",
+    "lowest": "Le 30 mai 2024, un jury new-yorkais le déclare coupable de 34 chefs de falsification de documents comptables : il devient le premier ancien président américain condamné au pénal.",
+    "comeback": "Il remporte l’élection présidentielle du 5 novembre 2024 et prête serment le 20 janvier 2025 pour un second mandat. Dix jours plus tôt, il avait été condamné à une dispense de peine inconditionnelle.",
+    "lesson": "Un retournement politique peut être spectaculaire.",
     "wikipedia": "Donald Trump",
-    "lesson": "Un retournement politique peut être spectaculaire."
+    "photo": "photos/trump.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Official_Presidential_Portrait_of_President_Donald_J._Trump_%282025%29.jpg/500px-Official_Presidential_Portrait_of_President_Donald_J._Trump_%282025%29.jpg",
+    "image_credit": "Daniel Torok, Domaine public",
+    "image_license": "Domaine public",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Official_Presidential_Portrait_of_President_Donald_J._Trump_(2025).jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Prosecution_of_Donald_Trump_in_New_York",
+      "https://en.wikipedia.org/wiki/2024_United_States_presidential_election"
+    ]
   },
   {
     "id": "niel",
     "name": "Xavier Niel",
     "category": "Entrepreneuriat · France",
-    "lowest": "En 2004, il est placé en détention provisoire pendant un mois. Il bénéficiera d’un non-lieu pour proxénétisme, puis sera condamné pour recel d’abus de biens sociaux.",
-    "comeback": "Il poursuit le développement de ses activités, notamment avec Free Mobile lancé en 2012.",
+    "lowest": "Le 28 mai 2004, le fondateur de Free est mis en examen et placé en détention provisoire pendant un mois. Le juge prononce un non-lieu pour proxénétisme aggravé en août 2005, mais il est condamné en octobre 2006 à deux ans de prison avec sursis et 250 000 euros d’amende pour recel d’abus de biens sociaux.",
+    "comeback": "Il reste à la tête de son groupe et lance Free Mobile le 10 janvier 2012 avec des forfaits à bas prix qui bousculent le marché français de la téléphonie mobile.",
+    "lesson": "Un revers judiciaire ne se confond pas avec une fin de carrière.",
     "wikipedia": "Xavier Niel",
-    "lesson": "Un revers judiciaire ne se confond pas avec une fin de carrière."
+    "photo": "photos/niel.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Xavier_Niel004.jpg/500px-Xavier_Niel004.jpg",
+    "image_credit": "Christopher Michel, CC BY 2.0",
+    "image_license": "CC BY 2.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Xavier_Niel004.jpg",
+    "sources": [
+      "https://fr.wikipedia.org/wiki/Xavier_Niel",
+      "https://fr.wikipedia.org/wiki/Free_Mobile"
+    ]
   }
 ]

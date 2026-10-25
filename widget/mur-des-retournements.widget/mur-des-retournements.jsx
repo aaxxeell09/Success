@@ -68,8 +68,8 @@ const CONFIG = {
   // lettres) tiennent entiers : la zone de texte ne défile pas, agrandir une
   // police ou une marge peut couper la fin du texte.
   layout: {
-    name: 20, category: 10, headline: 11, body: 11.5, eyebrow: 9, lineHeight: 1.35,
-    photo: PHOTO_HEIGHT, content: CONTENT_HEIGHT, nav: NAV_HEIGHT, pad: 14, padY: 9, gap: 8, button: 26,
+    name: 21, category: 10.5, headline: 11.5, body: 12.5, eyebrow: 9.5, lineHeight: 1.42,
+    photo: PHOTO_HEIGHT, content: CONTENT_HEIGHT, nav: NAV_HEIGHT, pad: 14, padY: 13, gap: 13, button: 26,
   },
 };
 
@@ -375,7 +375,7 @@ export const render = (state, dispatch) => {
         padding: `${L.padY}px ${L.pad}px` }}>
         {sections.map((sec, i) => (
           <section key={sec.key} data-role={sec.key} style={{ marginBottom: i < sections.length - 1 ? L.gap : 0 }}>
-            <div style={{ fontSize: L.eyebrow, fontWeight: 800, lineHeight: 1, letterSpacing: 1.6, color: sec.color, marginBottom: 3 }}>{sec.label}</div>
+            <div style={{ fontSize: L.eyebrow, fontWeight: 800, lineHeight: 1, letterSpacing: 1.6, color: sec.color, marginBottom: 5 }}>{sec.label}</div>
             <p style={{ fontSize: L.body, lineHeight: L.lineHeight, margin: 0, color: T.text, ...wrapText }}>{sec.text}</p>
           </section>
         ))}

@@ -1,0 +1,197 @@
+// État de l'interface du widget « Le mur des retournements ».
+// Module ES pur : aucun JSX, aucun import d'Übersicht, aucun accès global
+// implicite. Le temps (`now`) et le stockage (`storage`) sont toujours injectés,
+// ce qui permet de tester ce module sous Node 22 (`node --test`).
+
+export const SIZES = [
+  { key: 'S', width: 320 },
+  { key: 'M', width: 420 },
+  { key: 'L', width: 540 },
+];
+export const ROTATION_MS = 20 * 60 * 1000;
+export const PREFS_KEY = 'mur-des-retournements-settings-v2';
+
+// Ancienne clé (widget v1) : lue une seule fois en repli pour conserver
+// la taille et l'état de pause choisis avant la mise à jour.
+const LEGACY_PREFS_KEY = 'mur-des-retournements-settings-v1';
+const DEFAULT_SIZE = 1;
+
+const REPO_RAW_BASE = 'https://raw.githubusercontent.com/aaxxeell09/Success/main/widget/mur-des-retournements.widget/';
+const LOCAL_BASE = 'mur-des-retournements.widget/';
+
+const isValidSize = (n) => Number.isInteger(n) && n >= 0 && n < SIZES.length;
+const asStories = (list) => (Array.isArray(list) ? list.filter((s) => s && typeof s.id === 'string') : []);
+const hasId = (stories, id) => typeof id === 'string' && stories.some((s) => s.id === id);
+const firstId = (stories) => (stories.length ? stories[0].id : null);
+const isNum = (n) => typeof n === 'number' && Number.isFinite(n);
+
+// Index de la personne courante (0 si l'id a disparu ou si la liste est vide).
+export function currentIndex(state) {
+  const stories = asStories(state && state.stories);
+  const i = stories.findIndex((s) => s.id === (state && state.currentId));
+  return i >= 0 ? i : 0;
+}
+
+export function createInitialState(localStories, now) {
+  const stories = asStories(localStories);
+  return {
+    stories,
+    currentId: firstId(stories),
+    size: DEFAULT_SIZE,
+    paused: false,
+    lastAdvanceAt: isNum(now) ? now : 0,
+    photos: {},
+    lastSync: null,
+    syncError: null,
+    source: 'local',
+  };
+}
+
+// Déplacement circulaire de `delta` positions à partir de la personne courante.
+function step(state, delta) {
+  const stories = asStories(state.stories);
+  if (!stories.length) return state.currentId;
+  const n = stories.length;
+  const i = currentIndex(state);
+  return stories[(((i + delta) % n) + n) % n].id;
+}
+
+function errorText(error) {
+  if (!error) return 'Erreur de synchronisation';
+  if (typeof error === 'string') return error;
+  if (typeof error.message === 'string' && error.message) return error.message;
+  return String(error);
+}
+
+export function reducer(state, event) {
+  const s = state || createInitialState([], 0);
+  if (!event || typeof event.type !== 'string') return s;
+  const now = isNum(event.now) ? event.now : null;
+
+  switch (event.type) {
+    case 'RESTORE': {
+      const prefs = event.prefs || {};
+      const stories = asStories(s.stories);
+      return {
+        ...s,
+        currentId: hasId(stories, prefs.currentId) ? prefs.currentId : (hasId(stories, s.currentId) ? s.currentId : firstId(stories)),
+        size: isValidSize(prefs.size) ? prefs.size : s.size,
+        paused: typeof prefs.paused === 'boolean' ? prefs.paused : s.paused,
+        lastAdvanceAt: now !== null ? now : s.lastAdvanceAt,
+      };
+    }
+    case 'NEXT':
+    case 'PREV':
+      return {
+        ...s,
+        currentId: step(s, event.type === 'NEXT' ? 1 : -1),
+        lastAdvanceAt: now !== null ? now : s.lastAdvanceAt,
+      };
+    case 'TICK': {
+      if (s.paused || now === null) return s;
+      if (!isNum(s.lastAdvanceAt)) return { ...s, lastAdvanceAt: now };
+      if (now - s.lastAdvanceAt < ROTATION_MS) return s;
+      return { ...s, currentId: step(s, 1), lastAdvanceAt: now };
+    }
+    case 'SIZE':
+      return isValidSize(event.size) && event.size !== s.size ? { ...s, size: event.size } : s;
+    case 'TOGGLE_PAUSE':
+      // À la reprise, le compte à rebours de 20 minutes repart de zéro.
+      return { ...s, paused: !s.paused, lastAdvanceAt: now !== null ? now : s.lastAdvanceAt };
+    case 'DATA': {
+      const stories = asStories(event.stories);
+      if (!stories.length) return s;
+      return {
+        ...s,
+        stories,
+        currentId: hasId(stories, s.currentId) ? s.currentId : firstId(stories),
+        lastSync: isNum(event.at) ? event.at : s.lastSync,
+        syncError: event.source === 'cache' ? s.syncError : null,
+        source: typeof event.source === 'string' ? event.source : s.source,
+      };
+    }
+    case 'SYNC_OK':
+      return { ...s, lastSync: isNum(event.at) ? event.at : s.lastSync, syncError: null };
+    case 'SYNC_FAIL':
+      return { ...s, syncError: errorText(event.error) };
+    case 'PHOTOS': {
+      const incoming = event.photos && typeof event.photos === 'object' ? event.photos : {};
+      const clean = {};
+      for (const [title, url] of Object.entries(incoming)) {
+        if (typeof url === 'string' && /^https:\/\//.test(url)) clean[title] = url;
+      }
+      if (!Object.keys(clean).length) return s;
+      return { ...s, photos: { ...(s.photos || {}), ...clean } };
+    }
+    default:
+      return s;
+  }
+}
+
+function readJson(storage, key) {
+  try {
+    if (!storage || typeof storage.getItem !== 'function') return null;
+    const raw = storage.getItem(key);
+    if (typeof raw !== 'string' || !raw) return null;
+    const value = JSON.parse(raw);
+    return value && typeof value === 'object' && !Array.isArray(value) ? value : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+// Préférences validées. `defaults` (facultatif) fournit les valeurs utilisées
+// quand rien n'est enregistré, par exemple celles du bloc CONFIG du widget.
+// Ne lève jamais.
+export function loadPrefs(storage, defaults) {
+  const d = defaults && typeof defaults === 'object' ? defaults : {};
+  const fallback = {
+    currentId: typeof d.currentId === 'string' ? d.currentId : null,
+    size: isValidSize(d.size) ? d.size : DEFAULT_SIZE,
+    paused: typeof d.paused === 'boolean' ? d.paused : false,
+  };
+  const saved = readJson(storage, PREFS_KEY) || readJson(storage, LEGACY_PREFS_KEY) || {};
+  return {
+    currentId: typeof saved.currentId === 'string' && saved.currentId ? saved.currentId : fallback.currentId,
+    size: isValidSize(saved.size) ? saved.size : fallback.size,
+    paused: typeof saved.paused === 'boolean' ? saved.paused : fallback.paused,
+  };
+}
+
+// Ne lève jamais (stockage absent, plein ou interdit).
+export function savePrefs(storage, state) {
+  try {
+    if (!storage || typeof storage.setItem !== 'function' || !state) return;
+    storage.setItem(PREFS_KEY, JSON.stringify({
+      currentId: typeof state.currentId === 'string' ? state.currentId : null,
+      size: isValidSize(state.size) ? state.size : DEFAULT_SIZE,
+      paused: state.paused === true,
+    }));
+  } catch (_) {
+    // Stockage indisponible : les préférences ne seront simplement pas gardées.
+  }
+}
+
+// Chemin relatif sûr : pas de schéma, pas de chemin absolu, pas de « .. ».
+const safeRelativePath = (p) =>
+  typeof p === 'string' && p.trim() !== '' && !/^[a-z][a-z0-9+.-]*:/i.test(p) &&
+  !p.startsWith('/') && !p.startsWith('\\') && !p.split(/[\\/]/).includes('..');
+
+const isHttps = (u) => typeof u === 'string' && /^https:\/\/\S+$/.test(u);
+
+// Liste ordonnée des URL de photo à essayer. Une liste vide signifie : initiales.
+export function photoCandidates(story, wikiPhotos) {
+  if (!story || typeof story !== 'object') return [];
+  const out = [];
+  const push = (u) => { if (u && !out.includes(u)) out.push(u); };
+  if (safeRelativePath(story.photo)) {
+    const rel = story.photo.trim().replace(/^\.\//, '');
+    const encoded = rel.split('/').map(encodeURIComponent).join('/');
+    push(LOCAL_BASE + encoded);
+    push(REPO_RAW_BASE + encoded);
+  }
+  if (isHttps(story.image_url)) push(story.image_url);
+  const photos = wikiPhotos && typeof wikiPhotos === 'object' ? wikiPhotos : {};
+  if (typeof story.wikipedia === 'string' && isHttps(photos[story.wikipedia])) push(photos[story.wikipedia]);
+  return out;
+}

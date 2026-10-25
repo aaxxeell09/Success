@@ -3,35 +3,275 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mur des retournements — Aperçu</title>
+<title>Mur des retournements</title>
+<meta name="description" content="Aperçu navigateur du widget Übersicht « Le mur des retournements »." />
 <style>
-:root{color-scheme:dark;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif}
-*{box-sizing:border-box}body{min-height:100vh;display:grid;place-items:center;padding:35px;background:radial-gradient(ellipse at 70% 15%,#5e8bb4 0%,transparent 55%),linear-gradient(145deg,#183454,#132034 70%,#0a1627);color:white}
-#card{width:440px;max-width:95vw;border:1px solid #ffffff36;overflow:hidden;border-radius:26px;background:rgba(20,29,48,.89);box-shadow:0 18px 48px #0006;backdrop-filter:blur(28px);transition:width .18s}
-.top{display:flex;justify-content:space-between;align-items:center;padding:20px 22px 14px;color:#b9cde5;text-transform:uppercase;letter-spacing:1.3px;font-size:13px;font-weight:750}.num{font-size:12px;color:#b8c6d7;letter-spacing:0}
-.hero{height:238px;background:linear-gradient(125deg,#263c5e,#1a2c45);position:relative;overflow:hidden}.hero img{width:100%;height:100%;object-fit:cover;object-position:center 28%}.avatar{font-size:72px;font-weight:800;color:#ffffff4a;display:grid;place-items:center;height:100%}.shade{position:absolute;inset:0;background:linear-gradient(0deg,#0a121ffc 0%,transparent 70%);pointer-events:none}.identity{position:absolute;bottom:16px;left:22px;right:22px}.category{color:#c3d7f0;font-size:12px;margin-bottom:3px}.name{font-weight:800;font-size:29px;line-height:1.1}.body{padding:21px 22px 18px}.eyebrow{font-size:10px;letter-spacing:1.9px;font-weight:800;margin-bottom:7px}.low{color:#f6b0ad}.high{color:#8fe0bd}.body p{font-size:14px;line-height:1.53;margin:0 0 18px}.lesson{border-top:1px solid #ffffff29;padding-top:11px;font-size:12px;font-style:italic;color:#a9c1dd}.bar{border-top:1px solid #ffffff1a;background:#0002;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}.controls,.sizes{display:flex;gap:6px}button{appearance:none;border:1px solid #ffffff33;background:#ffffff1c;border-radius:12px;min-width:32px;height:32px;padding:0 8px;color:white;font-size:18px;cursor:pointer}.sizes button{font-size:11px;min-width:27px;height:28px}.active{background:#ffffff55}footer{margin-top:22px;color:#cfdfed;font-size:12px;text-align:center;max-width:450px}footer a{color:#c4ddff}
+/* Aperçu autonome, fidèle au widget (mêmes couleurs, tailles et comportements
+   que le bloc CONFIG de widget/mur-des-retournements.widget/mur-des-retournements.jsx). */
+:root {
+  --bg: 16, 22, 36;
+  --bg-opacity: 0.72;
+  --border: rgba(255, 255, 255, 0.16);
+  --text: #f5f7fa;
+  --muted: #a9b8cc;
+  --faint: #7d8ca3;
+  --title: #c4d4ea;
+  --low: #ff9f9a;
+  --high: #7fdcb4;
+  --lesson: #c9d8ee;
+  --button: rgba(255, 255, 255, 0.10);
+  --button-active: rgba(255, 255, 255, 0.30);
+  --button-border: rgba(255, 255, 255, 0.18);
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  min-height: 100vh; font-family: var(--font); color: var(--text); -webkit-font-smoothing: antialiased;
+  background: radial-gradient(ellipse at 18% 12%, #4f7fae 0%, transparent 55%),
+              radial-gradient(ellipse at 85% 80%, #c9805e 0%, transparent 50%),
+              linear-gradient(150deg, #1d3557 0%, #2b2f4a 55%, #141b2d 100%);
+  background-attachment: fixed;
+  display: flex; flex-direction: column; align-items: center; gap: 22px; padding: 40px 16px;
+  overflow-x: hidden;
+}
+#card {
+  width: var(--w, 420px); max-width: 100%; overflow: hidden; border-radius: 24px; border: 1px solid var(--border);
+  background: rgba(var(--bg), var(--bg-opacity));
+  -webkit-backdrop-filter: blur(30px) saturate(160%); backdrop-filter: blur(30px) saturate(160%);
+  box-shadow: 0 22px 50px rgba(0,0,0,.34), 0 2px 8px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.08);
+  transition: width .2s ease;
+}
+.wrap { overflow-wrap: anywhere; word-break: break-word; -webkit-hyphens: auto; hyphens: auto; }
+header.top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: calc(var(--pad) * .7) var(--pad) calc(var(--pad) * .6); }
+.brand { font-size: calc(var(--eyebrow) + .5px); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--title); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.status { display: flex; align-items: center; gap: 7px; flex-shrink: 0; font-size: calc(var(--eyebrow) + 1px); color: var(--muted); font-variant-numeric: tabular-nums; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot, #8e8e93); box-shadow: 0 0 0 3px color-mix(in srgb, var(--dot, #8e8e93) 20%, transparent); }
+.offline { color: #ff9f0a; font-weight: 600; }
+.hero { position: relative; height: var(--photo); overflow: hidden; background: linear-gradient(135deg, #2b4266 0%, #1a2a44 100%); }
+.initials { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding-bottom: calc(var(--photo) * .24); font-family: var(--display); font-size: calc(var(--photo) * .3); font-weight: 700; letter-spacing: 2px; color: rgba(255,255,255,.30); }
+.hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+.shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, rgba(var(--bg), .96) 0%, rgba(var(--bg), .55) 32%, rgba(var(--bg), 0) 62%); }
+.identity { position: absolute; left: var(--pad); right: var(--pad); bottom: calc(var(--pad) * .8); }
+.category { font-size: var(--category); font-weight: 600; letter-spacing: .4px; color: var(--title); margin-bottom: 4px; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
+.name { font-family: var(--display); font-size: var(--name); font-weight: 760; line-height: 1.08; letter-spacing: -.3px; text-shadow: 0 2px 16px rgba(0,0,0,.55); }
+.body { padding: calc(var(--pad) * .9) var(--pad) calc(var(--pad) * .8); }
+.eyebrow { font-size: var(--eyebrow); font-weight: 800; letter-spacing: 1.8px; margin-bottom: 6px; }
+.eyebrow.low { color: var(--low); } .eyebrow.high { color: var(--high); }
+.body p { font-size: var(--body); line-height: 1.5; margin: 0; }
+.body p.first { margin-bottom: var(--gap); }
+.lesson { margin-top: var(--gap); padding-top: calc(var(--gap) * .75); border-top: 1px solid var(--border); font-size: var(--lesson); line-height: 1.45; font-style: italic; color: var(--lesson); }
+.credit { margin-top: calc(var(--gap) * .7); font-size: 9.5px; line-height: 1.35; color: var(--faint); }
+nav.bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: calc(var(--pad) * .55) calc(var(--pad) * .8); border-top: 1px solid var(--border); background: rgba(0,0,0,.14); }
+.group { display: flex; gap: 6px; } .group.sizes { gap: 4px; }
+button {
+  appearance: none; -webkit-appearance: none; display: inline-flex; align-items: center; justify-content: center;
+  min-width: var(--btn); height: var(--btn); padding: 0 7px; border-radius: calc(var(--btn) / 2.4);
+  border: 1px solid var(--button-border); background: var(--button); color: var(--text); cursor: pointer;
+  font: 650 11px/1 var(--font); letter-spacing: .3px;
+}
+button:hover { background: rgba(255,255,255,.18); }
+button:focus-visible { outline: 2px solid #8fc1ff; outline-offset: 2px; }
+button.active { background: var(--button-active); }
+.sizes button { min-width: calc(var(--btn) - 2px); height: calc(var(--btn) - 2px); }
+button svg { width: calc(var(--btn) * .5); height: calc(var(--btn) * .5); }
+[hidden] { display: none !important; }
+.note { max-width: 520px; font-size: 12.5px; line-height: 1.55; color: #d3dfee; text-align: center; }
+.note a { color: #b9d6ff; }
+.note code { font-size: 11.5px; background: rgba(255,255,255,.1); padding: 1px 5px; border-radius: 5px; }
 </style>
 </head>
 <body>
-<div><article id="card"><header class="top"><span>Le mur des retournements</span><span class="num" id="count"></span></header><section class="hero"><div id="avatar" class="avatar">?</div><img id="photo" alt="" hidden><div class="shade"></div><div class="identity"><div class="category" id="category"></div><div class="name" id="name"></div></div></section><div class="body"><div class="eyebrow low">AU PLUS BAS</div><p id="lowest"></p><div class="eyebrow high">LE RETOURNEMENT</div><p id="comeback"></p><div class="lesson" id="lesson"></div></div><nav class="bar"><div class="controls"><button id="prev" title="Précédent">‹</button><button id="next" title="Suivant">›</button><button id="pause" title="Pause">Ⅱ</button></div><div class="sizes"><button data-size="340">S</button><button data-size="440" class="active">M</button><button data-size="560">L</button></div></nav></article><footer>Prévisualisation web — le vrai widget s'affiche sur le bureau macOS avec <a href="https://tracesof.net/uebersicht/">Übersicht</a>.</footer></div>
+<article id="card" aria-label="Le mur des retournements" lang="fr">
+  <header class="top">
+    <div class="brand">Le mur des retournements</div>
+    <div class="status" id="status">
+      <span class="offline" id="offline" hidden>hors connexion</span>
+      <span class="dot" id="dot"></span>
+      <span id="count">1 / 1</span>
+    </div>
+  </header>
+  <section class="hero">
+    <div class="initials" id="initials" aria-hidden="true"></div>
+    <img id="photo" alt="" hidden />
+    <div class="shade"></div>
+    <div class="identity">
+      <div class="category wrap" id="category"></div>
+      <div class="name wrap" id="name"></div>
+    </div>
+  </section>
+  <div class="body">
+    <div class="eyebrow low">AU PLUS BAS</div>
+    <p class="first wrap" id="lowest"></p>
+    <div class="eyebrow high">LE RETOURNEMENT</div>
+    <p class="wrap" id="comeback"></p>
+    <div class="lesson wrap" id="lesson" hidden></div>
+    <div class="credit wrap" id="credit" hidden></div>
+  </div>
+  <nav class="bar" aria-label="Commandes du widget">
+    <div class="group">
+      <button type="button" id="prev" title="Personne précédente" aria-label="Personne précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button type="button" id="next" title="Personne suivante" aria-label="Personne suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+      <button type="button" id="pause"></button>
+    </div>
+    <div class="group sizes" role="group" aria-label="Taille du widget">
+      <button type="button" data-size="0" title="Taille petite (S)" aria-label="Taille petite (S)">S</button>
+      <button type="button" data-size="1" title="Taille moyenne (M)" aria-label="Taille moyenne (M)">M</button>
+      <button type="button" data-size="2" title="Taille grande (L)" aria-label="Taille grande (L)">L</button>
+    </div>
+  </nav>
+</article>
+<p class="note">Aperçu navigateur. Le vrai widget s'affiche sur le bureau macOS avec <a href="https://tracesof.net/uebersicht/">Übersicht</a> ; ses boutons répondent aux clics avec le raccourci d'interaction d'Übersicht et l'autorisation Accessibilité. Données lues depuis GitHub, puis <code>../stories.json</code> si le dossier est servi localement (<code>python3 -m http.server</code>).</p>
+
 <script>
-let stories = [], index=0, paused=false, photoMap={};
-const $=id=>document.getElementById(id);
-const render=()=>{
- const s=stories[index];if(!s)return;
- $('count').textContent=`${index+1} / ${stories.length}`;
- for(const id of ['name','category','lowest','comeback'])$(id).textContent=s[id]||'';
- $('lesson').textContent=s.lesson?`« ${s.lesson} »`:'';
- const img=s.image_url||photoMap[s.wikipedia];$('avatar').textContent=s.name.split(' ').slice(0,2).map(x=>x[0]).join('');
- $('photo').hidden=!img;$('avatar').hidden=!!img;if(img)$('photo').src=img;
-};
-const step=d=>{index=(index+d+stories.length)%stories.length;render()};
-$('prev').onclick=()=>step(-1);$('next').onclick=()=>step(1);
-$('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'▶':'Ⅱ'};
-for(const b of document.querySelectorAll('[data-size]'))b.onclick=()=>{document.querySelectorAll('[data-size]').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('card').style.width=b.dataset.size+'px'};
-$('photo').onerror=()=>{$('photo').hidden=true;$('avatar').hidden=false};
-setInterval(()=>{if(!paused&&stories.length)step(1)},20*60*1000);
-fetch('../stories.json').then(r=>r.json()).then(d=>{stories=d;render();const titles=[...new Set(d.map(x=>x.wikipedia).filter(Boolean))];const q=new URLSearchParams({action:'query',prop:'pageimages',pithumbsize:'750',titles:titles.join('|'),format:'json',origin:'*'});return fetch('https://en.wikipedia.org/w/api.php?'+q).then(r=>r.json()).then(x=>{Object.values(x?.query?.pages||{}).forEach(p=>{if(p.thumbnail)photoMap[p.title]=p.thumbnail.source});render()})}).catch(()=>{$('name').textContent='Servez ce dossier avec un serveur local pour voir l’aperçu';});
+(() => {
+  'use strict';
+  // Mêmes constantes que lib/state.js et lib/sync.js.
+  const SIZES = [{ key: 'S', width: 320 }, { key: 'M', width: 420 }, { key: 'L', width: 540 }];
+  const LAYOUTS = [
+    { name: 21, category: 11, body: 12.5, eyebrow: 9.5, lesson: 11.5, photo: 168, pad: 16, gap: 13, button: 28 },
+    { name: 27, category: 12, body: 13.5, eyebrow: 10, lesson: 12.5, photo: 230, pad: 20, gap: 16, button: 30 },
+    { name: 33, category: 13, body: 15, eyebrow: 10.5, lesson: 13.5, photo: 300, pad: 24, gap: 19, button: 32 },
+  ];
+  const ROTATION_MS = 20 * 60 * 1000;
+  const PREFS_KEY = 'mur-des-retournements-preview-v2';
+  const DATA_URL = 'https://raw.githubusercontent.com/aaxxeell09/Success/main/stories.json';
+  const RAW_WIDGET = 'https://raw.githubusercontent.com/aaxxeell09/Success/main/widget/mur-des-retournements.widget/';
+  const LOCAL_WIDGET = '../widget/mur-des-retournements.widget/';
+
+  // Repli si aucune source n'est joignable (ouverture en file://, hors ligne).
+  const EMBEDDED = [
+    { id: 'jose', name: 'José Hernández', category: 'Astronautique · États-Unis',
+      lowest: 'Enfant d’ouvriers agricoles migrants, il travaille dans les champs, puis essuie onze refus successifs de la NASA.',
+      comeback: 'Accepté à sa douzième candidature en 2004, il part dans l’espace en 2009.',
+      wikipedia: 'José M. Hernández', lesson: 'Onze refus ne décident pas du douzième.' },
+    { id: 'mandela', name: 'Nelson Mandela', category: 'Politique · Afrique du Sud',
+      lowest: 'Il passe vingt-sept ans en prison pour son combat contre l’apartheid.',
+      comeback: 'Libéré en 1990, il devient président de l’Afrique du Sud en 1994.', wikipedia: 'Nelson Mandela' },
+  ];
+
+  const $ = (id) => document.getElementById(id);
+  const clean = (t) => (typeof t === 'string' ? t.replace(/\s*[\u2014\u2013]\s*/g, ', ').trim() : '');
+  const store = {
+    get() { try { return JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; } catch (_) { return {}; } },
+    set(v) { try { localStorage.setItem(PREFS_KEY, JSON.stringify(v)); } catch (_) { /* stockage indisponible */ } },
+  };
+  const valid = (s) => s && typeof s.id === 'string' && /^[a-z0-9-]+$/.test(s.id) &&
+    ['name', 'lowest', 'comeback'].every((k) => typeof s[k] === 'string' && s[k].trim());
+
+  const saved = store.get();
+  const state = {
+    stories: EMBEDDED, currentId: typeof saved.currentId === 'string' ? saved.currentId : null,
+    size: [0, 1, 2].includes(saved.size) ? saved.size : 1, paused: saved.paused === true,
+    lastAdvanceAt: Date.now(), photos: {}, lastSync: null, syncError: null, source: 'local',
+  };
+  const failed = new Set();
+
+  const index = () => Math.max(0, state.stories.findIndex((s) => s.id === state.currentId));
+  const move = (d) => {
+    const n = state.stories.length; const i = index();
+    state.currentId = state.stories[((i + d) % n + n) % n].id; state.lastAdvanceAt = Date.now();
+  };
+  const persist = () => store.set({ currentId: state.currentId, size: state.size, paused: state.paused });
+  const act = (fn) => { fn(); persist(); render(); };
+
+  const candidates = (s) => {
+    const out = []; const push = (u) => { if (u && !out.includes(u)) out.push(u); };
+    if (typeof s.photo === 'string' && s.photo && !s.photo.includes('..') && !/^[a-z]+:|^\//i.test(s.photo)) {
+      const rel = s.photo.replace(/^\.\//, '').split('/').map(encodeURIComponent).join('/');
+      push(LOCAL_WIDGET + rel); push(RAW_WIDGET + rel);
+    }
+    if (typeof s.image_url === 'string' && /^https:\/\//.test(s.image_url)) push(s.image_url);
+    if (s.wikipedia && state.photos[s.wikipedia]) push(state.photos[s.wikipedia]);
+    return out;
+  };
+  const initials = (name) => {
+    const w = clean(name).split(/\s+/).filter((x) => /^\p{L}/u.test(x));
+    return w.length ? (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase() : '?';
+  };
+  const hhmm = (t) => new Date(t).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+  function render() {
+    const s = state.stories[index()]; if (!s) return;
+    const L = LAYOUTS[state.size]; const card = $('card');
+    card.style.setProperty('--w', SIZES[state.size].width + 'px');
+    for (const k of ['name', 'category', 'body', 'eyebrow', 'lesson', 'photo', 'pad', 'gap']) card.style.setProperty('--' + k, L[k] + 'px');
+    card.style.setProperty('--btn', L.button + 'px');
+
+    $('count').textContent = `${index() + 1} / ${state.stories.length}`;
+    const status = state.syncError
+      ? { dot: '#ff9f0a', title: `Synchronisation impossible (${state.syncError}). Affichage : ${state.source === 'remote' ? 'dernières données reçues' : state.source === 'cache' ? 'copie locale' : 'données embarquées'}.` }
+      : state.lastSync ? { dot: '#34c759', title: `Synchronisé avec GitHub à ${hhmm(state.lastSync)} (vérification toutes les 5 minutes).` }
+      : { dot: '#8e8e93', title: 'Synchronisation en attente : affichage des données embarquées.' };
+    $('status').title = status.title; $('dot').style.setProperty('--dot', status.dot);
+    $('dot').setAttribute('aria-label', status.title); $('offline').hidden = !state.syncError;
+
+    $('name').textContent = clean(s.name);
+    $('category').textContent = clean(s.category); $('category').hidden = !s.category;
+    $('lowest').textContent = clean(s.lowest); $('comeback').textContent = clean(s.comeback);
+    $('lesson').textContent = s.lesson ? `« ${clean(s.lesson)} »` : ''; $('lesson').hidden = !s.lesson;
+    $('initials').textContent = initials(s.name);
+
+    const list = candidates(s); const photo = list.find((u) => !failed.has(u)); const img = $('photo');
+    img.dataset.candidates = JSON.stringify(list);
+    if (photo) {
+      if (img.dataset.src !== photo) { img.dataset.src = photo; img.src = photo; }
+      img.dataset.candidate = String(list.indexOf(photo)); img.alt = `Portrait de ${clean(s.name)}`; img.hidden = false;
+      $('credit').textContent = `Photo : ${clean(s.image_credit) || 'Wikimedia Commons'}`; $('credit').hidden = false;
+    } else {
+      img.hidden = true; img.removeAttribute('src'); img.dataset.src = ''; img.dataset.candidate = 'initiales'; $('credit').hidden = true;
+    }
+
+    const p = $('pause');
+    const label = state.paused ? 'Reprendre la rotation automatique (toutes les 20 minutes)' : 'Mettre la rotation automatique en pause';
+    p.title = label; p.setAttribute('aria-label', label); p.classList.toggle('active', state.paused);
+    p.innerHTML = state.paused
+      ? '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg>';
+    document.querySelectorAll('[data-size]').forEach((b) => b.classList.toggle('active', Number(b.dataset.size) === state.size));
+  }
+
+  $('photo').addEventListener('error', () => { if ($('photo').dataset.src) failed.add($('photo').dataset.src); render(); });
+  $('prev').onclick = () => act(() => move(-1));
+  $('next').onclick = () => act(() => move(1));
+  $('pause').onclick = () => act(() => { state.paused = !state.paused; state.lastAdvanceAt = Date.now(); });
+  document.querySelectorAll('[data-size]').forEach((b) => { b.onclick = () => act(() => { state.size = Number(b.dataset.size); }); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') act(() => move(-1));
+    if (e.key === 'ArrowRight') act(() => move(1));
+  });
+  setInterval(() => {
+    if (!state.paused && Date.now() - state.lastAdvanceAt >= ROTATION_MS) { move(1); persist(); render(); }
+  }, 60 * 1000);
+
+  const fetchPhotos = (stories) => {
+    const titles = [...new Set(stories.map((s) => s.wikipedia).filter(Boolean))];
+    for (let i = 0; i < titles.length; i += 25) {
+      const q = new URLSearchParams({ action: 'query', prop: 'pageimages', piprop: 'thumbnail', pithumbsize: '800',
+        titles: titles.slice(i, i + 25).join('|'), redirects: '1', format: 'json', origin: '*' });
+      fetch('https://en.wikipedia.org/w/api.php?' + q).then((r) => r.json()).then((x) => {
+        const query = x && x.query || {}; const back = {};
+        [...(query.normalized || []), ...(query.redirects || [])].forEach(({ from, to }) => { (back[to] = back[to] || []).push(...(back[from] || [from])); });
+        Object.values(query.pages || {}).forEach((pg) => {
+          if (pg.thumbnail) [pg.title, ...(back[pg.title] || [])].forEach((t) => { state.photos[t] = pg.thumbnail.source; });
+        });
+        render();
+      }).catch(() => {});
+    }
+  };
+  const load = (url) => fetch(url, { cache: 'no-store' }).then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then((d) => { const rows = Array.isArray(d) ? d.filter(valid) : []; if (!rows.length) throw new Error('liste vide'); return rows; });
+
+  render();
+  load(DATA_URL + '?t=' + Date.now())
+    .then((rows) => { state.stories = rows; state.lastSync = Date.now(); state.source = 'remote'; })
+    .catch((err) => load('../stories.json')
+      .then((rows) => { state.stories = rows; state.source = 'local'; state.syncError = err.message || 'réseau'; })
+      .catch(() => { state.syncError = err.message || 'réseau'; }))
+    .finally(() => { render(); fetchPhotos(state.stories); });
+})();
 </script>
 </body>
 </html>

@@ -91,7 +91,7 @@ Règles à respecter :
 - photo : utiliser une **vraie photographie** sous licence libre (Wikimedia Commons), jamais une image générée. Champs `image_url` (adresse `https://` obligatoire), `image_credit`, `image_license`, `image_source`. Sans photo, le widget cherche la vignette de la page Wikipédia indiquée dans `wikipedia`, sinon affiche les initiales ;
 - facultatif : `photo` (chemin relatif dans le dossier du widget, ex. `photos/marie-curie.jpg`) et `sources` (liste d'adresses) ;
 - facultatif : `headline`, accroche courte affichée sous le nom (120 caractères au plus conseillés, ex. « 8 ans de galère ») ;
-- facultatif : `at25`, ce que faisait la personne à 25 ans (texte factuel en français, 20 à 40 mots environ, 400 caractères au plus conseillés, ex. « En 1996, ... »), et `at25_sources`, la liste des adresses qui le justifient. Sans `at25`, la section « À 25 ans » n'est pas affichée. Les recherches et sources sont consignées dans `docs/A-25-ANS.md` et `data/at25.json`.
+- facultatif : `at25`, ce que faisait la personne à 25 ans (texte factuel en anglais, 20 à 40 mots environ, 400 caractères au plus conseillés, ex. « In 1996, ... »), et `at25_sources`, la liste des adresses qui le justifient. Sans `at25`, la section « AT 25 » n'est pas affichée. Les recherches et sources sont consignées dans `docs/A-25-ANS.md` et `data/at25.json`.
 
 Pour modifier une histoire : même démarche, en changeant le texte entre guillemets. Pour en retirer une : supprimer le bloc `{ ... }` et la virgule qui le sépare du voisin.
 

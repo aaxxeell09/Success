@@ -28,10 +28,10 @@ Les modules `lib/*.js` sont des **modules ES purs** (pas de JSX, pas d'import de
 | `id` | oui | `^[a-z0-9-]+$`, unique |
 | `name` | oui | Prénom Nom |
 | `lowest` | oui | L'épreuve (au plus bas), ≤ 400 caractères |
-| `comeback` | oui | Le retournement, ≤ 400 caractères |
+| `comeback` | oui | Le retournement (TURNAROUND), en anglais, ≤ 400 caractères |
 | `category` | non | « Domaine · Pays » |
 | `headline` | non | Accroche affichée sous le nom, ≤ 120 caractères |
-| `at25` | non | Section « À 25 ANS », factuelle, ≤ 400 caractères (masquée si absente) |
+| `at25` | non | Section « AT 25 », en anglais, factuelle, ≤ 400 caractères (masquée si absente) |
 | `at25_sources` | non | URL justifiant `at25` |
 | `lesson` | non | Conservé dans les données, non affiché |
 | `wikipedia` | non | Titre exact de la page Wikipédia anglaise (repli photo) |
@@ -75,7 +75,8 @@ Une seule requête en vol à la fois, délai d'expiration, URL anti-cache (`?t=`
 ## `lib/state.js` (état de l'interface)
 
 ```js
-export const CARD_WIDTH = 420; // largeur fixe, réduite si l'écran est plus étroit
+export const CARD_WIDTH = 350;  // largeur fixe, réduite si l'écran est plus étroit
+export const CARD_HEIGHT = 490; // hauteur fixe, seul le texte défile
 export const ROTATION_MS = 20 * 60 * 1000;
 export const PREFS_KEY = 'mur-des-retournements-settings-v3';
 export function createInitialState(localStories, now)
@@ -99,3 +100,8 @@ Les clics nécessitent le raccourci d'interaction d'Übersicht (Préférences �
 - Plus de tailles S/M/L : `CARD_WIDTH = 420`, événement `SIZE` ignoré, préférences v3 `{ currentId, paused }` (migration depuis v2/v1, anciennes clés supprimées).
 - Cache v2 : l'ancien cache v1 (20 personnes) n'est plus relu.
 - Carte : pas de titre ni de crédit photo ; sections « AU PLUS BAS », « LE RETOURNEMENT », « À 25 ANS » (`data-role` low, high, at25) ; accroche `data-role="headline"` sur la photo ; 3 boutons.
+
+## Version 3 (compacte, en anglais)
+
+- Interface et données en anglais : libellés « LOWEST POINT », « TURNAROUND », « AT 25 », boutons « Previous person », « Next person », « Pause automatic rotation » / « Resume automatic rotation (every 20 minutes) », indicateur « offline ».
+- Taille fixe `CARD_WIDTH` × `CARD_HEIGHT` = 350 × 490 : `<article>` en colonne flex ; photo 172 px (`flex: none`), zone `[data-role="content"]` (`flex: 1 1 auto`, `overflowY: auto`, remise en haut à chaque personne via `key`), `<nav>` fixe en bas.

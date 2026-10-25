@@ -88,6 +88,23 @@
           "description": "Page de fichier Wikimedia Commons de la photo.",
           "$ref": "#/$defs/httpsUrl"
         },
+        "at25": {
+          "description": "Ce que faisait la personne à 25 ans (du 25e au 26e anniversaire) : texte factuel en français, 20 à 40 mots environ. Absent : la section « À 25 ans » est masquée.",
+          "type": "string",
+          "maxLength": 400
+        },
+        "at25_sources": {
+          "description": "Adresses justifiant le texte « at25 ».",
+          "type": "array",
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https?://[^\\s/?#]+[^\\s]*$",
+            "maxLength": 2000
+          }
+        },
         "sources": {
           "description": "Adresses justifiant les faits.",
           "type": "array",

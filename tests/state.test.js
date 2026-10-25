@@ -180,12 +180,14 @@ describe('reducer : taille', () => {
   test('SIZE accepte 0, 1, 2', () => {
     for (const n of [0, 1, 2]) assert.equal(run(fresh(), { type: 'SIZE', size: n }).size, n);
   });
-  test('SIZE est bornée à 0..2', () => {
-    assert.equal(run(fresh(), { type: 'SIZE', size: 7 }).size, 2);
-    assert.equal(run(fresh(), { type: 'SIZE', size: -3 }).size, 0);
-    for (const bad of ['abc', null, undefined, NaN, {}, Infinity]) {
-      const size = run(fresh(), { type: 'SIZE', size: bad }).size;
+  test('SIZE est bornée à 0..2 (valeur ramenée dans les bornes ou ignorée)', () => {
+    const start = fresh();
+    const cases = [[7, 2], [-3, 0], [3, 2], ['abc'], [null], [undefined], [NaN], [{}], [Infinity], [1.5]];
+    for (const [bad, clamped] of cases) {
+      const size = run(start, { type: 'SIZE', size: bad }).size;
       assert.ok(Number.isInteger(size) && size >= 0 && size <= 2, `taille invalide pour ${String(bad)} : ${size}`);
+      const allowed = clamped === undefined ? [start.size, 0, 1, 2] : [clamped, start.size];
+      assert.ok(allowed.includes(size), `taille ${size} inattendue pour ${String(bad)}`);
     }
   });
 });

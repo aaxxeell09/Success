@@ -76,7 +76,8 @@ Une seule requête en vol à la fois, délai d'expiration, URL anti-cache (`?t=`
 
 ```js
 export const CARD_WIDTH = 350;  // largeur fixe, réduite si l'écran est plus étroit
-export const CARD_HEIGHT = 490; // hauteur fixe, seul le texte défile
+export const CARD_HEIGHT = 490; // hauteur fixe, aucun défilement
+export const PHOTO_HEIGHT = 150, NAV_HEIGHT = 46; // CONTENT_HEIGHT = 294
 export const ROTATION_MS = 20 * 60 * 1000;
 export const PREFS_KEY = 'mur-des-retournements-settings-v3';
 export function createInitialState(localStories, now)
@@ -104,4 +105,11 @@ Les clics nécessitent le raccourci d'interaction d'Übersicht (Préférences �
 ## Version 3 (compacte, en anglais)
 
 - Interface et données en anglais : libellés « LOWEST POINT », « TURNAROUND », « AT 25 », boutons « Previous person », « Next person », « Pause automatic rotation » / « Resume automatic rotation (every 20 minutes) », indicateur « offline ».
-- Taille fixe `CARD_WIDTH` × `CARD_HEIGHT` = 350 × 490 : `<article>` en colonne flex ; photo 172 px (`flex: none`), zone `[data-role="content"]` (`flex: 1 1 auto`, `overflowY: auto`, remise en haut à chaque personne via `key`), `<nav>` fixe en bas.
+- Taille fixe `CARD_WIDTH` × `CARD_HEIGHT` = 350 × 490 : `<article>` en colonne flex ; photo 172 px puis zone défilante (remplacé en v5, voir ci-dessous).
+
+## Version 5 (aucun défilement, 12 cartes)
+
+- 12 cartes : ajout de `disney` et `ford`.
+- Géométrie fixe 350 × 490 : photo 150 px, zone `[data-role="content"]` 294 px, `<nav>` 46 px (bordure de carte en `outline` pour ne pas consommer de hauteur). Plus de `overflowY: auto` ni de barre de défilement ; `overflow: hidden` seulement comme garde-fou, jamais de `line-clamp` ni d'ellipse.
+- Typographie (CONFIG.layout) : corps 12.5 px / 1.42, libellés 9.5 px, nom 21 px, espacement 13 px.
+- Limites éditoriales vérifiées par `tests/validate_stories.py` : headline ≤ 7 mots, lowest ≤ 24, comeback ≤ 24, at25 ≤ 18. Les tests Chromium échouent si un texte dépasse la zone.

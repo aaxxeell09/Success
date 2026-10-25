@@ -32,7 +32,19 @@ if [ -f "$PREVIEW" ]; then
   NB="$(grep -o '<button' "$PREVIEW" | wc -l | tr -d ' ')"
   [ "$NB" = "3" ] || fail "preview/index.html : 3 boutons attendus, $NB trouvés"
   grep -q '\.\./stories\.json' "$PREVIEW" || fail "preview/index.html doit charger ../stories.json"
-  grep -q 'À 25 ANS' "$PREVIEW" || fail "preview/index.html : section « À 25 ANS » absente"
+  # Contrat v3 : aperçu en anglais, mêmes libellés que le widget, taille fixe 350 x 490.
+  for label in 'LOWEST POINT' 'TURNAROUND' 'AT 25' 'Previous person' 'Next person' 'Pause automatic rotation' 'Widget controls'; do
+    grep -qF "$label" "$PREVIEW" || fail "preview/index.html : libellé « $label » absent"
+  done
+  for old in 'AU PLUS BAS' 'LE RETOURNEMENT' 'À 25 ANS' 'Personne' 'hors connexion' 'Portrait de' 'Commandes du widget' 'Reprendre la rotation'; do
+    grep -qF "$old" "$PREVIEW" && fail "preview/index.html : ancien libellé français « $old »"
+  done
+  grep -q '<html lang="en">' "$PREVIEW" || fail "preview/index.html : <html lang=\"en\"> attendu"
+  grep -q 'lang="fr"' "$PREVIEW" && fail "preview/index.html : lang=\"fr\" encore présent"
+  grep -q 'data-role="content"' "$PREVIEW" || fail "preview/index.html : zone [data-role=content] absente"
+  grep -qE -- '--card-width: *350px' "$PREVIEW" || fail "preview/index.html : largeur 350 px attendue"
+  grep -qE -- '--card-height: *490px' "$PREVIEW" || fail "preview/index.html : hauteur 490 px attendue"
+
   grep -q -e '—' -e '–' "$PREVIEW" && fail "preview/index.html : tiret cadratin ou demi-cadratin"
 else
   fail "preview/index.html introuvable"

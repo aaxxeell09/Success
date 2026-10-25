@@ -733,8 +733,10 @@ describe('aperçu navigateur (preview/index.html, Chromium)', { skip }, () => {
   });
   after(async () => { await context?.close(); });
 
-  test('charge les 9 histoires de ../stories.json, interface v2, photos locales', async () => {
+  test('charge les 9 histoires de ../stories.json, interface v3 en anglais, photos locales', async () => {
     const p = await openPreview(context);
+    assert.equal(await p.evaluate(() => document.documentElement.lang), 'en', '<html lang="en">');
+    const all = [];
     for (let i = 0; i < 9; i += 1) {
       await waitImage(p, '#card');
       const s = await snapshot(p, '#card');
@@ -742,20 +744,55 @@ describe('aperçu navigateur (preview/index.html, Chromium)', { skip }, () => {
       const story = local[i];
       assertV3Card(s, story);
       assert.ok(s.imageSrc.startsWith(`${ORIGIN}/repo/widget/mur-des-retournements.widget/photos/`), `photo locale : ${s.imageSrc}`);
-      assert.ok(Math.abs(s.width - 420) <= 2, `largeur 420, mesurée ${s.width}`);
+      const g = await layout(p, '#card');
+      assertV3Layout(g, `aperçu ${story.id}`);
+      assert.deepEqual(g.buttons.map((b) => [b.label, b.title]),
+        [['Previous person', 'Previous person'], ['Next person', 'Next person'], [PAUSE_LABEL, PAUSE_LABEL]]);
+      all.push(g);
+      await assertNoFrench(p, '#card', `aperçu ${story.id}`);
       await click(p, 'next', '#card');
+    }
+    for (const g of all.slice(1)) {
+      assert.deepEqual(g.card, all[0].card, 'aperçu : carte de taille constante');
+      assert.deepEqual(g.buttons.map((b) => [b.top, b.left]), all[0].buttons.map((b) => [b.top, b.left]), 'aperçu : boutons immobiles');
     }
     const page = await p.evaluate(() => document.body.innerText);
     assert.doesNotMatch(page, /mur des retournements/i);
+    for (const str of [page, await p.evaluate(() => document.title)]) {
+      assert.equal(str.replace(/José Hernández/g, '').match(FRENCH), null, `aperçu : français dans « ${str.slice(0, 200)} »`);
+    }
+    await click(p, 'pause', '#card');
+    assert.match(await signature(await button(p, 'pause', '#card')), /\|Resume automatic rotation \(every 20 minutes\)\|/);
+    await click(p, 'pause', '#card');
     await p.close();
   });
 
-  test('fenêtre étroite : largeur réduite, sans défilement horizontal', async () => {
+  test('zone de texte qui défile, remise en haut au changement de personne', async () => {
+    const p = await openPreview(context);
+    let found = false;
+    for (let i = 0; i < 9 && !found; i += 1) {
+      const g = await layout(p, '#card');
+      if (g.content.scrollHeight > g.content.clientHeight + 1) found = true;
+      else await click(p, 'next', '#card');
+    }
+    assert.ok(found, 'au moins une carte réelle défile dans l’aperçu');
+    await p.evaluate(() => { document.querySelector('#card [data-role="content"]').scrollTop = 50; });
+    assert.ok((await layout(p, '#card')).content.scrollTop > 0);
+    await click(p, 'next', '#card');
+    await click(p, 'prev', '#card');
+    const g = await layout(p, '#card');
+    assert.equal(g.content.scrollTop, 0);
+    assertV3Layout(g, 'aperçu après défilement');
+    await p.close();
+  });
+
+  test('fenêtre étroite : largeur réduite, hauteur 490, sans défilement horizontal', async () => {
     const ctx = await env.browser.newContext({ viewport: { width: 360, height: 900 } });
     await route(ctx, env.bundle);
     const p = await openPreview(ctx);
     const s = await snapshot(p, '#card');
-    assert.ok(s.width < 420 && s.left >= 0 && s.right <= s.viewport, `${s.left}..${s.right} / ${s.viewport}`);
+    assert.ok(s.width < CARD_W && s.left >= 0 && s.right <= s.viewport, `${s.left}..${s.right} / ${s.viewport}`);
+    assert.ok(Math.abs(s.height - CARD_H) <= 1, `hauteur toujours ${CARD_H} : ${s.height}`);
     assert.ok(await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
     await ctx.close();
   });

@@ -5,9 +5,13 @@
 
 // Taille fixe et compacte de la carte, en pixels (tient sous les widgets macOS).
 // Le widget réduit la largeur seulement si l'écran est plus étroit ; la hauteur
-// ne varie jamais : seul le texte défile.
+// ne varie jamais et rien ne défile : photo (PHOTO_HEIGHT), zone de texte
+// (CONTENT_HEIGHT) et barre de boutons (NAV_HEIGHT) se partagent CARD_HEIGHT.
 export const CARD_WIDTH = 350;
 export const CARD_HEIGHT = 490;
+export const PHOTO_HEIGHT = 150;
+export const NAV_HEIGHT = 46;
+export const CONTENT_HEIGHT = CARD_HEIGHT - PHOTO_HEIGHT - NAV_HEIGHT; // 294
 export const ROTATION_MS = 20 * 60 * 1000;
 export const PREFS_KEY = 'mur-des-retournements-settings-v3';
 

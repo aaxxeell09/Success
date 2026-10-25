@@ -9,7 +9,7 @@
 
 import localStories from './stories.json';
 import {
-  SIZES, ROTATION_MS, createInitialState, reducer, loadPrefs, savePrefs, photoCandidates, currentIndex,
+  CARD_WIDTH, ROTATION_MS, createInitialState, reducer, loadPrefs, savePrefs, photoCandidates, currentIndex,
 } from './lib/state.js';
 import { DATA_URL, SYNC_INTERVAL_MS, createSyncer } from './lib/sync.js';
 
@@ -30,10 +30,9 @@ const CONFIG = {
   // Rayon des coins de la carte, en pixels.
   radius: 24,
 
-  // Taille utilisée tant qu'aucune préférence n'est enregistrée : 0 = S, 1 = M, 2 = L.
-  defaultSize: 1,
-  // Largeurs S, M, L en pixels (par défaut celles de lib/state.js : 320, 420, 540).
-  widths: SIZES.map((s) => s.width),
+  // Largeur de la carte en pixels (420 par défaut, CARD_WIDTH de lib/state.js).
+  // Elle est réduite automatiquement si l'écran est plus étroit.
+  width: CARD_WIDTH,
   // Rotation automatique toutes les 20 minutes activée au premier lancement.
   // false : le widget démarre en pause (le bouton pause/reprise reste disponible).
   rotationEnabledByDefault: true,
@@ -44,11 +43,10 @@ const CONFIG = {
     border: 'rgba(255, 255, 255, 0.16)',
     text: '#f5f7fa',
     muted: '#a9b8cc',
-    faint: '#7d8ca3',
     title: '#c4d4ea',
     low: '#ff9f9a',        // « AU PLUS BAS »
     high: '#7fdcb4',       // « LE RETOURNEMENT »
-    lesson: '#c9d8ee',
+    at25: '#b9b8f2',       // « À 25 ANS »
     photoFallback: 'linear-gradient(135deg, #2b4266 0%, #1a2a44 100%)',
     button: 'rgba(255, 255, 255, 0.10)',
     buttonActive: 'rgba(255, 255, 255, 0.30)',
@@ -58,12 +56,8 @@ const CONFIG = {
     syncIdle: '#8e8e93',
   },
 
-  // Typographie et espacements par taille (S, M, L).
-  layouts: [
-    { name: 21, category: 11, body: 12.5, eyebrow: 9.5, lesson: 11.5, photo: 168, pad: 16, gap: 13, button: 28 },
-    { name: 27, category: 12, body: 13.5, eyebrow: 10, lesson: 12.5, photo: 230, pad: 20, gap: 16, button: 30 },
-    { name: 33, category: 13, body: 15, eyebrow: 10.5, lesson: 13.5, photo: 300, pad: 24, gap: 19, button: 32 },
-  ],
+  // Typographie et espacements (tailles de police, hauteur de photo, marges, boutons), en pixels.
+  layout: { name: 27, category: 12, body: 13.5, eyebrow: 10, photo: 230, pad: 20, gap: 16, button: 30 },
 };
 
 const FONT = "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif";
@@ -94,7 +88,6 @@ export const className = `
 
 export const initialState = {
   ...createInitialState(localStories, Date.now()),
-  size: CONFIG.defaultSize,
   paused: !CONFIG.rotationEnabledByDefault,
 };
 
@@ -181,10 +174,7 @@ const startRotationTimer = () => {
 export const init = (dispatch) => {
   const s = ensureSyncer(dispatch);
   // Préférences lues AVANT le cache : le DATA du cache ne doit pas les écraser.
-  const prefs = loadPrefs(getStorage(), {
-    size: CONFIG.defaultSize,
-    paused: !CONFIG.rotationEnabledByDefault,
-  });
+  const prefs = loadPrefs(getStorage(), { paused: !CONFIG.rotationEnabledByDefault });
   try { s.loadCached(); } catch (_) { /* cache illisible : on garde les données embarquées */ }
   dispatch({ type: 'RESTORE', prefs, now: Date.now() });
   prefsRestored = true;
@@ -197,10 +187,10 @@ export const command = (dispatch) => {
   return Promise.resolve().then(() => s.syncNow()).catch(() => {});
 };
 
-// Événements après lesquels la personne courante, la taille ou la pause
-// peuvent changer : on enregistre alors les préférences.
+// Événements après lesquels la personne courante ou la pause peuvent changer :
+// on enregistre alors les préférences.
 let prefsRestored = false;
-const PERSISTED = new Set(['NEXT', 'PREV', 'TICK', 'SIZE', 'TOGGLE_PAUSE', 'DATA']);
+const PERSISTED = new Set(['NEXT', 'PREV', 'TICK', 'TOGGLE_PAUSE', 'DATA']);
 
 export const updateState = (event, previousState) => {
   const next = reducer(previousState || initialState, event);
@@ -214,6 +204,19 @@ export const updateState = (event, previousState) => {
 // ---------------------------------------------------------------------------
 // Couleur d'étiquette de « À 25 ANS » (lavande sobre), remplaçable par CONFIG.theme.at25.
 const AT25_COLOR = '#b9b8f2';
+
+// Largeur de la carte : CONFIG.width, réduite si l'écran (moins les marges
+// horizontales de CONFIG.position) est plus étroit. Recalculée à chaque rendu.
+const MIN_WIDTH = 200;
+const cardWidth = () => {
+  const target = px(CONFIG.width) ? CONFIG.width : CARD_WIDTH;
+  let screen = null;
+  try { screen = typeof window !== 'undefined' ? window.innerWidth : null; } catch (_) { screen = null; }
+  if (typeof screen !== 'number' || !Number.isFinite(screen) || screen <= 0) return target;
+  // Côté sans ancrage : marge par défaut de 16 px pour ne pas coller au bord.
+  const margin = (k) => (px(CONFIG.position[k]) ? Math.max(0, CONFIG.position[k]) : 16);
+  return Math.round(Math.max(MIN_WIDTH, Math.min(target, screen - margin('left') - margin('right'))));
+};
 
 // Les textes affichés n'utilisent ni tiret cadratin ni demi-cadratin.
 const clean = (t) => (typeof t === 'string' ? t.replace(/\s*[\u2014\u2013]\s*/g, ', ').trim() : '');
@@ -276,9 +279,8 @@ const syncInfo = (state) => {
 export const render = (state, dispatch) => {
   const T = CONFIG.theme;
   const stories = (state && state.stories && state.stories.length) ? state.stories : localStories;
-  const sizeIndex = Number.isInteger(state && state.size) ? Math.max(0, Math.min(2, state.size)) : 1;
-  const L = CONFIG.layouts[sizeIndex] || CONFIG.layouts[1];
-  const width = CONFIG.widths[sizeIndex] || SIZES[sizeIndex].width;
+  const L = CONFIG.layout;
+  const width = cardWidth();
   const index = currentIndex({ ...state, stories });
   const story = stories[index];
   if (!story) return <div />;
@@ -355,22 +357,15 @@ export const render = (state, dispatch) => {
         ))}
       </div>
 
-      <nav aria-label="Commandes du widget" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      <nav aria-label="Commandes du widget" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center',
         gap: 8, padding: `${L.pad * 0.55}px ${L.pad * 0.8}px`, borderTop: `1px solid ${T.border}`,
         background: 'rgba(0, 0, 0, 0.14)' }}>
-        <div style={{ display: 'flex', gap: 6 }}>
-          {button('Personne précédente', () => send({ type: 'PREV', now: Date.now() }), <Icon kind="prev" size={L.button * 0.5} />)}
-          {button('Personne suivante', () => send({ type: 'NEXT', now: Date.now() }), <Icon kind="next" size={L.button * 0.5} />)}
-          {button(paused ? 'Reprendre la rotation automatique (toutes les 20 minutes)' : 'Mettre la rotation automatique en pause',
-            () => send({ type: 'TOGGLE_PAUSE', now: Date.now() }),
-            <Icon kind={paused ? 'play' : 'pause'} size={L.button * 0.46} />,
-            paused ? { background: T.buttonActive } : {})}
-        </div>
-        <div role="group" aria-label="Taille du widget" style={{ display: 'flex', gap: 4 }}>
-          {SIZES.map((s, i) => button(`Taille ${s.key === 'S' ? 'petite' : s.key === 'M' ? 'moyenne' : 'grande'} (${s.key})`,
-            () => send({ type: 'SIZE', size: i }), s.key,
-            { minWidth: L.button - 2, height: L.button - 2, background: sizeIndex === i ? T.buttonActive : T.button }, s.key))}
-        </div>
+        {button('Personne précédente', () => send({ type: 'PREV', now: Date.now() }), <Icon kind="prev" size={L.button * 0.5} />)}
+        {button('Personne suivante', () => send({ type: 'NEXT', now: Date.now() }), <Icon kind="next" size={L.button * 0.5} />)}
+        {button(paused ? 'Reprendre la rotation automatique (toutes les 20 minutes)' : 'Mettre la rotation automatique en pause',
+          () => send({ type: 'TOGGLE_PAUSE', now: Date.now() }),
+          <Icon kind={paused ? 'play' : 'pause'} size={L.button * 0.46} />,
+          paused ? { background: T.buttonActive } : {})}
       </nav>
     </article>
   );

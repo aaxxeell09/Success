@@ -10,7 +10,7 @@ Ouvrez [`preview/index.html`](./preview/index.html) dans un navigateur pour voir
 
 ## Fonctionnalités
 
-- **Dix personnalités choisies**, une à la fois : grande photo, nom, catégorie, accroche, puis « LOWEST POINT », « TURNAROUND », « AT 25 ». **Interface et textes en anglais.** Compteur et indicateur de synchronisation discrets sur la photo. Aucun titre, aucun crédit affiché sur la carte (attributions dans [CREDITS.md](./CREDITS.md)).
+- **Douze personnalités choisies**, une à la fois : grande photo, nom, catégorie, accroche, puis « LOWEST POINT », « TURNAROUND », « AT 25 ». **Interface et textes en anglais.** Compteur et indicateur de synchronisation discrets sur la photo. Aucun titre, aucun crédit affiché sur la carte (attributions dans [CREDITS.md](./CREDITS.md)).
 - **Liste blanche** : seules les personnes présentes dans `stories.json` s'affichent ; les 11 histoires retirées sont archivées dans `archive/stories-retirees.json`.
 - **‹ / ›** : personne précédente ou suivante (navigation circulaire).
 - **Taille fixe et compacte de 350 × 490 px**, pensée pour se placer sous les widgets macOS : la hauteur ne change jamais, seul le texte défile (photo et boutons fixes). La largeur est réduite si l'écran est plus étroit.
@@ -116,7 +116,7 @@ npm test
 - `bash tests/static_checks.sh` : syntaxe des scripts `.command`, URL du dépôt ;
 - `bash tests/install.test.sh` s'il est présent : scripts d'installation.
 
-Le test de rendu de `tests/widget.test.js` bundle le JSX avec esbuild, le rend avec React 18 dans Chromium via Playwright, en reproduisant le cycle Übersicht (`tests/harness/`) : titre et crédit absents, 10 cartes de la liste blanche, sections LOWEST POINT / TURNAROUND / AT 25, taille fixe 350 × 490 px sur les 10 cartes, défilement du texte, interface sans français, flèches, pause, rotation, hors connexion, ajout d'une histoire sur GitHub. Il est **sauté** si esbuild, React ou Playwright manquent. Playwright n'est pas une dépendance du projet : la CI l'installe (`.github/workflows/tests.yml`) ; en local, `npm install --no-save playwright` puis `npx playwright install chromium`.
+Le test de rendu de `tests/widget.test.js` bundle le JSX avec esbuild, le rend avec React 18 dans Chromium via Playwright, en reproduisant le cycle Übersicht (`tests/harness/`) : titre et crédit absents, 12 cartes de la liste blanche, sections LOWEST POINT / TURNAROUND / AT 25, taille fixe 350 × 490 px sur les 12 cartes, défilement du texte, interface sans français, flèches, pause, rotation, hors connexion, ajout d'une histoire sur GitHub. Il est **sauté** si esbuild, React ou Playwright manquent. Playwright n'est pas une dépendance du projet : la CI l'installe (`.github/workflows/tests.yml`) ; en local, `npm install --no-save playwright` puis `npx playwright install chromium`.
 
 ## Structure du dépôt
 

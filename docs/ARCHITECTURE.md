@@ -96,7 +96,7 @@ Les clics nécessitent le raccourci d'interaction d'Übersicht (Préférences �
 
 ## Version 2 (simplification)
 
-- `stories.json` est une **liste blanche** de 10 cartes (valdas, elon, mandela, chesky, collison, pope, jose, thatcher, jensen, rdj ; Trump retiré en v3) ; les autres histoires sont archivées dans `archive/stories-retirees.json`.
+- `stories.json` est une **liste blanche** de 12 cartes (valdas, elon, mandela, chesky, collison, pope, jose, thatcher, jensen, rdj, disney, ford ; Trump retiré en v3) ; les autres histoires sont archivées dans `archive/stories-retirees.json`.
 - Plus de tailles S/M/L : `CARD_WIDTH = 420`, événement `SIZE` ignoré, préférences v3 `{ currentId, paused }` (migration depuis v2/v1, anciennes clés supprimées).
 - Cache v2 : l'ancien cache v1 (20 personnes) n'est plus relu.
 - Carte : pas de titre ni de crédit photo ; sections « AU PLUS BAS », « LE RETOURNEMENT », « À 25 ANS » (`data-role` low, high, at25) ; accroche `data-role="headline"` sur la photo ; 3 boutons.

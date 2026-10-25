@@ -145,11 +145,11 @@ describe('validateStories', () => {
     const r = validateStories([story('x', {
       category: 5, lesson: ['a'], wikipedia: { t: 1 }, image_credit: true, image_license: 3,
       photo: 7, image_url: 12, image_source: {}, sources: 'https://a.org',
-      at25: 25, at25_sources: 'https://a.org',
+      at25: 25, at25_sources: 'https://a.org', headline: 8,
     })]);
     assert.equal(r.rejected.length, 0);
     assert.deepEqual(r.stories[0], story('x'));
-    assert.equal(r.warnings.length, 11);
+    assert.equal(r.warnings.length, 12);
     assert.ok(r.warnings.every((w) => w.id === 'x' && w.index === 0 && typeof w.field === 'string'));
   });
 
@@ -185,6 +185,15 @@ describe('validateStories', () => {
     assert.equal(r.warnings.length, 1);
     const empty = validateStories([story('y', { sources: [1, 2] })]);
     assert.equal(empty.stories[0].sources, undefined);
+  });
+
+  test('headline conservé (trim), vide ignoré, mauvais type retiré', () => {
+    const r = validateStories([story('x', { headline: '  8 ans de galère ' }), story('y', { headline: '   ' }), story('z', { headline: ['a'] })]);
+    assert.equal(r.stories[0].headline, '8 ans de galère');
+    assert.equal('headline' in r.stories[1], false);
+    assert.equal('headline' in r.stories[2], false);
+    assert.equal(r.warnings.length, 1);
+    assert.equal(r.warnings[0].field, 'headline');
   });
 
   test('at25 et at25_sources conservés (trim, filtrage comme sources)', () => {
@@ -677,7 +686,7 @@ describe('cohérence avec schema/stories.schema.json', () => {
     const all = story('x', {
       category: 'c', lesson: 'l', wikipedia: 'w', photo: 'photos/x.jpg', image_url: 'https://a.org/x.jpg',
       image_credit: 'c', image_license: 'l', image_source: 'https://a.org/f', sources: ['https://a.org'],
-      at25: 'En 2000, x.', at25_sources: ['https://a.org/b'],
+      at25: 'En 2000, x.', at25_sources: ['https://a.org/b'], headline: 'h',
     });
     const kept = Object.keys(validateStories([all]).stories[0]).sort();
     assert.deepEqual(kept, Object.keys(def.properties).sort());

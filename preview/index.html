@@ -26,8 +26,8 @@
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --card-width: 350px; --card-height: 490px;
-  --name: 20px; --category: 10px; --headline: 11px; --body: 11.5px; --eyebrow: 9px; --line: 1.35;
-  --photo: 150px; --content: 294px; --nav: 46px; --pad: 14px; --pad-y: 9px; --gap: 8px; --btn: 26px;
+  --name: 21px; --category: 10.5px; --headline: 11.5px; --body: 12.5px; --eyebrow: 9.5px; --line: 1.42;
+  --photo: 150px; --content: 294px; --nav: 46px; --pad: 14px; --pad-y: 13px; --gap: 13px; --btn: 26px;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -65,7 +65,7 @@ body {
 /* Fixed height, no scrolling: overflow hidden is only a safeguard. */
 .content { flex: none; height: var(--content); overflow: hidden; padding: var(--pad-y) var(--pad); }
 .content section + section:not([hidden]) { margin-top: var(--gap); }
-.eyebrow { font-size: var(--eyebrow); font-weight: 800; line-height: 1; letter-spacing: 1.6px; margin-bottom: 3px; }
+.eyebrow { font-size: var(--eyebrow); font-weight: 800; line-height: 1; letter-spacing: 1.6px; margin-bottom: 5px; }
 .eyebrow.low { color: var(--low); } .eyebrow.high { color: var(--high); } .eyebrow.at25 { color: var(--at25); }
 .content p { font-size: var(--body); line-height: var(--line); margin: 0; }
 nav.bar { flex: none; height: var(--nav); display: flex; align-items: center; justify-content: center; gap: 8px; padding: 0 12px; border-top: 1px solid var(--border); background: rgba(0,0,0,.14); }

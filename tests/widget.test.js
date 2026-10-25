@@ -223,6 +223,12 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     const story = local.find((x) => x.id === s.currentId);
     assert.ok(s.text.includes(story.lowest.slice(0, 30)), 'récit « au plus bas » affiché');
     assert.ok(s.text.includes(story.comeback.slice(0, 30)), 'récit du retournement affiché');
+    assert.doesNotMatch(s.text, /le mur des retournements/i, 'ne pas afficher le titre du widget');
+    const counterOnPhoto = await page.evaluate(() => {
+      const photo = document.querySelector('#widget article')?.firstElementChild;
+      return !!photo && [...photo.querySelectorAll('span')].some((el) => /\\d+\\s*\\/\\s*\\d+/.test(el.textContent));
+    });
+    assert.ok(counterOnPhoto, 'compteur de navigation présent sur la photo');
     assert.deepEqual(s.counter, [1, s.total]);
     if (s.hasPhotoSource) {
       await until(page, () => [...document.querySelectorAll('#widget img')].some((i) => i.complete && i.naturalWidth > 0));

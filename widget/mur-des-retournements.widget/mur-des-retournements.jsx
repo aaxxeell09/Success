@@ -309,20 +309,20 @@ export const render = (state, dispatch) => {
       backdropFilter: `blur(${CONFIG.blur}px) saturate(160%)`, WebkitBackdropFilter: `blur(${CONFIG.blur}px) saturate(160%)`,
       boxShadow: '0 22px 50px rgba(0, 0, 0, 0.34), 0 2px 8px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
     }}>
-      <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
-        padding: `${L.pad * 0.7}px ${L.pad}px ${L.pad * 0.6}px` }}>
-        <div style={{ fontSize: L.eyebrow + 0.5, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase',
-          color: T.title, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Le mur des retournements</div>
-        <div title={sync.title} style={{ display: 'flex', alignItems: 'center', gap: 7, flexShrink: 0,
-          fontSize: L.eyebrow + 1, color: T.muted, fontVariantNumeric: 'tabular-nums' }}>
+      <div style={{ position: 'relative', height: L.photo, overflow: 'hidden', background: T.photoFallback }}>
+        <div title={sync.title} aria-label={sync.title} style={{
+          position: 'absolute', top: L.pad * 0.55, right: L.pad * 0.65, zIndex: 2,
+          display: 'flex', alignItems: 'center', gap: 7,
+          padding: '5px 9px', borderRadius: 99,
+          background: 'rgba(16, 22, 36, 0.62)',
+          backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
+          fontSize: L.eyebrow + 1, color: T.text, fontVariantNumeric: 'tabular-nums',
+        }}>
           {sync.label && <span style={{ color: sync.color, fontWeight: 600 }}>{sync.label}</span>}
-          <span aria-label={sync.title} style={{ width: 7, height: 7, borderRadius: '50%', background: sync.color,
+          <span style={{ width: 7, height: 7, borderRadius: '50%', background: sync.color,
             boxShadow: `0 0 0 3px ${sync.color}33` }} />
           <span>{index + 1} / {stories.length}</span>
         </div>
-      </header>
-
-      <div style={{ position: 'relative', height: L.photo, overflow: 'hidden', background: T.photoFallback }}>
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center',
           justifyContent: 'center', paddingBottom: L.photo * 0.24, fontFamily: DISPLAY_FONT, fontSize: L.photo * 0.3, fontWeight: 700,
           letterSpacing: 2, color: 'rgba(255, 255, 255, 0.30)' }}>{initialsOf(story.name)}</div>

@@ -3,7 +3,8 @@
 // reproduit par tests/harness/. Le rendu est SAUTÉ si un outil manque.
 import test, { describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { createRequire } from 'node:module';
 import { execSync } from 'node:child_process';
 import path from 'node:path';
@@ -132,18 +133,25 @@ const ORIGIN = 'http://ubersicht.test';
 const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp' };
 
-// Contrat v3 : carte en anglais, taille fixe CARD_WIDTH x CARD_HEIGHT, photo de 172 px.
+// Contrat v5 : carte en anglais, taille fixe CARD_WIDTH x CARD_HEIGHT découpée en
+// bloc photo 150 px + zone de texte 294 px + nav 46 px ; AUCUN défilement.
 const CARD_W = 350;
 const CARD_H = 490;
-const PHOTO_H = 172;
+const PHOTO_H = 150;
+const CONTENT_H = 294;
+const NAV_H = 46;
+// Captures PNG de chaque carte (best effort : jamais bloquant). En CI : dossier temporaire du système.
+const CARDS_DIR = process.env.SUCCESS_CARDS_DIR
+  || (process.env.CI ? path.join(tmpdir(), 'success-cards')
+    : '/tmp/claude-0/-home-user/b8b88926-340f-54ab-8421-d1f350a0ea8b/scratchpad/cards');
 // Mots français typiques (mots entiers, insensible à la casse) : aucun ne doit
 // apparaître dans le texte visible ni dans title/aria-label/alt. Les noms propres
 // accentués (José Hernández) ne sont pas concernés.
 const FRENCH = /(?<![\p{L}\p{N}])(?:le|la|les|de|des|du|au|aux|une|est|et|il|elle|sur|pour|avec|dans|à|où|qui|personne|précédente|suivante|reprendre|hors connexion|en pause|ans)(?![\p{L}\p{N}])|synchronis/iu;
 
-// Contrat v2 : liste blanche stricte, dans cet ordre.
-const WHITELIST = ['valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj'];
-const N = WHITELIST.length; // 10 cartes
+// Contrat v2/v5 : liste blanche stricte, dans cet ordre.
+const WHITELIST = ['valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj', 'disney', 'ford'];
+const N = WHITELIST.length;
 // Les 11 personnes retirées (ancienne liste à 20) : ne doivent plus jamais revenir.
 const RETIRED = ['kariko', 'dej', 'dyson', 'melanie', 'jobs', 'tina', 'knight', 'jan', 'niel', 'trump'];
 const CACHE_V1 = 'mur-des-retournements-stories-cache-v1';
@@ -265,28 +273,61 @@ const until = (page, fn, arg) => page.waitForFunction(fn, arg, { timeout: 5000 }
 const waitImage = (page, rootSel = '#widget') => until(page,
   (sel) => [...document.querySelectorAll(`${sel} img`)].some((i) => !i.hidden && i.complete && i.naturalWidth > 0), rootSel);
 
-// Géométrie de la carte v3 : article > [bloc photo, zone [data-role=content], nav].
+// Géométrie de la carte v5 : article > [bloc photo, zone [data-role=content], nav],
+// plus tout ce qu'il faut pour prouver l'absence de défilement et de troncature.
 const layout = (page, rootSel = '#widget') => page.evaluate((sel) => {
   const root = document.querySelector(sel);
   const card = root.matches('article') ? root : root.querySelector('article');
-  const box = (el) => { const b = el.getBoundingClientRect(); return { top: Math.round(b.top * 10) / 10, left: Math.round(b.left * 10) / 10, width: Math.round(b.width * 10) / 10, height: Math.round(b.height * 10) / 10 }; };
+  const r10 = (v) => Math.round(v * 10) / 10;
+  const box = (el) => { const b = el.getBoundingClientRect(); return { top: r10(b.top), left: r10(b.left), width: r10(b.width), height: r10(b.height), bottom: r10(b.bottom), right: r10(b.right) }; };
+  const shown = (el) => !el.hidden && getComputedStyle(el).display !== 'none' && el.getClientRects().length > 0;
+  const scroll = (el) => ({ scrollHeight: el.scrollHeight, clientHeight: el.clientHeight, scrollWidth: el.scrollWidth, clientWidth: el.clientWidth });
+  const truncation = (el) => {
+    const c = getComputedStyle(el);
+    const clamp = c.webkitLineClamp || c.getPropertyValue('-webkit-line-clamp') || 'none';
+    return { tag: el.tagName.toLowerCase(), text: el.textContent.trim().slice(0, 40), clamp, textOverflow: c.textOverflow };
+  };
   const kids = [...card.children];
   const content = card.querySelector('[data-role="content"]');
   const nav = card.querySelector('nav');
+  const photo = kids[0] || null;
   const cs = getComputedStyle(card);
   const ccs = content ? getComputedStyle(content) : {};
+  // Textes d'identité (catégorie, nom, accroche) : feuilles de texte du bloc photo, hors compteur.
+  const identity = photo ? [...card.querySelectorAll('*')]
+    .filter((el) => el.children.length === 0 && el.textContent.trim() && shown(el) && !/^\s*\d+\s*\/\s*\d+\s*$|^offline$/.test(el.textContent.trim()))
+    .filter((el) => !(content && content.contains(el)) && !(nav && nav.contains(el)))
+    .map((el) => ({ text: el.textContent.trim(), inPhoto: photo.contains(el), headline: el.matches('[data-role="headline"]'), ...box(el) })) : [];
   return {
     card: box(card),
+    cardScroll: scroll(card),
     boxSizing: cs.boxSizing, display: cs.display, flexDirection: cs.flexDirection, overflow: cs.overflow,
     children: kids.map((el) => (el.tagName === 'NAV' ? 'nav' : el.getAttribute('data-role') || (el.querySelector('img, [aria-hidden]') ? 'photo' : el.tagName.toLowerCase()))),
-    photo: kids[0] ? { ...box(kids[0]), flexShrink: getComputedStyle(kids[0]).flexShrink, hasImg: !!kids[0].querySelector('img'), hasHeadline: !!kids[0].querySelector('[data-role="headline"]'), hasCounter: /\d+\s*\/\s*\d+/.test(kids[0].innerText) } : null,
+    photo: photo ? { ...box(photo), flexShrink: getComputedStyle(photo).flexShrink, hasImg: !!photo.querySelector('img'), hasHeadline: !!photo.querySelector('[data-role="headline"]'), hasCounter: /\d+\s*\/\s*\d+/.test(photo.innerText) } : null,
+    identity,
     contentIndex: kids.indexOf(content),
-    content: content ? { ...box(content), scrollHeight: content.scrollHeight, clientHeight: content.clientHeight, scrollTop: content.scrollTop, overflowY: ccs.overflowY, flexGrow: ccs.flexGrow, flexShrink: ccs.flexShrink, minHeight: ccs.minHeight, sections: [...content.querySelectorAll('section[data-role]')].map((x) => x.getAttribute('data-role')) } : null,
+    content: content ? {
+      ...box(content), ...scroll(content), scrollTop: content.scrollTop,
+      overflowY: ccs.overflowY, overflowX: ccs.overflowX,
+      sections: [...content.querySelectorAll('section[data-role]')].filter(shown).map((x) => x.getAttribute('data-role')),
+      // Chaque section et chaque bloc de texte visibles, avec leur boîte.
+      blocks: [...content.querySelectorAll('section, p')].filter(shown).map((el) => ({ tag: el.tagName.toLowerCase(), role: el.getAttribute('data-role') || (el.closest('section') || {}).getAttribute?.('data-role'), ...box(el) })),
+      truncation: [...card.querySelectorAll('p, section, section *, [data-role="headline"]')].filter(shown).map(truncation),
+    } : null,
     navIndex: kids.indexOf(nav),
     nav: nav ? { ...box(nav), label: nav.getAttribute('aria-label'), flexShrink: getComputedStyle(nav).flexShrink, justify: getComputedStyle(nav).justifyContent } : null,
     buttons: nav ? [...nav.querySelectorAll('button')].map((b) => ({ ...box(b), label: b.getAttribute('aria-label'), title: b.getAttribute('title') })) : [],
   };
 }, rootSel);
+
+// Capture PNG de la carte courante (best effort, jamais bloquant).
+async function capture(page, id, rootSel = '#widget', prefix = '') {
+  try {
+    mkdirSync(CARDS_DIR, { recursive: true });
+    const sel = `${rootSel}${rootSel === '#card' ? '' : ' article'}`;
+    await page.locator(sel).first().screenshot({ path: path.join(CARDS_DIR, `${prefix}${id}.png`) });
+  } catch { /* dossier non inscriptible : on ignore */ }
+}
 
 // Tous les textes lisibles : innerText + title/aria-label/alt de l'article et de ses descendants.
 const visibleStrings = (page, rootSel = '#widget') => page.evaluate((sel) => {
@@ -305,31 +346,60 @@ async function assertNoFrench(page, rootSel, where) {
   }
 }
 
-// Contrôle de la géométrie v3 (taille fixe, structure, nav en bas).
-function assertV3Layout(g, where, width = CARD_W) {
-  assert.ok(Math.abs(g.card.width - width) <= 1, `${where} : largeur ${g.card.width} (attendu ${width})`);
-  assert.ok(Math.abs(g.card.height - CARD_H) <= 1, `${where} : hauteur ${g.card.height} (attendu ${CARD_H})`);
+// Contrôle de la géométrie v5 : taille fixe, structure, 150 / 294 / 46, nav en bas.
+// Ne dit rien du texte : assertNoScroll vérifie qu'il tient.
+function assertV5Layout(g, where, width = CARD_W) {
+  assert.ok(Math.abs(g.card.width - width) <= 0.5, `${where} : largeur ${g.card.width} (attendu ${width} ± 0,5)`);
+  assert.ok(Math.abs(g.card.height - CARD_H) <= 0.5, `${where} : hauteur ${g.card.height} (attendu ${CARD_H} ± 0,5)`);
   assert.equal(g.boxSizing, 'border-box');
   assert.equal(g.display, 'flex');
   assert.equal(g.flexDirection, 'column');
   assert.equal(g.overflow, 'hidden');
   assert.equal(g.contentIndex, 1, `${where} : [data-role=content] doit être le 2e enfant (${g.children})`);
   assert.equal(g.navIndex, 2, `${where} : nav doit être le 3e enfant (${g.children})`);
-  assert.ok(g.photo.hasImg && g.photo.hasHeadline !== undefined && g.photo.hasCounter, `${where} : bloc photo (img + compteur)`);
-  assert.ok(Math.abs(g.photo.height - PHOTO_H) <= 0.5, `${where} : bloc photo ${g.photo.height} (attendu ${PHOTO_H})`);
+  assert.ok(g.photo.hasImg && g.photo.hasCounter, `${where} : bloc photo (img + compteur)`);
+  assert.ok(Math.abs(g.photo.height - PHOTO_H) <= 1, `${where} : bloc photo ${g.photo.height} (attendu ${PHOTO_H} ± 1)`);
   assert.equal(g.photo.flexShrink, '0', `${where} : bloc photo flex none`);
-  assert.equal(g.content.overflowY, 'auto');
-  assert.equal(g.content.flexGrow, '1');
-  assert.equal(g.content.minHeight, '0px');
+  assert.ok(Math.abs(g.content.height - CONTENT_H) <= 1, `${where} : zone content ${g.content.height} (attendu ${CONTENT_H} ± 1)`);
+  assert.ok(Math.abs(g.nav.height - NAV_H) <= 1, `${where} : nav ${g.nav.height} (attendu ${NAV_H} ± 1)`);
+  assert.ok(!['auto', 'scroll'].includes(g.content.overflowY), `${where} : overflowY de content = ${g.content.overflowY} (ni auto ni scroll)`);
+  assert.ok(!['auto', 'scroll'].includes(g.content.overflowX), `${where} : overflowX de content = ${g.content.overflowX} (ni auto ni scroll)`);
   assert.equal(g.nav.label, 'Widget controls');
   assert.equal(g.nav.flexShrink, '0', `${where} : nav flex none`);
   assert.equal(g.nav.justify, 'center');
   assert.equal(g.buttons.length, 3);
-  const bottom = g.nav.top + g.nav.height;
-  assert.ok(Math.abs(g.card.top + g.card.height - bottom) <= 1.5, `${where} : nav collée en bas (${bottom} / ${g.card.top + g.card.height})`);
+  assert.ok(Math.abs(g.card.bottom - g.nav.bottom) <= 1.5, `${where} : nav collée en bas (${g.nav.bottom} / ${g.card.bottom})`);
   const mid = g.card.left + g.card.width / 2;
-  const span = [Math.min(...g.buttons.map((b) => b.left)), Math.max(...g.buttons.map((b) => b.left + b.width))];
+  const span = [Math.min(...g.buttons.map((b) => b.left)), Math.max(...g.buttons.map((b) => b.right))];
   assert.ok(Math.abs((span[0] + span[1]) / 2 - mid) <= 1.5, `${where} : boutons centrés (${span} / ${mid})`);
+  for (const b of g.buttons) {
+    assert.ok(b.top >= g.nav.top - 0.5 && b.bottom <= g.nav.bottom + 0.5, `${where} : bouton « ${b.label} » dans la nav`);
+  }
+  // Nom, catégorie et accroche superposés au bloc photo.
+  assert.ok(g.identity.length >= 1, `${where} : nom affiché sur la photo`);
+  for (const t of g.identity) {
+    assert.ok(t.inPhoto, `${where} : « ${t.text} » doit être dans le bloc photo`);
+    assert.ok(t.top >= g.photo.top - 0.5 && t.bottom <= g.photo.bottom + 0.5 && t.left >= g.photo.left - 0.5 && t.right <= g.photo.right + 0.5,
+      `${where} : « ${t.text} » déborde du bloc photo (${t.top}..${t.bottom} / ${g.photo.top}..${g.photo.bottom})`);
+  }
+}
+
+// Contrat v5 : aucun défilement, tout le texte visible, rien de tronqué.
+function assertNoScroll(g, where) {
+  const c = g.content;
+  for (const [name, m] of [['article', g.cardScroll], ['content', c]]) {
+    assert.ok(m.scrollHeight <= m.clientHeight + 1, `${where} : ${name} défile verticalement (scrollHeight ${m.scrollHeight} > clientHeight ${m.clientHeight})`);
+    assert.ok(m.scrollWidth <= m.clientWidth + 1, `${where} : ${name} défile horizontalement (scrollWidth ${m.scrollWidth} > clientWidth ${m.clientWidth})`);
+  }
+  assert.ok(c.blocks.some((b) => b.tag === 'section') && c.blocks.some((b) => b.tag === 'p'), `${where} : sections et paragraphes attendus`);
+  for (const b of c.blocks) {
+    assert.ok(b.bottom <= c.bottom + 0.5, `${where} : ${b.tag}[${b.role}] coupé en bas (${b.bottom} > ${c.bottom})`);
+    assert.ok(b.top >= c.top - 0.5, `${where} : ${b.tag}[${b.role}] au-dessus de la zone (${b.top} < ${c.top})`);
+  }
+  for (const t of c.truncation) {
+    assert.ok(!t.clamp || t.clamp === 'none', `${where} : -webkit-line-clamp ${t.clamp} sur ${t.tag} « ${t.text} »`);
+    assert.notEqual(t.textOverflow, 'ellipsis', `${where} : text-overflow ellipsis sur ${t.tag} « ${t.text} »`);
+  }
 }
 
 // Interface v3 : 3 boutons, aucun S/M/L, aucun titre, aucun crédit ni citation, anglais.
@@ -382,7 +452,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
   const ADDED = { id: 'ajout-harnais', name: 'Harness Added Person', lowest: 'Trial added on GitHub.', comeback: 'Turnaround added on GitHub.' };
   // Revient à la première carte (navigation circulaire avec ›).
   const backToFirst = async (p = page) => {
-    for (let i = 0; i < 12 && (await snapshot(p)).currentId !== WHITELIST[0]; i += 1) await click(p, 'next');
+    for (let i = 0; i < N + 2 && (await snapshot(p)).currentId !== WHITELIST[0]; i += 1) await click(p, 'next');
     assert.equal((await snapshot(p)).currentId, WHITELIST[0]);
   };
 
@@ -397,11 +467,11 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     await context?.close();
   });
 
-  test('copie embarquée = liste blanche des 10 personnes', () => {
+  test(`copie embarquée = liste blanche des ${N} personnes`, () => {
     assert.deepEqual(local.map((x) => x.id), WHITELIST);
   });
 
-  test('carte initiale : sans titre ni crédit, 3 boutons, compteur 1 / 10 sur la photo, 350 × 490', async () => {
+  test(`carte initiale : sans titre ni crédit, 3 boutons, compteur 1 / ${N} sur la photo, 350 × 490`, async () => {
     const s = await snapshot(page);
     assert.deepEqual(s.errors, []);
     assert.equal(s.currentId, WHITELIST[0]);
@@ -417,7 +487,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     assert.ok(counterOnPhoto, 'compteur de navigation superposé à la photo');
     assert.ok(Math.abs(s.width - CARD_W) <= 1, `largeur ≈ ${CARD_W} px, mesurée ${s.width}`);
     assert.ok(Math.abs(s.height - CARD_H) <= 1, `hauteur ≈ ${CARD_H} px, mesurée ${s.height}`);
-    assertV3Layout(await layout(page), 'carte initiale');
+    assertV5Layout(await layout(page), 'carte initiale');
     const labels = (await layout(page)).buttons.map((b) => [b.label, b.title]);
     assert.deepEqual(labels, [['Previous person', 'Previous person'], ['Next person', 'Next person'], [PAUSE_LABEL, PAUSE_LABEL]]);
     const alt = await page.evaluate(() => document.querySelector('#widget article img').getAttribute('alt'));
@@ -426,7 +496,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     await waitImage(page);
   });
 
-  test('parcours complet des 10 cartes avec › : noms, photos locales, section À 25 ANS', async () => {
+  test(`parcours complet des ${N} cartes avec › : noms, photos locales, section AT 25`, async () => {
     for (let i = 0; i < WHITELIST.length; i += 1) {
       await waitImage(page);
       const s = await snapshot(page);
@@ -443,11 +513,22 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     assert.equal(back.currentId, WHITELIST[0], 'retour circulaire à la première carte');
   });
 
-  test('taille fixe 350 × 490 sur les 10 cartes : photo 172 px, nav et boutons immobiles', async () => {
+  test(`${N} cartes : 350 × 490, photo ${PHOTO_H} / texte ${CONTENT_H} / nav ${NAV_H}, aucun défilement, tout le texte visible`, async () => {
     const all = [];
-    for (let i = 0; i < WHITELIST.length; i += 1) {
+    for (let i = 0; i < N; i += 1) {
+      const id = WHITELIST[i];
+      assert.equal((await snapshot(page)).currentId, id);
+      await waitImage(page);
       const g = await layout(page);
-      assertV3Layout(g, WHITELIST[i]);
+      assertV5Layout(g, id);
+      assertNoScroll(g, id);
+      const story = byId(id);
+      for (const t of [story.name, story.category, story.headline].filter(Boolean)) {
+        assert.ok(g.identity.some((x) => x.inPhoto && x.text === t), `${id} : « ${t} » affiché dans le bloc photo`);
+      }
+      const expected = ['low', 'high', ...(story.at25 ? ['at25'] : [])];
+      assert.deepEqual(g.content.sections, expected, `${id} : sections visibles`);
+      await capture(page, id);
       all.push(g);
       await click(page, 'next');
     }
@@ -455,44 +536,18 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     for (let i = 1; i < all.length; i += 1) {
       const g = all[i];
       assert.deepEqual(g.card, ref.card, `${WHITELIST[i]} : carte identique à la première`);
-      assert.deepEqual({ top: g.nav.top, left: g.nav.left, width: g.nav.width, height: g.nav.height },
-        { top: ref.nav.top, left: ref.nav.left, width: ref.nav.width, height: ref.nav.height }, `${WHITELIST[i]} : nav immobile`);
+      assert.deepEqual(g.nav, ref.nav, `${WHITELIST[i]} : nav immobile`);
       g.buttons.forEach((b, k) => {
         const r = ref.buttons[k];
         assert.deepEqual([b.top, b.left, b.width, b.height], [r.top, r.left, r.width, r.height], `${WHITELIST[i]} : bouton ${k + 1} immobile`);
       });
-      assert.equal(g.photo.height, ref.photo.height, `${WHITELIST[i]} : bloc photo constant`);
-      assert.equal(g.content.clientHeight, ref.content.clientHeight, `${WHITELIST[i]} : zone texte de hauteur constante`);
+      assert.deepEqual([g.photo.top, g.photo.height], [ref.photo.top, ref.photo.height], `${WHITELIST[i]} : bloc photo constant`);
+      assert.deepEqual([g.content.top, g.content.height], [ref.content.top, ref.content.height], `${WHITELIST[i]} : zone texte constante`);
     }
     assert.equal((await snapshot(page)).currentId, WHITELIST[0]);
   });
 
-  test('seule la zone de texte défile, remise en haut à chaque changement de personne', async () => {
-    const scrolling = [];
-    for (let i = 0; i < WHITELIST.length; i += 1) {
-      const g = await layout(page);
-      assert.equal(g.content.overflowY, 'auto');
-      if (g.content.scrollHeight > g.content.clientHeight + 1) scrolling.push(i);
-      await click(page, 'next');
-    }
-    assert.ok(scrolling.length >= 1, 'au moins une carte réelle a un texte plus long que la zone visible');
-    const target = WHITELIST[scrolling[0]];
-    for (let i = 0; i < 12 && (await snapshot(page)).currentId !== target; i += 1) await click(page, 'next');
-    await page.evaluate(() => { document.querySelector('#widget [data-role="content"]').scrollTop = 50; });
-    const scrolled = await layout(page);
-    assert.ok(scrolled.content.scrollTop > 0, `défilement effectif (${scrolled.content.scrollTop})`);
-    assert.ok(Math.abs(scrolled.card.height - CARD_H) <= 1, 'la carte ne grandit pas');
-    await click(page, 'next');
-    assert.equal((await layout(page)).content.scrollTop, 0, 'personne suivante : zone en haut');
-    await click(page, 'prev');
-    const back = await layout(page);
-    assert.equal((await snapshot(page)).currentId, target);
-    assert.equal(back.content.scrollTop, 0, 'retour : zone en haut');
-    assert.ok(Math.abs(back.card.height - CARD_H) <= 1);
-    await backToFirst();
-  });
-
-  test('aucun texte français visible (texte, title, aria-label, alt) sur les 10 cartes', async () => {
+  test(`aucun texte français visible (texte, title, aria-label, alt) sur les ${N} cartes`, async () => {
     for (let i = 0; i < WHITELIST.length; i += 1) {
       await assertNoFrench(page, '#widget', WHITELIST[i]);
       await click(page, 'next');
@@ -557,7 +612,9 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     const tip = await page.evaluate(() => [...document.querySelectorAll('#widget [title]')].map((e) => e.getAttribute('title')).find((t) => /^Sync failed/.test(t)));
     assert.ok(tip, 'infobulle « Sync failed ... »');
     await assertNoFrench(page, '#widget', 'hors connexion');
-    assertV3Layout(await layout(page), 'hors connexion');
+    const g = await layout(page);
+    assertV5Layout(g, 'hors connexion');
+    assertNoScroll(g, 'hors connexion');
     assert.equal(b.currentId, a.currentId);
     assert.deepEqual(b.ids, a.ids);
     assert.ok(b.text.includes(a.currentName));
@@ -625,33 +682,37 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     const s2 = await snapshot(p);
     assert.equal(s2.currentId, remote[1].id);
     assert.doesNotMatch(s2.text, /AT 25/, 'section absente sans at25');
-    assert.deepEqual((await layout(p)).content.sections, ['low', 'high']);
-    assertV3Layout(await layout(p), 'sans at25 ni accroche');
+    const g2 = await layout(p);
+    assert.deepEqual(g2.content.sections, ['low', 'high']);
+    assertV5Layout(g2, 'sans at25 ni accroche');
+    assertNoScroll(g2, 'sans at25 ni accroche');
     assert.equal(s2.at25Visible, false);
     assert.equal(s2.headline, null, 'pas d’accroche sans headline');
     await ctx.close();
   });
 
-  test('histoire distante très longue : la zone texte défile, la carte reste à 490 px', async () => {
-    const long = 'He kept going through years of setbacks, debts and doubts, and never gave up on the plan. ';
+  // Preuve que les tests sans défilement échoueraient : un « lowest » de 80 mots
+  // (bien au-delà de la limite de 24) déborde de la zone de 294 px.
+  test('débordement détecté : un lowest distant de 80 mots dépasse la zone (scrollHeight > clientHeight)', async () => {
+    const lowest = Array.from({ length: 80 }, (_, i) => (i % 8 === 7 ? 'setbacks.' : 'through')).join(' ');
+    assert.equal(lowest.split(' ').length, 80);
     const remote = local.map((x) => ({ ...x }));
-    remote[0] = { ...remote[0], lowest: long.repeat(12).trim(), comeback: long.repeat(10).trim(), at25: long.repeat(6).trim() };
+    remote[0] = { ...remote[0], lowest };
     const ctx = await env.browser.newContext({ viewport: { width: 1280, height: 1400 } });
     await route(ctx, env.bundle);
     const p = await openWidget(ctx, { online: true, remote });
-    await until(p, (t) => document.getElementById('widget').innerText.includes(t), remote[0].at25.slice(0, 40));
+    await until(p, (t) => document.getElementById('widget').innerText.includes(t), lowest.slice(0, 60));
     const g = await layout(p);
-    assertV3Layout(g, 'histoire longue');
-    assert.ok(g.content.scrollHeight > g.content.clientHeight + 100, `texte plus long que la zone : ${g.content.scrollHeight} / ${g.content.clientHeight}`);
-    await p.evaluate(() => { document.querySelector('#widget [data-role="content"]').scrollTop = 50; });
-    assert.equal((await layout(p)).content.scrollTop, 50);
-    const navBefore = (await layout(p)).nav;
+    assertV5Layout(g, 'histoire de 80 mots');
+    assert.ok(g.content.scrollHeight > g.content.clientHeight, `débordement attendu : ${g.content.scrollHeight} / ${g.content.clientHeight}`);
+    assert.throws(() => assertNoScroll(g, 'histoire de 80 mots'), /défile|coupé/, 'assertNoScroll doit refuser cette carte');
+    await capture(p, 'overflow-80-words');
+    const navBefore = g.nav;
     await click(p, 'next');
-    await click(p, 'prev');
     const after = await layout(p);
-    assert.equal(after.content.scrollTop, 0, 'remontée en haut après › puis ‹');
+    assertNoScroll(after, 'carte suivante');
     assert.deepEqual(after.nav, navBefore, 'nav immobile');
-    assert.ok(Math.abs(after.card.height - CARD_H) <= 1, 'la carte ne grandit pas');
+    assert.ok(Math.abs(after.card.height - CARD_H) <= 0.5, 'la carte ne grandit pas');
     await ctx.close();
   });
 
@@ -662,7 +723,9 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     const s = await snapshot(p);
     assert.ok(s.width <= 360 && s.width < CARD_W, `largeur réduite : ${s.width}`);
     assert.ok(Math.abs(s.height - CARD_H) <= 1, `hauteur toujours ${CARD_H} : ${s.height}`);
-    assertV3Layout(await layout(p), 'fenêtre étroite', s.width);
+    const g = await layout(p);
+    assertV5Layout(g, 'fenêtre étroite', s.width);
+    assertNoScroll(g, 'fenêtre étroite');
     assert.ok(s.width >= 240, `largeur encore lisible : ${s.width}`);
     assert.ok(s.left >= 0 && s.right <= s.viewport, `carte dans la fenêtre : ${s.left}..${s.right} / ${s.viewport}`);
     const scroll = await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
@@ -671,7 +734,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     await ctx.close();
   });
 
-  test('ancien cache v1 à 20 personnes + réseau coupé : seules les 10 cartes embarquées', async () => {
+  test(`ancien cache v1 à 20 personnes + réseau coupé : seules les ${N} cartes embarquées`, async () => {
     const ctx = await env.browser.newContext({ viewport: { width: 1280, height: 1400 } });
     await route(ctx, env.bundle);
     await seedStorage(ctx, {
@@ -692,7 +755,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     await ctx.close();
   });
 
-  test('distant à 10 : aucune personne retirée ne revient après synchronisation ni rechargement', async () => {
+  test(`distant à ${N} : aucune personne retirée ne revient après synchronisation ni rechargement`, async () => {
     const ctx = await env.browser.newContext({ viewport: { width: 1280, height: 1400 } });
     await route(ctx, env.bundle);
     await seedStorage(ctx, { [CACHE_V1]: oldCacheV1(local) });
@@ -724,7 +787,7 @@ describe('aperçu navigateur (preview/index.html, Chromium)', { skip }, () => {
   const openPreview = async (ctx) => {
     const p = await ctx.newPage();
     await p.goto(PREVIEW);
-    await p.waitForFunction(() => /\d+\s*\/\s*10\b/.test(document.body.innerText), null, { timeout: 5000 });
+    await p.waitForFunction((n) => new RegExp(`\\d+\\s*/\\s*${n}\\b`).test(document.body.innerText), N, { timeout: 5000 });
     return p;
   };
 
@@ -735,7 +798,7 @@ describe('aperçu navigateur (preview/index.html, Chromium)', { skip }, () => {
   });
   after(async () => { await context?.close(); });
 
-  test('charge les 10 histoires de ../stories.json, interface v3 en anglais, photos locales', async () => {
+  test(`charge les ${N} histoires de ../stories.json, interface en anglais, photos locales`, async () => {
     const p = await openPreview(context);
     assert.equal(await p.evaluate(() => document.documentElement.lang), 'en', '<html lang="en">');
     const all = [];
@@ -746,8 +809,14 @@ describe('aperçu navigateur (preview/index.html, Chromium)', { skip }, () => {
       const story = local[i];
       assertV3Card(s, story);
       assert.ok(s.imageSrc.startsWith(`${ORIGIN}/repo/widget/mur-des-retournements.widget/photos/`), `photo locale : ${s.imageSrc}`);
+      assert.equal(story.id, WHITELIST[i], 'aperçu : ordre de ../stories.json');
       const g = await layout(p, '#card');
-      assertV3Layout(g, `aperçu ${story.id}`);
+      assertV5Layout(g, `aperçu ${story.id}`);
+      assertNoScroll(g, `aperçu ${story.id}`);
+      for (const t of [story.name, story.category, story.headline].filter(Boolean)) {
+        assert.ok(g.identity.some((x) => x.inPhoto && x.text === t), `aperçu ${story.id} : « ${t} » dans le bloc photo`);
+      }
+      await capture(p, story.id, '#card', 'preview-');
       assert.deepEqual(g.buttons.map((b) => [b.label, b.title]),
         [['Previous person', 'Previous person'], ['Next person', 'Next person'], [PAUSE_LABEL, PAUSE_LABEL]]);
       all.push(g);
@@ -756,7 +825,9 @@ describe('aperçu navigateur (preview/index.html, Chromium)', { skip }, () => {
     }
     for (const g of all.slice(1)) {
       assert.deepEqual(g.card, all[0].card, 'aperçu : carte de taille constante');
-      assert.deepEqual(g.buttons.map((b) => [b.top, b.left]), all[0].buttons.map((b) => [b.top, b.left]), 'aperçu : boutons immobiles');
+      assert.deepEqual(g.nav, all[0].nav, 'aperçu : nav immobile');
+      assert.deepEqual(g.buttons.map((b) => [b.top, b.left, b.width, b.height]), all[0].buttons.map((b) => [b.top, b.left, b.width, b.height]), 'aperçu : boutons immobiles');
+      assert.deepEqual([g.content.top, g.content.height], [all[0].content.top, all[0].content.height], 'aperçu : zone texte constante');
     }
     const page = await p.evaluate(() => document.body.innerText);
     assert.doesNotMatch(page, /mur des retournements/i);
@@ -769,25 +840,6 @@ describe('aperçu navigateur (preview/index.html, Chromium)', { skip }, () => {
     await p.close();
   });
 
-  test('zone de texte qui défile, remise en haut au changement de personne', async () => {
-    const p = await openPreview(context);
-    let found = false;
-    for (let i = 0; i < N && !found; i += 1) {
-      const g = await layout(p, '#card');
-      if (g.content.scrollHeight > g.content.clientHeight + 1) found = true;
-      else await click(p, 'next', '#card');
-    }
-    assert.ok(found, 'au moins une carte réelle défile dans l’aperçu');
-    await p.evaluate(() => { document.querySelector('#card [data-role="content"]').scrollTop = 50; });
-    assert.ok((await layout(p, '#card')).content.scrollTop > 0);
-    await click(p, 'next', '#card');
-    await click(p, 'prev', '#card');
-    const g = await layout(p, '#card');
-    assert.equal(g.content.scrollTop, 0);
-    assertV3Layout(g, 'aperçu après défilement');
-    await p.close();
-  });
-
   test('fenêtre étroite : largeur réduite, hauteur 490, sans défilement horizontal', async () => {
     const ctx = await env.browser.newContext({ viewport: { width: 360, height: 900 } });
     await route(ctx, env.bundle);
@@ -796,6 +848,9 @@ describe('aperçu navigateur (preview/index.html, Chromium)', { skip }, () => {
     assert.ok(s.width < CARD_W && s.left >= 0 && s.right <= s.viewport, `${s.left}..${s.right} / ${s.viewport}`);
     assert.ok(Math.abs(s.height - CARD_H) <= 1, `hauteur toujours ${CARD_H} : ${s.height}`);
     assert.ok(await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
+    const g = await layout(p, '#card');
+    assertV5Layout(g, 'aperçu étroit', g.card.width);
+    assertNoScroll(g, 'aperçu étroit');
     await ctx.close();
   });
 });

@@ -71,6 +71,16 @@ describe('constantes du contrat', () => {
     assert.equal(ROTATION_MS, 20 * 60 * 1000);
     assert.equal(PREFS_KEY, 'mur-des-retournements-settings-v3');
   });
+  // Contrat v5 : photo 150 px + zone de texte 294 px + nav 46 px = CARD_HEIGHT.
+  // Constantes facultatives : vérifiées seulement si lib/state.js les exporte.
+  test('PHOTO_HEIGHT et NAV_HEIGHT (si exportés) : 150 et 46, zone de texte 294', () => {
+    if ('PHOTO_HEIGHT' in mod) assert.equal(mod.PHOTO_HEIGHT, 150);
+    if ('NAV_HEIGHT' in mod) assert.equal(mod.NAV_HEIGHT, 46);
+    if ('CONTENT_HEIGHT' in mod) assert.equal(mod.CONTENT_HEIGHT, 294);
+    if ('PHOTO_HEIGHT' in mod && 'NAV_HEIGHT' in mod) {
+      assert.equal(CARD_HEIGHT - mod.PHOTO_HEIGHT - mod.NAV_HEIGHT, 294, 'zone de texte de 294 px');
+    }
+  });
   test('plus aucune notion de taille exportée (SIZES, SIZE)', () => {
     assert.ok(!('SIZES' in mod), 'SIZES ne doit plus être exporté');
     assert.ok(!('SIZE' in mod), 'SIZE ne doit plus être exporté');

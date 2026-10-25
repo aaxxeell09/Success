@@ -23,6 +23,14 @@ if grep -nE '\bSIZES?\b|Taille (S|M|L|petite|moyenne|grande)|Taille du widget' "
   fail "le JSX mentionne encore les tailles (SIZE/SIZES/« Taille ») : $(grep -nE '\bSIZES?\b|Taille ' "$JSX" | head -3 | tr '\n' ' ')"
 fi
 
+# Contrat v5 : aucun défilement ni texte tronqué, dans le JSX comme dans l'aperçu.
+NOSCROLL_RE="overflowY: *['\"](auto|scroll)['\"]|overflow(-y)?: *(auto|scroll)|::-webkit-scrollbar|line-clamp|LineClamp|text-overflow|textOverflow"
+for f in "$JSX" "$ROOT/preview/index.html"; do
+  [ -f "$f" ] || continue
+  HITS="$(grep -nE "$NOSCROLL_RE" "$f" | head -5 | tr '\n' ' ')"
+  [ -z "$HITS" ] || fail "${f#$ROOT/} : défilement ou troncature interdits (overflow auto/scroll, ::-webkit-scrollbar, line-clamp, text-overflow) : $HITS"
+done
+
 # Aperçu navigateur : même interface que le widget (sans titre, S/M/L ni crédit).
 PREVIEW="$ROOT/preview/index.html"
 if [ -f "$PREVIEW" ]; then

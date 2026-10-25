@@ -59,5 +59,19 @@
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Margaret_Thatcher"
     ]
+  },
+  "jensen": {
+    "at25": "In 1988, Jensen Huang is an engineer at LSI Logic in Silicon Valley, after a first job designing microprocessors at AMD. He studies at night for a master's in electrical engineering from Stanford (1992) and will co-found Nvidia in 1993.",
+    "at25_sources": [
+      "https://en.wikipedia.org/wiki/Jensen_Huang",
+      "https://nvidianews.nvidia.com/bios/jensen-huang"
+    ]
+  },
+  "rdj": {
+    "at25": "In 1990, Robert Downey Jr. is a working Hollywood actor, known for Less Than Zero (1987). He co-stars with Mel Gibson in Air America (1990), and two years later earns his first Oscar nomination for Chaplin (1992).",
+    "at25_sources": [
+      "https://en.wikipedia.org/wiki/Robert_Downey_Jr.",
+      "https://en.wikipedia.org/wiki/Air_America_(film)"
+    ]
   }
 }

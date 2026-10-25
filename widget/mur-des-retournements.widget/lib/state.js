@@ -3,23 +3,20 @@
 // implicite. Le temps (`now`) et le stockage (`storage`) sont toujours injectés,
 // ce qui permet de tester ce module sous Node 22 (`node --test`).
 
-export const SIZES = [
-  { key: 'S', width: 320 },
-  { key: 'M', width: 420 },
-  { key: 'L', width: 540 },
-];
+// Largeur fixe de la carte, en pixels (ancienne taille M). Le widget la réduit
+// seulement si l'écran est plus étroit.
+export const CARD_WIDTH = 420;
 export const ROTATION_MS = 20 * 60 * 1000;
-export const PREFS_KEY = 'mur-des-retournements-settings-v2';
+export const PREFS_KEY = 'mur-des-retournements-settings-v3';
 
-// Ancienne clé (widget v1) : lue une seule fois en repli pour conserver
-// la taille et l'état de pause choisis avant la mise à jour.
-const LEGACY_PREFS_KEY = 'mur-des-retournements-settings-v1';
-const DEFAULT_SIZE = 1;
+// Anciennes clés (widgets v2 puis v1) : relues en repli pour conserver la
+// personne courante et l'état de pause, puis supprimées au premier
+// enregistrement. L'ancienne taille (S/M/L) qu'elles contiennent est ignorée.
+const LEGACY_PREFS_KEYS = ['mur-des-retournements-settings-v2', 'mur-des-retournements-settings-v1'];
 
 const REPO_RAW_BASE = 'https://raw.githubusercontent.com/aaxxeell09/Success/main/widget/mur-des-retournements.widget/';
 const LOCAL_BASE = 'mur-des-retournements.widget/';
 
-const isValidSize = (n) => Number.isInteger(n) && n >= 0 && n < SIZES.length;
 const asStories = (list) => (Array.isArray(list) ? list.filter((s) => s && typeof s.id === 'string') : []);
 const hasId = (stories, id) => typeof id === 'string' && stories.some((s) => s.id === id);
 const firstId = (stories) => (stories.length ? stories[0].id : null);
@@ -37,7 +34,6 @@ export function createInitialState(localStories, now) {
   return {
     stories,
     currentId: firstId(stories),
-    size: DEFAULT_SIZE,
     paused: false,
     lastAdvanceAt: isNum(now) ? now : 0,
     photos: {},
@@ -75,7 +71,6 @@ export function reducer(state, event) {
       return {
         ...s,
         currentId: hasId(stories, prefs.currentId) ? prefs.currentId : (hasId(stories, s.currentId) ? s.currentId : firstId(stories)),
-        size: isValidSize(prefs.size) ? prefs.size : s.size,
         paused: typeof prefs.paused === 'boolean' ? prefs.paused : s.paused,
         lastAdvanceAt: now !== null ? now : s.lastAdvanceAt,
       };
@@ -93,8 +88,6 @@ export function reducer(state, event) {
       if (now - s.lastAdvanceAt < ROTATION_MS) return s;
       return { ...s, currentId: step(s, 1), lastAdvanceAt: now };
     }
-    case 'SIZE':
-      return isValidSize(event.size) && event.size !== s.size ? { ...s, size: event.size } : s;
     case 'TOGGLE_PAUSE':
       // À la reprise, le compte à rebours de 20 minutes repart de zéro.
       return { ...s, paused: !s.paused, lastAdvanceAt: now !== null ? now : s.lastAdvanceAt };
@@ -123,6 +116,8 @@ export function reducer(state, event) {
       if (!Object.keys(clean).length) return s;
       return { ...s, photos: { ...(s.photos || {}), ...clean } };
     }
+    // Ancien événement SIZE (plus de taille réglable) et événements inconnus :
+    // état inchangé.
     default:
       return s;
   }
@@ -147,28 +142,33 @@ export function loadPrefs(storage, defaults) {
   const d = defaults && typeof defaults === 'object' ? defaults : {};
   const fallback = {
     currentId: typeof d.currentId === 'string' ? d.currentId : null,
-    size: isValidSize(d.size) ? d.size : DEFAULT_SIZE,
     paused: typeof d.paused === 'boolean' ? d.paused : false,
   };
-  const saved = readJson(storage, PREFS_KEY) || readJson(storage, LEGACY_PREFS_KEY) || {};
+  let saved = readJson(storage, PREFS_KEY);
+  for (let i = 0; !saved && i < LEGACY_PREFS_KEYS.length; i += 1) saved = readJson(storage, LEGACY_PREFS_KEYS[i]);
+  saved = saved || {};
   return {
     currentId: typeof saved.currentId === 'string' && saved.currentId ? saved.currentId : fallback.currentId,
-    size: isValidSize(saved.size) ? saved.size : fallback.size,
     paused: typeof saved.paused === 'boolean' ? saved.paused : fallback.paused,
   };
 }
 
+// Écrit { currentId, paused } sous PREFS_KEY puis supprime les anciennes clés.
 // Ne lève jamais (stockage absent, plein ou interdit).
 export function savePrefs(storage, state) {
+  if (!storage || typeof storage.setItem !== 'function' || !state) return;
   try {
-    if (!storage || typeof storage.setItem !== 'function' || !state) return;
     storage.setItem(PREFS_KEY, JSON.stringify({
       currentId: typeof state.currentId === 'string' ? state.currentId : null,
-      size: isValidSize(state.size) ? state.size : DEFAULT_SIZE,
       paused: state.paused === true,
     }));
   } catch (_) {
     // Stockage indisponible : les préférences ne seront simplement pas gardées.
+    return;
+  }
+  if (typeof storage.removeItem !== 'function') return;
+  for (const key of LEGACY_PREFS_KEYS) {
+    try { storage.removeItem(key); } catch (_) { /* clé ancienne laissée en place */ }
   }
 }
 

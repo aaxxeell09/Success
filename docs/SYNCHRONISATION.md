@@ -16,8 +16,17 @@ Le code se trouve dans `widget/mur-des-retournements.widget/lib/sync.js`, le for
 2. Le widget **télécharge ensuite** `stories.json` depuis GitHub, puis recommence **toutes les 5 minutes** (`SYNC_INTERVAL_MS`).
 3. Le fichier reçu est **vérifié histoire par histoire**. Une histoire mal écrite est ignorée seule : les autres restent affichées.
 4. Si le contenu a changé, l'affichage est mis à jour et la personne actuellement affichée reste la même (elle est retenue par son `id`). Si rien n'a changé, rien ne bouge à l'écran.
-5. La liste valide est **enregistrée dans le cache** local (clé `mur-des-retournements-stories-cache-v1`), réutilisé au prochain démarrage ou hors connexion.
+5. La liste valide est **enregistrée dans le cache** local (clé `mur-des-retournements-stories-cache-v2`), réutilisé au prochain démarrage ou hors connexion. L'ancien cache `mur-des-retournements-stories-cache-v1` (l'ancienne liste à 20 personnes) n'est **plus relu** : il est ignoré puis supprimé, pour qu'aucune personne retirée ne réapparaisse.
 6. **En cas d'échec** (pas de réseau, GitHub indisponible, fichier cassé), le widget garde les histoires déjà affichées, signale l'échec, puis réessaie rapidement : après 30 secondes, puis après 60 secondes, puis au cycle normal de 5 minutes.
+
+## stories.json est la liste blanche
+
+`stories.json` sur GitHub décide **seul** de qui s'affiche :
+
+- seules les personnes présentes dans le fichier s'affichent, dans l'ordre du fichier ;
+- la liste téléchargée **remplace entièrement** la liste affichée (rien n'est ajouté ni conservé d'une ancienne version) ;
+- une personne **retirée** de `stories.json` sur GitHub **disparaît** du widget à la synchronisation réussie suivante (et du cache, qui est réécrit) ;
+- l'ancien cache v1 étant ignoré, une personne retirée ne revient pas non plus au démarrage hors connexion.
 
 Détails techniques :
 
@@ -80,7 +89,8 @@ Règles à respecter :
 - `id` : uniquement minuscules sans accent, chiffres et tirets (`marie-curie`, pas `Marie Curie`), **unique**, et à ne plus modifier ensuite ;
 - `lowest` et `comeback` : 400 caractères au plus conseillés (au delà de 2000, le widget coupe le texte) ;
 - photo : utiliser une **vraie photographie** sous licence libre (Wikimedia Commons), jamais une image générée. Champs `image_url` (adresse `https://` obligatoire), `image_credit`, `image_license`, `image_source`. Sans photo, le widget cherche la vignette de la page Wikipédia indiquée dans `wikipedia`, sinon affiche les initiales ;
-- facultatif : `photo` (chemin relatif dans le dossier du widget, ex. `photos/marie-curie.jpg`) et `sources` (liste d'adresses).
+- facultatif : `photo` (chemin relatif dans le dossier du widget, ex. `photos/marie-curie.jpg`) et `sources` (liste d'adresses) ;
+- facultatif : `at25`, ce que faisait la personne à 25 ans (texte factuel en français, 20 à 40 mots environ, 400 caractères au plus conseillés, ex. « En 1996, ... »), et `at25_sources`, la liste des adresses qui le justifient. Sans `at25`, la section « À 25 ans » n'est pas affichée. Les recherches et sources sont consignées dans `docs/A-25-ANS.md` et `data/at25.json`.
 
 Pour modifier une histoire : même démarche, en changeant le texte entre guillemets. Pour en retirer une : supprimer le bloc `{ ... }` et la virgule qui le sépare du voisin.
 
@@ -140,7 +150,7 @@ node -e "import('./widget/mur-des-retournements.widget/lib/sync.js').then(m => {
 
 **5. Toujours rien ?** Ouvrir la console de débogage d'Übersicht (menu Übersicht, « Open Debug Console ») et chercher les erreurs réseau. Le message d'échec de synchronisation commence par `Réseau indisponible`, `Réponse HTTP`, `Délai dépassé`, `stories.json n'est pas un JSON valide` ou `Aucune histoire valide`.
 
-**Vider le cache local** (rarement utile : le cache est remplacé à chaque synchronisation réussie) : dans la console de débogage, `localStorage.removeItem('mur-des-retournements-stories-cache-v1')`, puis rafraîchir.
+**Vider le cache local** (rarement utile : le cache est remplacé à chaque synchronisation réussie) : dans la console de débogage, `localStorage.removeItem('mur-des-retournements-stories-cache-v2')`, puis rafraîchir.
 
 ## Choix de validation
 
@@ -148,6 +158,7 @@ node -e "import('./widget/mur-des-retournements.widget/lib/sync.js').then(m => {
 - Un `id` de plus de 100 caractères est **rejeté** : le couper changerait l'identité de la personne.
 - Une adresse de plus de 2000 caractères est retirée.
 - Les champs inconnus sont ignorés (non transmis à l'affichage).
+- `at25` suit les mêmes règles que les autres textes facultatifs (texte attendu, sinon retiré ; tronqué au delà de 2000 caractères) ; `at25_sources` suit celles de `sources` (adresses `http(s)://` valides, sans doublon, 20 au plus ; un tableau sans adresse valide est retiré).
 - En cas de doublon d'`id`, la **première** histoire est gardée, les suivantes sont rejetées.
 - Le cache n'est relu que s'il contient au moins une histoire valide ; un cache abîmé est simplement ignoré.
 

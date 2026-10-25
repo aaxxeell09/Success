@@ -1,5 +1,6 @@
 // Vérifie que tests/validate_stories.py détecte bien chaque défaut du schéma
-// et du contrat v2 (liste blanche, at25, photo et crédit obligatoires, archive),
+// et des contrats v2/v3 (liste blanche, at25, photo et crédit obligatoires, archive,
+// textes affichés en anglais, catégorie de thatcher),
 // sur des dépôts factices créés dans un dossier temporaire.
 import test, { describe } from 'node:test';
 import assert from 'node:assert/strict';
@@ -18,11 +19,11 @@ const python = ['python3', 'python'].find((p) => spawnSync(p, ['--version']).sta
 
 const entry = (id) => ({
   id,
-  name: `Personne ${id}`,
-  category: 'Domaine · Pays',
-  lowest: 'Une épreuve.',
-  comeback: 'Un retournement.',
-  wikipedia: `Personne ${id}`,
+  name: `Person ${id}`,
+  category: id === 'thatcher' ? 'Politics · United Kingdom' : 'Field · Country',
+  lowest: 'A hard trial.',
+  comeback: 'A turnaround.',
+  wikipedia: `Person ${id}`,
   photo: `photos/${id}.jpg`,
   image_credit: 'Auteur, CC BY-SA 4.0',
   image_license: 'CC BY-SA 4.0',
@@ -76,8 +77,8 @@ describe('validate_stories.py', { skip: python ? false : 'python3 indisponible' 
     assert.match(out, /OK: 9 histoires/);
   });
   test('optionnels absents ou présents acceptés (wikipedia, category, sources, at25, headline)', () => {
-    expectOk(base().map(({ wikipedia, category, sources, image_source, ...rest }) => rest));
-    expectOk(base().map((s) => ({ ...s, headline: `Accroche de ${s.id}` })));
+    expectOk(base().map(({ wikipedia, category, sources, image_source, ...rest }) => (rest.id === 'thatcher' ? { ...rest, category } : rest)));
+    expectOk(base().map((s) => ({ ...s, headline: `Headline for ${s.id}` })));
   });
 
   describe('liste blanche', () => {
@@ -98,7 +99,7 @@ describe('validate_stories.py', { skip: python ? false : 'python3 indisponible' 
   describe('champs', () => {
     test('champ requis manquant', () => expectFail(withoutField('comeback'), /comeback/));
     test('id invalide', () => expectFail([...base(), { ...entry('x'), id: 'Mandela_1' }], /id invalide/));
-    test('id dupliqué', () => expectFail([...base(), { ...entry('mandela'), name: 'Autre' }], /dupliqué/));
+    test('id dupliqué', () => expectFail([...base(), { ...entry('mandela'), name: 'Other' }], /dupliqué/));
     test('texte trop long', () => expectFail(withM({ lowest: 'a'.repeat(401) }), /trop long/));
     test('texte de 400 caractères accepté', () => expectOk(withM({ comeback: 'a'.repeat(400) })));
     test('optionnel de mauvais type', () => expectFail(withM({ lesson: 12 }), /lesson/));
@@ -119,7 +120,7 @@ describe('validate_stories.py', { skip: python ? false : 'python3 indisponible' 
   });
 
   describe('at25 (optionnel)', () => {
-    const AT25 = 'À 25 ans, en 1943, il étudie le droit à Johannesburg et rejoint le Congrès national africain.';
+    const AT25 = 'At 25, in 1943, he was studying law in Johannesburg and joined the African National Congress.';
     test('at25 et at25_sources valides acceptés', () => {
       expectOk(withM({ at25: AT25, at25_sources: ['https://fr.wikipedia.org/wiki/Nelson_Mandela'] }));
     });
@@ -147,6 +148,29 @@ describe('validate_stories.py', { skip: python ? false : 'python3 indisponible' 
     test('archive avec un id commun : refusée', () => expectFail(base(), /archive.*mandela/, { archive: [entry('jobs'), entry('mandela')] }));
     test('archive JSON invalide : refusée', () => expectFail(base(), /JSON invalide/, { archive: '{corrompu' }));
     test('archive qui n’est pas un tableau : refusée', () => expectFail(base(), /tableau/, { archive: { id: 'jobs' } }));
+  });
+
+  describe('contrat v3 : textes affichés en anglais', () => {
+    for (const key of ['lowest', 'comeback', 'at25', 'headline', 'category']) {
+      test(`mot français dans ${key} refusé`, () => expectFail(withM({ [key]: 'Il passe des années en prison.' }), new RegExp(`${key} doit être en anglais.*des`)));
+    }
+    for (const word of ['le', 'les', 'des', 'avec', 'dans', 'pour']) {
+      test(`mot entier « ${word} » refusé`, () => expectFail(withM({ comeback: `It works ${word} sure.` }), new RegExp(`mot\\(s\\) français : ${word}`)));
+    }
+    test('majuscules détectées (« Pour »)', () => expectFail(withM({ headline: 'Pour toujours' }), /headline doit être en anglais/));
+    test('mots anglais contenant ces lettres acceptés (lessons, desks, handles, pouring)', () => {
+      expectOk(withM({ lowest: 'Lessons, desks, battles, handles, despair and a pouring rain.', headline: 'Cradle to glory' }));
+    });
+    test('noms propres accentués acceptés (José Hernández)', () => expectOk(withM({ comeback: 'José Hernández reached space in 2009.' })));
+    test('champs non affichés ignorés (name, image_credit)', () => expectOk(withM({ image_credit: 'Photo de la NASA pour Wikimedia' })));
+    test('catégorie de thatcher exactement « Politics · United Kingdom »', () => {
+      const s = base().map((x) => (x.id === 'thatcher' ? { ...x, category: 'Politique · Royaume-Uni' } : x));
+      expectFail(s, /thatcher.*Politics · United Kingdom/);
+      const t = base().map((x) => (x.id === 'thatcher' ? { ...x, category: 'Politics · UK' } : x));
+      expectFail(t, /category attendue/);
+      const u = base().map((x) => { if (x.id !== 'thatcher') return x; const c = { ...x }; delete c.category; return c; });
+      expectFail(u, /category attendue/);
+    });
   });
 
   test('copie du widget différente', () => expectFail(base(), /copie locale/, { widgetCopy: [] }));

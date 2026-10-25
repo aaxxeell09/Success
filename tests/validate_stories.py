@@ -4,6 +4,8 @@
 Liste blanche stricte (WHITELIST, ordre compris), photo, crédit et licence
 obligatoires, champ optionnel at25 (et at25_sources), archive des histoires
 retirées sans id commun avec stories.json, champ optionnel headline (≤ 120).
+Contrat v3 (widget en anglais) : les champs affichés ne contiennent pas de mots
+français évidents, et la catégorie de thatcher vaut « Politics · United Kingdom ».
 
 Usage : python3 tests/validate_stories.py [racine_du_depot]
 Code de sortie 0 si tout est valide, 1 sinon (toutes les erreurs sont listées).
@@ -32,6 +34,11 @@ MAX_TEXT = 400
 MAX_HEADLINE = 120
 ID_RE = re.compile(r'^[a-z0-9-]+$')
 DASHES = {'—': 'tiret cadratin', '–': 'tiret demi-cadratin'}
+# Contrat v3 : textes affichés en anglais.
+DISPLAYED = ('category', 'headline', 'lowest', 'comeback', 'at25')
+FRENCH_WORDS = ('le', 'les', 'des', 'avec', 'dans', 'pour')
+FRENCH_RE = re.compile(r"(?<![\w'’-])(" + '|'.join(FRENCH_WORDS) + r")(?![\w'’-])", re.IGNORECASE)
+EXPECTED_CATEGORY = {'thatcher': 'Politics · United Kingdom'}
 KNOWN = set(REQUIRED) | set(OPTIONAL_STR) | {'sources', 'at25_sources'}
 
 errors = []
@@ -122,6 +129,14 @@ def check_story(index, item, ids):
             err(f'{label} : photo doit être un chemin relatif au dossier du widget')
         elif not (WIDGET / rel).is_file():
             err(f'{label} : photo introuvable : widget/mur-des-retournements.widget/{photo}')
+    for key in DISPLAYED:
+        value = item.get(key)
+        if isinstance(value, str):
+            found = sorted({m.group(1).lower() for m in FRENCH_RE.finditer(value)})
+            if found:
+                err(f'{label} : {key} doit être en anglais (mot(s) français : {", ".join(found)})')
+    if isinstance(sid, str) and sid in EXPECTED_CATEGORY and item.get('category') != EXPECTED_CATEGORY[sid]:
+        err(f'{label} : category attendue « {EXPECTED_CATEGORY[sid]} », reçue « {item.get("category")} »')
     unknown = set(item) - KNOWN
     if unknown:
         warnings.append(f'{label} : champs non documentés : {", ".join(sorted(unknown))}')

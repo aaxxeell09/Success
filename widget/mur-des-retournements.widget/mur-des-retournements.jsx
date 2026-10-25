@@ -345,6 +345,8 @@ export const render = (state, dispatch) => {
             marginBottom: 4, textShadow: '0 1px 8px rgba(0, 0, 0, 0.5)', ...wrapText }}>{clean(story.category)}</div>}
           <div style={{ fontFamily: DISPLAY_FONT, fontSize: L.name, fontWeight: 760, lineHeight: 1.08,
             letterSpacing: -0.3, textShadow: '0 2px 16px rgba(0, 0, 0, 0.55)', ...wrapText }}>{clean(story.name)}</div>
+          {clean(story.headline) && <div data-role="headline" style={{ fontSize: L.category + 2, fontWeight: 600, lineHeight: 1.3,
+            marginTop: 5, color: T.text, opacity: 0.9, textShadow: '0 1px 10px rgba(0, 0, 0, 0.6)', ...wrapText }}>{clean(story.headline)}</div>}
         </div>
       </div>
 

@@ -142,9 +142,10 @@ const PHOTO_H = 172;
 const FRENCH = /(?<![\p{L}\p{N}])(?:le|la|les|de|des|du|au|aux|une|est|et|il|elle|sur|pour|avec|dans|à|où|qui|personne|précédente|suivante|reprendre|hors connexion|en pause|ans)(?![\p{L}\p{N}])|synchronis/iu;
 
 // Contrat v2 : liste blanche stricte, dans cet ordre.
-const WHITELIST = ['valdas', 'elon', 'mandela', 'trump', 'chesky', 'collison', 'pope', 'jose', 'thatcher'];
+const WHITELIST = ['valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj'];
+const N = WHITELIST.length; // 10 cartes
 // Les 11 personnes retirées (ancienne liste à 20) : ne doivent plus jamais revenir.
-const RETIRED = ['kariko', 'rdj', 'dej', 'jensen', 'dyson', 'melanie', 'jobs', 'tina', 'knight', 'jan', 'niel'];
+const RETIRED = ['kariko', 'dej', 'dyson', 'melanie', 'jobs', 'tina', 'knight', 'jan', 'niel', 'trump'];
 const CACHE_V1 = 'mur-des-retournements-stories-cache-v1';
 const PREFS_V2 = 'mur-des-retournements-settings-v2';
 const retiredStory = (id) => ({ id, name: `Retired ${id}`, lowest: `Retired trial ${id}.`, comeback: `Retired turnaround ${id}.` });
@@ -396,17 +397,17 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     await context?.close();
   });
 
-  test('copie embarquée = liste blanche des 9 personnes', () => {
+  test('copie embarquée = liste blanche des 10 personnes', () => {
     assert.deepEqual(local.map((x) => x.id), WHITELIST);
   });
 
-  test('carte initiale : sans titre ni crédit, 3 boutons, compteur 1 / 9 sur la photo, 350 × 490', async () => {
+  test('carte initiale : sans titre ni crédit, 3 boutons, compteur 1 / 10 sur la photo, 350 × 490', async () => {
     const s = await snapshot(page);
     assert.deepEqual(s.errors, []);
     assert.equal(s.currentId, WHITELIST[0]);
     assertV3Card(s, byId(s.currentId));
-    assert.deepEqual(s.counter, [1, 9]);
-    assert.match(s.text, /1 \/ 9/);
+    assert.deepEqual(s.counter, [1, N]);
+    assert.match(s.text, new RegExp(`1 / ${N}\\b`));
     const counterOnPhoto = await page.evaluate(() => {
       const card = document.querySelector('#widget article');
       const img = card && card.querySelector('img');
@@ -425,13 +426,13 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     await waitImage(page);
   });
 
-  test('parcours complet des 9 cartes avec › : noms, photos locales, section À 25 ANS', async () => {
+  test('parcours complet des 10 cartes avec › : noms, photos locales, section À 25 ANS', async () => {
     for (let i = 0; i < WHITELIST.length; i += 1) {
       await waitImage(page);
       const s = await snapshot(page);
       const story = byId(WHITELIST[i]);
       assert.equal(s.currentId, WHITELIST[i], `carte ${i + 1}`);
-      assert.deepEqual(s.counter, [i + 1, 9]);
+      assert.deepEqual(s.counter, [i + 1, N]);
       assert.ok(s.text.includes(story.name), `nom exact « ${story.name} »`);
       assertV3Card(s, story);
       assert.ok(s.loadedImage && s.imageWidth > 1, `photo chargée pour ${story.id} (naturalWidth ${s.imageWidth})`);
@@ -442,7 +443,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     assert.equal(back.currentId, WHITELIST[0], 'retour circulaire à la première carte');
   });
 
-  test('taille fixe 350 × 490 sur les 9 cartes : photo 172 px, nav et boutons immobiles', async () => {
+  test('taille fixe 350 × 490 sur les 10 cartes : photo 172 px, nav et boutons immobiles', async () => {
     const all = [];
     for (let i = 0; i < WHITELIST.length; i += 1) {
       const g = await layout(page);
@@ -491,7 +492,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     await backToFirst();
   });
 
-  test('aucun texte français visible (texte, title, aria-label, alt) sur les 9 cartes', async () => {
+  test('aucun texte français visible (texte, title, aria-label, alt) sur les 10 cartes', async () => {
     for (let i = 0; i < WHITELIST.length; i += 1) {
       await assertNoFrench(page, '#widget', WHITELIST[i]);
       await click(page, 'next');
@@ -501,13 +502,14 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
 
   test('catégorie de Thatcher : « Politics · United Kingdom » (données et rendu)', async () => {
     assert.equal(byId('thatcher').category, 'Politics · United Kingdom');
-    await click(page, 'prev');
+    const steps = WHITELIST.length - WHITELIST.indexOf('thatcher');
+    for (let i = 0; i < steps; i += 1) await click(page, 'prev');
     const s = await snapshot(page);
     assert.equal(s.currentId, 'thatcher');
     const shown = await page.evaluate(() => [...document.querySelectorAll('#widget article div')]
       .some((el) => el.children.length === 0 && el.textContent.trim() === 'Politics · United Kingdom'));
     assert.ok(shown, 'catégorie affichée telle quelle');
-    await click(page, 'next');
+    for (let i = 0; i < steps; i += 1) await click(page, 'next');
     assert.equal((await snapshot(page)).currentId, WHITELIST[0]);
   });
 
@@ -516,13 +518,13 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     await click(page, 'next');
     const b = await snapshot(page);
     assert.notEqual(b.currentId, a.currentId);
-    assert.deepEqual(b.counter, [2, 9]);
+    assert.deepEqual(b.counter, [2, N]);
     await click(page, 'prev');
     assert.equal((await snapshot(page)).currentId, a.currentId);
     await click(page, 'prev');
-    assert.deepEqual((await snapshot(page)).counter, [9, 9], 'vers la dernière');
+    assert.deepEqual((await snapshot(page)).counter, [N, N], 'vers la dernière');
     await click(page, 'next');
-    assert.deepEqual((await snapshot(page)).counter, [1, 9]);
+    assert.deepEqual((await snapshot(page)).counter, [1, N]);
   });
 
   test('pause change l’icône et bloque la rotation ; rotation toutes les 20 minutes', async () => {
@@ -544,7 +546,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     await page.clock.fastForward('03:00');
     await until(page, (id) => window.__harness.state.currentId !== id, start.currentId);
     const s = await snapshot(page);
-    assert.equal(s.currentId, WHITELIST[(WHITELIST.indexOf(start.currentId) + 1) % 9], 'avance d’une carte');
+    assert.equal(s.currentId, WHITELIST[(WHITELIST.indexOf(start.currentId) + 1) % N], 'avance d’une carte');
   });
 
   test('hors connexion : indicateur affiché, données conservées', async () => {
@@ -669,7 +671,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     await ctx.close();
   });
 
-  test('ancien cache v1 à 20 personnes + réseau coupé : seules les 9 cartes embarquées', async () => {
+  test('ancien cache v1 à 20 personnes + réseau coupé : seules les 10 cartes embarquées', async () => {
     const ctx = await env.browser.newContext({ viewport: { width: 1280, height: 1400 } });
     await route(ctx, env.bundle);
     await seedStorage(ctx, {
@@ -681,8 +683,8 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     const s = await snapshot(p);
     assert.deepEqual(s.ids, WHITELIST, 'les personnes du cache v1 ne reviennent pas');
     assert.equal(s.currentId, WHITELIST[0], 'préférence v2 sur une personne retirée : première carte');
-    assert.deepEqual(s.counter, [1, 9]);
-    for (let i = 0; i < 9; i += 1) {
+    assert.deepEqual(s.counter, [1, N]);
+    for (let i = 0; i < N; i += 1) {
       const t = (await snapshot(p)).text;
       for (const id of RETIRED) assert.ok(!t.includes(`Retired ${id}`), `${id} ne doit pas s’afficher`);
       await click(p, 'next');
@@ -690,7 +692,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     await ctx.close();
   });
 
-  test('distant à 9 : aucune personne retirée ne revient après synchronisation ni rechargement', async () => {
+  test('distant à 10 : aucune personne retirée ne revient après synchronisation ni rechargement', async () => {
     const ctx = await env.browser.newContext({ viewport: { width: 1280, height: 1400 } });
     await route(ctx, env.bundle);
     await seedStorage(ctx, { [CACHE_V1]: oldCacheV1(local) });
@@ -704,7 +706,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     await again.waitForTimeout(100);
     const r = await snapshot(again);
     assert.deepEqual(r.ids, WHITELIST, 'après rechargement hors connexion');
-    assert.deepEqual(r.counter, [1, 9]);
+    assert.deepEqual(r.counter, [1, N]);
     assert.ok(!RETIRED.some((id) => r.ids.includes(id)));
     await ctx.close();
   });
@@ -722,7 +724,7 @@ describe('aperçu navigateur (preview/index.html, Chromium)', { skip }, () => {
   const openPreview = async (ctx) => {
     const p = await ctx.newPage();
     await p.goto(PREVIEW);
-    await p.waitForFunction(() => /\d+\s*\/\s*9\b/.test(document.body.innerText), null, { timeout: 5000 });
+    await p.waitForFunction(() => /\d+\s*\/\s*10\b/.test(document.body.innerText), null, { timeout: 5000 });
     return p;
   };
 
@@ -733,14 +735,14 @@ describe('aperçu navigateur (preview/index.html, Chromium)', { skip }, () => {
   });
   after(async () => { await context?.close(); });
 
-  test('charge les 9 histoires de ../stories.json, interface v3 en anglais, photos locales', async () => {
+  test('charge les 10 histoires de ../stories.json, interface v3 en anglais, photos locales', async () => {
     const p = await openPreview(context);
     assert.equal(await p.evaluate(() => document.documentElement.lang), 'en', '<html lang="en">');
     const all = [];
-    for (let i = 0; i < 9; i += 1) {
+    for (let i = 0; i < N; i += 1) {
       await waitImage(p, '#card');
       const s = await snapshot(p, '#card');
-      assert.deepEqual(s.counter, [i + 1, 9]);
+      assert.deepEqual(s.counter, [i + 1, N]);
       const story = local[i];
       assertV3Card(s, story);
       assert.ok(s.imageSrc.startsWith(`${ORIGIN}/repo/widget/mur-des-retournements.widget/photos/`), `photo locale : ${s.imageSrc}`);
@@ -770,7 +772,7 @@ describe('aperçu navigateur (preview/index.html, Chromium)', { skip }, () => {
   test('zone de texte qui défile, remise en haut au changement de personne', async () => {
     const p = await openPreview(context);
     let found = false;
-    for (let i = 0; i < 9 && !found; i += 1) {
+    for (let i = 0; i < N && !found; i += 1) {
       const g = await layout(p, '#card');
       if (g.content.scrollHeight > g.content.clientHeight + 1) found = true;
       else await click(p, 'next', '#card');

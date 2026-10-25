@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SCRIPT = path.join(HERE, 'validate_stories.py');
 const DATA_URL = 'https://raw.githubusercontent.com/aaxxeell09/Success/main/stories.json';
-const WHITELIST = ['valdas', 'elon', 'mandela', 'trump', 'chesky', 'collison', 'pope', 'jose', 'thatcher'];
+const WHITELIST = ['valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj'];
 
 const python = ['python3', 'python'].find((p) => spawnSync(p, ['--version']).status === 0);
 
@@ -30,7 +30,7 @@ const entry = (id) => ({
   image_source: `https://commons.wikimedia.org/wiki/File:${id}.jpg`,
   sources: [`https://fr.wikipedia.org/wiki/${id}`],
 });
-// Les 9 histoires de la liste blanche, dans l'ordre.
+// Les 10 histoires de la liste blanche, dans l'ordre.
 const base = () => WHITELIST.map(entry);
 // Modifie la 3e histoire (mandela).
 const withM = (patch) => base().map((s) => (s.id === 'mandela' ? { ...s, ...patch } : s));
@@ -72,9 +72,9 @@ const expectFail = (stories, pattern, opts) => {
 };
 
 describe('validate_stories.py', { skip: python ? false : 'python3 indisponible' }, () => {
-  test('données conformes acceptées (9 histoires de la liste blanche)', () => {
+  test('données conformes acceptées (10 histoires de la liste blanche)', () => {
     const out = expectOk(base(), { sync: `export const DATA_URL = '${DATA_URL}';\n` });
-    assert.match(out, /OK: 9 histoires/);
+    assert.match(out, /OK: 10 histoires/);
   });
   test('optionnels absents ou présents acceptés (wikipedia, category, sources, at25, headline)', () => {
     expectOk(base().map(({ wikipedia, category, sources, image_source, ...rest }) => (rest.id === 'thatcher' ? { ...rest, category } : rest)));

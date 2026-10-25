@@ -243,5 +243,55 @@
       "https://en.wikipedia.org/wiki/Robert_Downey_Jr.",
       "https://en.wikipedia.org/wiki/Air_America_(film)"
     ]
+  },
+  {
+    "id": "disney",
+    "name": "Walt Disney",
+    "headline": "Bankrupt at 21, then built Disney",
+    "category": "Animation · United States",
+    "lowest": "In 1923, at 21, his Kansas City cartoon studio Laugh-O-Gram goes bankrupt. He leaves for Hollywood that summer with little but an unfinished reel. In February 1928, he loses Oswald the Lucky Rabbit, whose rights belong to Universal, and most of his animators.",
+    "comeback": "On October 16, 1923, a deal to distribute his Alice Comedies marks the start of the Disney company, run with his brother Roy. Mickey Mouse stars in Steamboat Willie on November 18, 1928, Snow White opens on December 21, 1937, and Disneyland on July 17, 1955.",
+    "lesson": "Own what you create.",
+    "wikipedia": "Walt Disney",
+    "photo": "photos/disney.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/df/Walt_Disney_1946.JPG",
+    "image_credit": "Boy Scouts of America, Public domain",
+    "image_license": "Public domain",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Walt_Disney_1946.JPG",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Walt_Disney",
+      "https://d23.com/a-history-of-the-walt-disney-company/",
+      "https://www.archives.gov/kansas-city/highlights/disney-bankruptcy"
+    ],
+    "at25": "In 1927, Walt Disney runs his studio on Hyperion Avenue in Los Angeles with his brother Roy. After the Alice Comedies end in July, he and Ub Iwerks create Oswald the Lucky Rabbit for Universal; Trolley Troubles is released on September 5, 1927.",
+    "at25_sources": [
+      "https://en.wikipedia.org/wiki/Walt_Disney",
+      "https://en.wikipedia.org/wiki/Oswald_the_Lucky_Rabbit"
+    ]
+  },
+  {
+    "id": "ford",
+    "name": "Henry Ford",
+    "headline": "Two failed car companies before Ford",
+    "category": "Industry · United States",
+    "lowest": "His Detroit Automobile Company, founded in 1899, folds in 1901; in 1902 he leaves the Henry Ford Company, which becomes Cadillac.",
+    "comeback": "He founds Ford Motor Company on June 16, 1903. The Model T arrives in 1908, then the moving assembly line in 1913.",
+    "lesson": "A failed start is not the end.",
+    "wikipedia": "Henry Ford",
+    "photo": "photos/ford.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Henry_ford_1919_%28cropped%29.jpg/500px-Henry_ford_1919_%28cropped%29.jpg",
+    "image_credit": "Fred Hartsook, Public domain",
+    "image_license": "Public domain",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Henry_ford_1919_(cropped).jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Henry_Ford",
+      "https://www.thehenryford.org/collections/explore/sets/detail/lesson-henry-ford",
+      "https://www.fromtheroad.ford.com/us/en/articles/2026/henry-ford-three-attempts-at-business-revolution"
+    ],
+    "at25": "Married to Clara Bryant in April 1888, he runs a lumber business on his father's former farmland.",
+    "at25_sources": [
+      "https://www.thehenryford.org/collections/explore/artifact/347631",
+      "https://en.wikipedia.org/wiki/Henry_Ford"
+    ]
   }
 ]

@@ -73,5 +73,19 @@
       "https://en.wikipedia.org/wiki/Robert_Downey_Jr.",
       "https://en.wikipedia.org/wiki/Air_America_(film)"
     ]
+  },
+  "disney": {
+    "at25": "In 1927, Walt Disney runs his studio on Hyperion Avenue in Los Angeles with his brother Roy. After the Alice Comedies end in July, he and Ub Iwerks create Oswald the Lucky Rabbit for Universal; Trolley Troubles is released on September 5, 1927.",
+    "at25_sources": [
+      "https://en.wikipedia.org/wiki/Walt_Disney",
+      "https://en.wikipedia.org/wiki/Oswald_the_Lucky_Rabbit"
+    ]
+  },
+  "ford": {
+    "at25": "Married to Clara Bryant in April 1888, he runs a lumber business on his father's former farmland.",
+    "at25_sources": [
+      "https://www.thehenryford.org/collections/explore/artifact/347631",
+      "https://en.wikipedia.org/wiki/Henry_Ford"
+    ]
   }
 }

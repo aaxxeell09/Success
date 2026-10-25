@@ -1,4 +1,4 @@
-// Tests du module de synchronisation : node --test tests/
+// Tests du module de synchronisation : node --test tests/sync.test.mjs
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';

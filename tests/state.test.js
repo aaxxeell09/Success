@@ -1,5 +1,5 @@
 // Tests du module pur widget/mur-des-retournements.widget/lib/state.js
-// selon le contrat de docs/ARCHITECTURE.md. Lancement : node --test tests/
+// selon le contrat v2 (plus de taille, CARD_WIDTH, préférences v3). Lancement : node --test tests/
 import test, { describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
@@ -11,8 +11,10 @@ const STATE_PATH = path.join(ROOT, 'widget/mur-des-retournements.widget/lib/stat
 
 assert.ok(existsSync(STATE_PATH), `Module introuvable : ${STATE_PATH} (exigé par docs/ARCHITECTURE.md)`);
 const mod = await import(pathToFileURL(STATE_PATH).href);
-const { SIZES, ROTATION_MS, PREFS_KEY, createInitialState, reducer, loadPrefs, savePrefs, photoCandidates } = mod;
+const { CARD_WIDTH, ROTATION_MS, PREFS_KEY, createInitialState, reducer, loadPrefs, savePrefs, photoCandidates } = mod;
 
+const PREFS_V2 = 'mur-des-retournements-settings-v2';
+const PREFS_V1 = 'mur-des-retournements-settings-v1';
 const RAW_WIDGET = 'https://raw.githubusercontent.com/aaxxeell09/Success/main/widget/mur-des-retournements.widget/';
 const T0 = 1_700_000_000_000;
 const MIN = 60 * 1000;
@@ -57,15 +59,20 @@ const assertValidPrefs = (p) => {
   assert.ok(p !== null);
   assert.ok(p.currentId === null || p.currentId === undefined || typeof p.currentId === 'string',
     `currentId doit être une chaîne ou null, reçu ${JSON.stringify(p.currentId)}`);
-  assert.ok(Number.isInteger(p.size) && p.size >= 0 && p.size <= 2, `size invalide : ${p.size}`);
   assert.equal(typeof p.paused, 'boolean');
+  assert.ok(!('size' in p), `loadPrefs ne doit plus retourner de taille : ${JSON.stringify(p)}`);
+  assert.deepEqual(Object.keys(p).sort(), ['currentId', 'paused']);
 };
 
 describe('constantes du contrat', () => {
-  test('SIZES, ROTATION_MS, PREFS_KEY', () => {
-    assert.deepEqual(SIZES, [{ key: 'S', width: 320 }, { key: 'M', width: 420 }, { key: 'L', width: 540 }]);
+  test('CARD_WIDTH, ROTATION_MS, PREFS_KEY', () => {
+    assert.equal(CARD_WIDTH, 420);
     assert.equal(ROTATION_MS, 20 * 60 * 1000);
-    assert.equal(PREFS_KEY, 'mur-des-retournements-settings-v2');
+    assert.equal(PREFS_KEY, 'mur-des-retournements-settings-v3');
+  });
+  test('plus aucune notion de taille exportée (SIZES, SIZE)', () => {
+    assert.ok(!('SIZES' in mod), 'SIZES ne doit plus être exporté');
+    assert.ok(!('SIZE' in mod), 'SIZE ne doit plus être exporté');
   });
   test('fonctions exportées', () => {
     for (const f of [createInitialState, reducer, loadPrefs, savePrefs, photoCandidates]) {
@@ -79,7 +86,7 @@ describe('createInitialState', () => {
     const s = fresh();
     assert.deepEqual(s.stories.map((x) => x.id), ['a', 'b', 'c']);
     assert.equal(s.currentId, 'a');
-    assert.ok(Number.isInteger(s.size) && s.size >= 0 && s.size <= 2);
+    assert.ok(!('size' in s), 'state.size ne doit plus exister');
     assert.equal(s.paused, false);
     assert.equal(s.lastAdvanceAt, T0);
     assert.equal(typeof s.photos, 'object');
@@ -116,7 +123,7 @@ describe('reducer : navigation', () => {
     assert.equal(run(s, { type: 'NEXT', now: T0 }).currentId, 'seule');
     assert.equal(run(s, { type: 'PREV', now: T0 }).currentId, 'seule');
   });
-  test('liste vide : NEXT/PREV/TICK/SIZE/TOGGLE_PAUSE ne lèvent pas', () => {
+  test('liste vide : NEXT/PREV/TICK/SIZE (ignoré)/TOGGLE_PAUSE ne lèvent pas', () => {
     const s = createInitialState([], T0);
     assert.doesNotThrow(() => run(s,
       { type: 'NEXT', now: T0 }, { type: 'PREV', now: T0 },
@@ -176,19 +183,21 @@ describe('reducer : rotation automatique', () => {
   });
 });
 
-describe('reducer : taille', () => {
-  test('SIZE accepte 0, 1, 2', () => {
-    for (const n of [0, 1, 2]) assert.equal(run(fresh(), { type: 'SIZE', size: n }).size, n);
-  });
-  test('SIZE est bornée à 0..2 (valeur ramenée dans les bornes ou ignorée)', () => {
-    const start = fresh();
-    const cases = [[7, 2], [-3, 0], [3, 2], ['abc'], [null], [undefined], [NaN], [{}], [Infinity], [1.5]];
-    for (const [bad, clamped] of cases) {
-      const size = run(start, { type: 'SIZE', size: bad }).size;
-      assert.ok(Number.isInteger(size) && size >= 0 && size <= 2, `taille invalide pour ${String(bad)} : ${size}`);
-      const allowed = clamped === undefined ? [start.size, 0, 1, 2] : [clamped, start.size];
-      assert.ok(allowed.includes(size), `taille ${size} inattendue pour ${String(bad)}`);
+describe('reducer : SIZE ignoré (plus de taille)', () => {
+  test('SIZE laisse l’état inchangé, quelle que soit la valeur', () => {
+    const start = run(fresh(), { type: 'NEXT', now: T0 });
+    for (const size of [0, 1, 2, 7, -1, 'L', null, undefined]) {
+      const next = reducer(deepFreeze(start), { type: 'SIZE', size });
+      assert.deepEqual(next, start, `SIZE ${String(size)} ne doit rien changer`);
+      assert.ok(!('size' in next), 'aucun champ size créé');
     }
+  });
+  test('aucun événement ne crée de champ size', () => {
+    const s = run(fresh(), { type: 'RESTORE', prefs: { currentId: 'b', size: 2, paused: true }, now: T0 },
+      { type: 'NEXT', now: T0 }, { type: 'TOGGLE_PAUSE', now: T0 }, { type: 'TICK', now: T0 + ROTATION_MS },
+      { type: 'DATA', stories: STORIES, source: 'remote', at: T0 }, { type: 'SYNC_OK', at: T0 },
+      { type: 'SYNC_FAIL', error: 'x', at: T0 }, { type: 'PHOTOS', photos: { A: 'https://e/a.jpg' } });
+    assert.ok(!('size' in s), `champ size inattendu : ${JSON.stringify(s.size)}`);
   });
 });
 
@@ -196,8 +205,8 @@ describe('reducer : RESTORE', () => {
   test('préférences valides appliquées', () => {
     const s = run(fresh(), { type: 'RESTORE', prefs: { currentId: 'c', size: 2, paused: true }, now: T0 });
     assert.equal(s.currentId, 'c');
-    assert.equal(s.size, 2);
     assert.equal(s.paused, true);
+    assert.ok(!('size' in s), 'la taille des anciennes préférences est ignorée');
   });
   test('préférences invalides ou corrompues : état valide', () => {
     const corrupt = [
@@ -210,7 +219,7 @@ describe('reducer : RESTORE', () => {
     for (const prefs of corrupt) {
       const s = run(fresh(), { type: 'RESTORE', prefs, now: T0 });
       assert.ok(['a', 'b', 'c'].includes(s.currentId), `currentId invalide pour ${JSON.stringify(prefs)} : ${s.currentId}`);
-      assert.ok(Number.isInteger(s.size) && s.size >= 0 && s.size <= 2, `size invalide pour ${JSON.stringify(prefs)} : ${s.size}`);
+      assert.ok(!('size' in s), `size inattendu pour ${JSON.stringify(prefs)}`);
       assert.equal(typeof s.paused, 'boolean');
       assert.equal(s.stories.length, 3);
     }
@@ -283,14 +292,11 @@ describe('reducer : données et synchronisation', () => {
 describe('loadPrefs / savePrefs', () => {
   test('aller-retour', () => {
     const storage = memoryStorage();
-    const s = run(fresh(), { type: 'NEXT', now: T0 }, { type: 'SIZE', size: 2 }, { type: 'TOGGLE_PAUSE', now: T0 });
+    const s = run(fresh(), { type: 'NEXT', now: T0 }, { type: 'TOGGLE_PAUSE', now: T0 });
     savePrefs(storage, s);
     assert.ok(storage.data[PREFS_KEY], `clé ${PREFS_KEY} écrite`);
-    assert.doesNotThrow(() => JSON.parse(storage.data[PREFS_KEY]));
-    const p = loadPrefs(storage);
-    assert.equal(p.currentId, 'b');
-    assert.equal(p.size, 2);
-    assert.equal(p.paused, true);
+    assert.deepEqual(JSON.parse(storage.data[PREFS_KEY]), { currentId: 'b', paused: true }, 'v3 = { currentId, paused } uniquement');
+    assert.deepEqual(loadPrefs(storage), { currentId: 'b', paused: true });
   });
   test('stockage vide : valeurs par défaut valides', () => {
     const p = loadPrefs(memoryStorage());
@@ -299,7 +305,7 @@ describe('loadPrefs / savePrefs', () => {
     assert.ok(p.currentId === null || p.currentId === undefined);
   });
   test('JSON corrompu : ne lève pas, valeurs valides', () => {
-    for (const raw of ['{pas du json', 'null', '"texte"', '42', '[]', '{"size":99,"paused":"oui","currentId":5}']) {
+    for (const raw of ['{pas du json', 'null', '"texte"', '42', '[]', '{"size":99,"paused":"oui","currentId":5}', '{"currentId":"","paused":1}']) {
       let p;
       assert.doesNotThrow(() => { p = loadPrefs(memoryStorage({ [PREFS_KEY]: raw })); }, raw);
       assertValidPrefs(p);
@@ -311,6 +317,18 @@ describe('loadPrefs / savePrefs', () => {
     assert.doesNotThrow(() => { p = loadPrefs(throwingStorage()); });
     assertValidPrefs(p);
     assert.doesNotThrow(() => savePrefs(throwingStorage(), fresh()));
+  });
+  test('stockage dont seul removeItem lève : v3 écrit quand même, ne lève pas', () => {
+    const storage = memoryStorage({ [PREFS_V2]: '{"currentId":"a","size":0,"paused":false}' });
+    storage.removeItem = () => { throw new Error('interdit'); };
+    assert.doesNotThrow(() => savePrefs(storage, run(fresh(), { type: 'PREV', now: T0 })));
+    assert.deepEqual(JSON.parse(storage.data[PREFS_KEY]), { currentId: 'c', paused: false });
+  });
+  test('stockage sans removeItem : ne lève pas', () => {
+    const storage = memoryStorage();
+    delete storage.removeItem;
+    assert.doesNotThrow(() => savePrefs(storage, fresh()));
+    assert.ok(storage.data[PREFS_KEY]);
   });
   test('stockage absent : ne lève pas', () => {
     for (const storage of [null, undefined, {}]) {
@@ -325,7 +343,59 @@ describe('loadPrefs / savePrefs', () => {
     savePrefs(storage, run(fresh(), { type: 'PREV', now: T0 }, { type: 'SIZE', size: 0 }));
     const s = run(fresh(), { type: 'RESTORE', prefs: loadPrefs(storage), now: T0 });
     assert.equal(s.currentId, 'c');
-    assert.equal(s.size, 0);
+    assert.ok(!('size' in s));
+  });
+  test('savePrefs ignore une éventuelle taille présente dans l’état', () => {
+    const storage = memoryStorage();
+    savePrefs(storage, { ...fresh(), size: 2 });
+    assert.deepEqual(Object.keys(JSON.parse(storage.data[PREFS_KEY])).sort(), ['currentId', 'paused']);
+  });
+});
+
+describe('migration des préférences v2 et v1 vers v3', () => {
+  test('v2 seule : currentId et paused conservés, taille ignorée', () => {
+    const storage = memoryStorage({ [PREFS_V2]: JSON.stringify({ currentId: 'c', size: 2, paused: true }) });
+    assert.deepEqual(loadPrefs(storage), { currentId: 'c', paused: true });
+  });
+  test('v1 seule : currentId et paused conservés, taille ignorée', () => {
+    const storage = memoryStorage({ [PREFS_V1]: JSON.stringify({ currentId: 'b', size: 0, paused: true }) });
+    assert.deepEqual(loadPrefs(storage), { currentId: 'b', paused: true });
+  });
+  test('ordre de priorité : v3, puis v2, puis v1', () => {
+    const all = {
+      [PREFS_KEY]: JSON.stringify({ currentId: 'a', paused: false }),
+      [PREFS_V2]: JSON.stringify({ currentId: 'b', size: 1, paused: true }),
+      [PREFS_V1]: JSON.stringify({ currentId: 'c', size: 2, paused: true }),
+    };
+    assert.deepEqual(loadPrefs(memoryStorage(all)), { currentId: 'a', paused: false });
+    const { [PREFS_KEY]: _v3, ...noV3 } = all;
+    assert.deepEqual(loadPrefs(memoryStorage(noV3)), { currentId: 'b', paused: true });
+  });
+  test('v2 corrompue : repli sur v1', () => {
+    const storage = memoryStorage({ [PREFS_V2]: '{corrompu', [PREFS_V1]: JSON.stringify({ currentId: 'c', size: 0, paused: true }) });
+    assertValidPrefs(loadPrefs(storage));
+    assert.deepEqual(loadPrefs(storage), { currentId: 'c', paused: true });
+  });
+  test('savePrefs écrit v3 et supprime les clés v1 et v2', () => {
+    const storage = memoryStorage({
+      [PREFS_V2]: JSON.stringify({ currentId: 'b', size: 2, paused: true }),
+      [PREFS_V1]: JSON.stringify({ currentId: 'c', size: 0, paused: false }),
+      autre: 'conservée',
+    });
+    const s = run(fresh(), { type: 'RESTORE', prefs: loadPrefs(storage), now: T0 });
+    assert.equal(s.currentId, 'b');
+    assert.equal(s.paused, true);
+    savePrefs(storage, s);
+    assert.deepEqual(JSON.parse(storage.data[PREFS_KEY]), { currentId: 'b', paused: true });
+    assert.ok(!(PREFS_V2 in storage.data), 'clé v2 supprimée');
+    assert.ok(!(PREFS_V1 in storage.data), 'clé v1 supprimée');
+    assert.equal(storage.data.autre, 'conservée', 'les autres clés ne sont pas touchées');
+    assert.deepEqual(loadPrefs(storage), { currentId: 'b', paused: true });
+  });
+  test('id de v2 disparu des données : retour à la première histoire', () => {
+    const storage = memoryStorage({ [PREFS_V2]: JSON.stringify({ currentId: 'jobs', size: 1, paused: false }) });
+    const s = run(fresh(), { type: 'RESTORE', prefs: loadPrefs(storage), now: T0 });
+    assert.equal(s.currentId, 'a');
   });
 });
 

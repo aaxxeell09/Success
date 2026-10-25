@@ -4,7 +4,7 @@
     "name": "Valdas Dambrauskas",
     "headline": "8 years of struggle",
     "category": "Football · Lithuania",
-    "lowest": "At 25, he moves to London to become a coach. For 8 years, he takes one odd job after another: newspaper delivery, gardening, pub work, sometimes three or four jobs at once. He coaches on the side, without landing a full-time professional post.",
+    "lowest": "At 25, he moves to London to coach. For 8 years he juggles odd jobs: newspaper delivery, gardening, pubs, never a full-time coaching post.",
     "comeback": "In 2026, after more than 20 years on the road, he leads Sabah into the Champions League, all the way to Old Trafford.",
     "lesson": "The invisible years of learning end up counting.",
     "wikipedia": "Valdas Dambrauskas",
@@ -18,7 +18,7 @@
       "https://www.uefa.com/uefachampionsleague/news/02a9-218a9ecd5f83-091799d07d42-1000--different-roads-same-dream-how-sabah-and-coach-dambrauskas-reached-the-champions-league/",
       "https://www.malaymail.com/news/sports/2026/09/11/manchester-united-mark-champions-league-return-with-4-0-win-over-debutants-sabah/234775"
     ],
-    "at25": "In 2002, at 25, Valdas Dambrauskas wins 4,000 litas on the Lithuanian version of a quiz show like \"Who Wants to Be a Millionaire?\". He uses it to move to England with his partner and become a coach.",
+    "at25": "In 2002, he wins 4,000 litas on a Lithuanian quiz show and moves to England to coach.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Valdas_Dambrauskas",
       "https://www.uefa.com/uefachampionsleague/news/02a9-218a9ecd5f83-091799d07d42-1000--different-roads-same-dream-how-sabah-and-coach-dambrauskas-reached-the-champions-league/"
@@ -27,10 +27,10 @@
   {
     "id": "elon",
     "name": "Elon Musk",
-    "headline": "Days away from losing everything",
-    "category": "Entrepreneurship · United States",
-    "lowest": "In 2008, SpaceX has just failed to launch its rocket three times. Tesla is on the brink of bankruptcy. Musk has put much of his fortune on the line and funding is drying up.",
-    "comeback": "In December 2008, SpaceX wins a major NASA contract and Tesla secures last-minute funding. Both companies survive and keep growing.",
+    "headline": "Days from losing everything",
+    "category": "Business · United States",
+    "lowest": "In 2008, SpaceX's rocket has failed three times, Tesla nears bankruptcy, and Musk's fortune is on the line as funding dries up.",
+    "comeback": "In December 2008, SpaceX wins a major NASA contract and Tesla secures last-minute funding. Both companies survive.",
     "lesson": "The breaking point can come right before the turnaround.",
     "wikipedia": "Elon Musk",
     "photo": "photos/elon.jpg",
@@ -43,7 +43,7 @@
       "https://en.wikipedia.org/wiki/Commercial_Resupply_Services",
       "https://en.wikipedia.org/wiki/Elon_Musk"
     ],
-    "at25": "In 1996, Elon Musk is building Zip2, an online city guide for newspapers he co-founded in 1995 with his brother Kimbal. After a $3 million funding round, he becomes its chief technology officer. Compaq will buy Zip2 in 1999.",
+    "at25": "In 1996, he is CTO of Zip2, co-founded with Kimbal. Compaq buys it in 1999.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Elon_Musk",
       "https://en.wikipedia.org/wiki/Zip2"
@@ -54,7 +54,7 @@
     "name": "Nelson Mandela",
     "headline": "27 years in prison",
     "category": "Politics · South Africa",
-    "lowest": "At 44, he is imprisoned for his fight against apartheid. He spends more than 27 years behind bars, much of it on Robben Island, and turns down several offers of conditional release.",
+    "lowest": "At 44, he is jailed for fighting apartheid. He spends over 27 years behind bars, much on Robben Island, refusing conditional release.",
     "comeback": "Released in 1990, at 71, he becomes South Africa's first democratically elected president four years later.",
     "lesson": "A life is not defined by its years of confinement.",
     "wikipedia": "Nelson Mandela",
@@ -67,7 +67,7 @@
       "https://en.wikipedia.org/wiki/Nelson_Mandela",
       "https://www.nobelprize.org/prizes/peace/1993/mandela/biographical/"
     ],
-    "at25": "In 1943 and 1944, Nelson Mandela studies law at the University of the Witwatersrand, the only Black African student, while working as a clerk at a Johannesburg law firm. At Easter 1944, he co-founds the ANC Youth League.",
+    "at25": "In 1944, while studying law at the University of the Witwatersrand, he co-founds the ANC Youth League.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Nelson_Mandela",
       "https://www.nelsonmandela.org/content/page/biography"
@@ -77,9 +77,9 @@
     "id": "chesky",
     "name": "Brian Chesky",
     "headline": "In debt, almost no customers",
-    "category": "Entrepreneurship · Airbnb",
-    "lowest": "In 2008, Airbnb is not taking off. Chesky and his co-founders pile up credit card debt. Investors turn the project down and the company has almost no activity.",
-    "comeback": "To survive, they sell cereal boxes themed on the US presidential candidates. In 2009, Airbnb joins Y Combinator and sees its first signs of lasting growth.",
+    "category": "Business · Airbnb",
+    "lowest": "In 2008, Airbnb is not taking off. The founders pile up credit card debt and investors turn them down.",
+    "comeback": "To survive, they sell cereal boxes themed on the US presidential candidates. In 2009, Airbnb joins Y Combinator and starts growing.",
     "lesson": "Survive long enough to find what works.",
     "wikipedia": "Brian Chesky",
     "photo": "photos/chesky.jpg",
@@ -91,7 +91,7 @@
       "https://en.wikipedia.org/wiki/Airbnb",
       "https://en.wikipedia.org/wiki/Brian_Chesky"
     ],
-    "at25": "In 2006 and 2007, Brian Chesky, a 2004 industrial design graduate of RISD, is a designer at 3DID in Los Angeles, where he designs toys and medical equipment. Disappointed, he cuts back his hours in 2007. Airbnb does not exist yet.",
+    "at25": "In 2006, the RISD graduate designs toys and medical equipment in Los Angeles. Airbnb does not exist yet.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Brian_Chesky"
     ]
@@ -100,9 +100,9 @@
     "id": "collison",
     "name": "Patrick and John Collison",
     "headline": "2 years for just 50 users",
-    "category": "Entrepreneurship · Stripe",
-    "lowest": "In 2009, the two brothers start building Stripe. For nearly 2 years, they develop their payments infrastructure, negotiate with financial players and refine their product.",
-    "comeback": "At its public launch in September 2011, Stripe has only about 50 users, according to John Collison. They keep improving the service, which goes on to become a major piece of global payments infrastructure.",
+    "category": "Business · Stripe",
+    "lowest": "In 2009, the two brothers start building Stripe. For nearly 2 years, they develop payments infrastructure and negotiate with financial players.",
+    "comeback": "At its September 2011 launch, Stripe has only about 50 users. It goes on to become major global payments infrastructure.",
     "lesson": "Recognizing a wrong course lets you start again.",
     "wikipedia": "Patrick Collison",
     "photo": "photos/collison.jpg",
@@ -115,7 +115,7 @@
       "https://en.wikipedia.org/wiki/Stripe,_Inc.",
       "https://stripe.com/newsroom/news/ceo-patrick-collisons-email-to-stripe-employees"
     ],
-    "at25": "Patrick, born in 1988, is 25 in 2013 and 2014: he runs Stripe, co-founded in 2010 with his brother and valued at $1.75 billion in a 2014 funding round. John, born in 1990, is 25 in 2015 and 2016: he is president of Stripe, which launches Atlas in February 2016.",
+    "at25": "At 25, Patrick (2013) runs Stripe, valued at $1.75 billion in 2014; John (2015) is its president.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Patrick_Collison",
       "https://en.wikipedia.org/wiki/John_Collison",
@@ -125,9 +125,9 @@
   {
     "id": "pope",
     "name": "Leo XIV (Robert Prevost)",
-    "headline": "Priest in Peru at 40, pope at 69",
+    "headline": "Peru priest at 40, pope at 69",
     "category": "Religion · Vatican",
-    "lowest": "At 40, Robert Prevost lives in Peru, where he trains future priests and holds pastoral responsibilities. For many years, he works far from the Vatican's highest offices.",
+    "lowest": "At 40, Robert Prevost trains future priests in Peru, working for many years far from the Vatican's highest offices.",
     "comeback": "He becomes a bishop at 59, a cardinal at 68, and is elected pope on May 8, 2025, at 69.",
     "lesson": "A long life in the field can lead to the top.",
     "wikipedia": "Pope Leo XIV",
@@ -140,7 +140,7 @@
       "https://en.wikipedia.org/wiki/Pope_Leo_XIV",
       "https://www.vatican.va/content/leo-xiv/en.html"
     ],
-    "at25": "In 1980 and 1981, Robert Prevost, an Augustinian friar since 1978, studies theology at the Catholic Theological Union in Chicago. He takes his solemn vows on August 29, 1981 and will be ordained a priest in Rome in 1982.",
+    "at25": "In 1981, the Augustinian friar studies theology in Chicago and takes solemn vows, a year before ordination.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Pope_Leo_XIV",
       "https://www.osservatoreromano.va/en/news/2025-05/ing-006/biography-of-his-holiness-leo-xiv.html"
@@ -151,8 +151,8 @@
     "name": "José Hernández",
     "headline": "Rejected 11 times by NASA",
     "category": "Spaceflight · United States",
-    "lowest": "The child of Mexican migrant farmworkers, he works in California's fields between schools. After becoming an engineer, he applies to be an astronaut and is turned down by NASA eleven times in a row.",
-    "comeback": "In May 2004, on his twelfth application, he is selected for NASA Astronaut Group 19. On August 28, 2009, he flies aboard the space shuttle Discovery (mission STS-128) to the International Space Station.",
+    "lowest": "The son of Mexican migrant farmworkers, he works California's fields. Once an engineer, he is turned down by NASA eleven times.",
+    "comeback": "In May 2004, on his twelfth try, NASA selects him. On August 28, 2009, he flies aboard Discovery to the International Space Station.",
     "lesson": "Eleven rejections do not decide the twelfth.",
     "wikipedia": "José M. Hernández",
     "photo": "photos/jose.jpg",
@@ -164,7 +164,7 @@
       "https://en.wikipedia.org/wiki/Jos%C3%A9_M._Hern%C3%A1ndez",
       "https://magazine.ucsb.edu/fall-winter-2023/jose-hernandez-86"
     ],
-    "at25": "In 1987, José Hernández, who earned a master's degree from the University of California, Santa Barbara in 1986, joins Lawrence Livermore National Laboratory as an electrical engineer (signal and image processing). NASA will not select him until 2004.",
+    "at25": "In 1987, he joins Lawrence Livermore National Laboratory as an electrical engineer. NASA selects him only in 2004.",
     "at25_sources": [
       "https://www.nasa.gov/wp-content/uploads/2016/01/hernandez_jose.Pdf",
       "https://en.wikipedia.org/wiki/Jos%C3%A9_M._Hern%C3%A1ndez"
@@ -175,8 +175,8 @@
     "name": "Margaret Thatcher",
     "headline": "Grocer's daughter, Prime Minister",
     "category": "Politics · United Kingdom",
-    "lowest": "She grows up in a flat above the family grocery in the small town of Grantham. After studying chemistry, she tries to enter Parliament but loses the 1950 and 1951 elections.",
-    "comeback": "Elected an MP in 1959, she keeps rising for twenty years. In 1979, at 53, she becomes the UK's first woman Prime Minister and stays in power for more than 11 years.",
+    "lowest": "She grows up above the family grocery in Grantham. After studying chemistry, she loses the 1950 and 1951 elections.",
+    "comeback": "Elected an MP in 1959, she becomes the UK's first woman Prime Minister in 1979, at 53, and governs over 11 years.",
     "lesson": "Record unpopularity does not necessarily end a career.",
     "wikipedia": "Margaret Thatcher",
     "photo": "photos/thatcher.jpg",
@@ -189,7 +189,7 @@
       "https://www.ipsos.com/en-uk/margaret-thatcher-1925-2013",
       "https://en.wikipedia.org/wiki/1983_United_Kingdom_general_election"
     ],
-    "at25": "In 1950 and 1951, Margaret Roberts, the future Thatcher, is a chemist at J. Lyons and Co. in Hammersmith and lives in Dartford, where she is the Conservative candidate. Beaten in February 1950, she runs again in October 1951 and loses again.",
+    "at25": "In 1950 and 1951, Margaret Roberts works as a chemist and runs for Parliament in Dartford, losing twice.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Margaret_Thatcher"
     ]
@@ -198,9 +198,9 @@
     "id": "jensen",
     "name": "Jensen Huang",
     "headline": "Close to running out of cash",
-    "category": "Entrepreneurship · Nvidia",
-    "lowest": "Nvidia's first chip, the NV1 (1995), flops: its quadrilateral rendering is incompatible with Direct3D, and Sega drops it for its next console. With the company close to running out of cash, Jensen Huang lays off more than half the staff in 1996 (from about 100 to 40).",
-    "comeback": "Launched in August 1997 with about a month of payroll left, the RIVA 128 sells around a million units in four months and saves the company. Nvidia then introduces the GeForce 256 GPU in 1999, and its chips go on to power the AI boom, making it the leader in AI computing.",
+    "category": "Business · Nvidia",
+    "lowest": "Nvidia's first chip, the NV1 (1995), flops and Sega drops it. Nearly out of cash, Huang lays off over half the staff in 1996.",
+    "comeback": "In 1997, with a month of payroll left, the RIVA 128 sells about a million units in four months. Nvidia later leads AI computing.",
     "lesson": "Admitting a mistake can save the project.",
     "wikipedia": "Jensen Huang",
     "photo": "photos/jensen.jpg",
@@ -214,7 +214,7 @@
       "https://en.wikipedia.org/wiki/RIVA_128",
       "https://en.wikipedia.org/wiki/GeForce_256"
     ],
-    "at25": "In 1988, Jensen Huang is an engineer at LSI Logic in Silicon Valley, after a first job designing microprocessors at AMD. He studies at night for a master's in electrical engineering from Stanford (1992) and will co-found Nvidia in 1993.",
+    "at25": "In 1988, he is an LSI Logic engineer, studying at night at Stanford. He co-founds Nvidia in 1993.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Jensen_Huang",
       "https://nvidianews.nvidia.com/bios/jensen-huang"
@@ -225,8 +225,8 @@
     "name": "Robert Downey Jr.",
     "headline": "From prison to Iron Man",
     "category": "Film · United States",
-    "lowest": "Arrested in June 1996 with heroin, cocaine and a gun, he relapses again and again. In 1999, he is sentenced to three years at Corcoran state prison and his career seems ruined. After another arrest in 2001, he is fired from Ally McBeal.",
-    "comeback": "Sober, he lands the role of Tony Stark in Iron Man, released on May 2, 2008, which relaunches his career. In March 2024, he wins the Oscar for Best Supporting Actor for Oppenheimer.",
+    "lowest": "Arrested in 1996 with drugs and a gun, he keeps relapsing: three years in prison in 1999, fired from Ally McBeal in 2001.",
+    "comeback": "Sober, he plays Tony Stark in Iron Man (2008), relaunching his career. In 2024, he wins an Oscar for Oppenheimer.",
     "lesson": "A career can be rebuilt.",
     "wikipedia": "Robert Downey Jr.",
     "photo": "photos/rdj.jpg",
@@ -238,7 +238,7 @@
       "https://en.wikipedia.org/wiki/Robert_Downey_Jr.",
       "https://www.oscars.org/oscars/ceremonies/2024"
     ],
-    "at25": "In 1990, Robert Downey Jr. is a working Hollywood actor, known for Less Than Zero (1987). He co-stars with Mel Gibson in Air America (1990), and two years later earns his first Oscar nomination for Chaplin (1992).",
+    "at25": "In 1990, he co-stars with Mel Gibson in Air America. Chaplin earns him an Oscar nomination in 1992.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Robert_Downey_Jr.",
       "https://en.wikipedia.org/wiki/Air_America_(film)"
@@ -249,8 +249,8 @@
     "name": "Walt Disney",
     "headline": "Bankrupt at 21, then built Disney",
     "category": "Animation · United States",
-    "lowest": "In 1923, at 21, his Kansas City cartoon studio Laugh-O-Gram goes bankrupt. He leaves for Hollywood that summer with little but an unfinished reel. In February 1928, he loses Oswald the Lucky Rabbit, whose rights belong to Universal, and most of his animators.",
-    "comeback": "On October 16, 1923, a deal to distribute his Alice Comedies marks the start of the Disney company, run with his brother Roy. Mickey Mouse stars in Steamboat Willie on November 18, 1928, Snow White opens on December 21, 1937, and Disneyland on July 17, 1955.",
+    "lowest": "In 1923, at 21, his Kansas City studio Laugh-O-Gram goes bankrupt. In 1928, he loses Oswald the Lucky Rabbit to Universal, with most animators.",
+    "comeback": "In 1923, he and his brother Roy start the Disney company. Mickey Mouse arrives in 1928, Snow White in 1937, Disneyland in 1955.",
     "lesson": "Own what you create.",
     "wikipedia": "Walt Disney",
     "photo": "photos/disney.jpg",
@@ -263,7 +263,7 @@
       "https://d23.com/a-history-of-the-walt-disney-company/",
       "https://www.archives.gov/kansas-city/highlights/disney-bankruptcy"
     ],
-    "at25": "In 1927, Walt Disney runs his studio on Hyperion Avenue in Los Angeles with his brother Roy. After the Alice Comedies end in July, he and Ub Iwerks create Oswald the Lucky Rabbit for Universal; Trolley Troubles is released on September 5, 1927.",
+    "at25": "In 1927, he and Ub Iwerks create Oswald the Lucky Rabbit for Universal at his Los Angeles studio.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Walt_Disney",
       "https://en.wikipedia.org/wiki/Oswald_the_Lucky_Rabbit"

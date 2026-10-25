@@ -1,20 +1,20 @@
 {
   "valdas": {
-    "at25": "En 2002, à 25 ans, Valdas Dambrauskas gagne 4 000 litas à la version lituanienne d'un jeu télévisé type « Qui veut gagner des millions ? ». Il s'en sert pour partir en Angleterre avec sa compagne et devenir entraîneur.",
+    "at25": "In 2002, he wins 4,000 litas on a Lithuanian quiz show and moves to England to coach.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Valdas_Dambrauskas",
       "https://www.uefa.com/uefachampionsleague/news/02a9-218a9ecd5f83-091799d07d42-1000--different-roads-same-dream-how-sabah-and-coach-dambrauskas-reached-the-champions-league/"
     ]
   },
   "elon": {
-    "at25": "En 1996, Elon Musk développe Zip2, un guide urbain en ligne pour les journaux, cofondé en 1995 avec son frère Kimbal. Après une levée de 3 millions de dollars, il en devient directeur technique. Compaq rachètera Zip2 en 1999.",
+    "at25": "In 1996, he is CTO of Zip2, co-founded with Kimbal. Compaq buys it in 1999.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Elon_Musk",
       "https://en.wikipedia.org/wiki/Zip2"
     ]
   },
   "mandela": {
-    "at25": "En 1943 et 1944, Nelson Mandela étudie le droit à l'université du Witwatersrand, seul étudiant noir africain, tout en étant clerc dans un cabinet d'avocats de Johannesburg. À Pâques 1944, il cofonde la Ligue de la jeunesse de l'ANC.",
+    "at25": "In 1944, while studying law at the University of the Witwatersrand, he co-founds the ANC Youth League.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Nelson_Mandela",
       "https://www.nelsonmandela.org/content/page/biography"
@@ -27,13 +27,13 @@
     ]
   },
   "chesky": {
-    "at25": "En 2006 et 2007, Brian Chesky, diplômé en design industriel de la RISD en 2004, est designer chez 3DID à Los Angeles, où il dessine jouets et équipements médicaux. Déçu, il réduit ses heures en 2007. Airbnb n'existe pas encore.",
+    "at25": "In 2006, the RISD graduate designs toys and medical equipment in Los Angeles. Airbnb does not exist yet.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Brian_Chesky"
     ]
   },
   "collison": {
-    "at25": "Patrick, né en 1988, a 25 ans en 2013 et 2014 : il dirige Stripe, cofondée en 2010 avec son frère et valorisée 1,75 milliard de dollars lors d'une levée en 2014. John, né en 1990, a 25 ans en 2015 et 2016 : il est président de Stripe, qui lance Atlas en février 2016.",
+    "at25": "At 25, Patrick (2013) runs Stripe, valued at $1.75 billion in 2014; John (2015) is its president.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Patrick_Collison",
       "https://en.wikipedia.org/wiki/John_Collison",
@@ -41,41 +41,41 @@
     ]
   },
   "pope": {
-    "at25": "En 1980 et 1981, Robert Prevost, frère augustin depuis 1978, étudie la théologie à la Catholic Theological Union de Chicago. Il prononce ses vœux solennels le 29 août 1981 et sera ordonné prêtre à Rome en 1982.",
+    "at25": "In 1981, the Augustinian friar studies theology in Chicago and takes solemn vows, a year before ordination.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Pope_Leo_XIV",
       "https://www.osservatoreromano.va/en/news/2025-05/ing-006/biography-of-his-holiness-leo-xiv.html"
     ]
   },
   "jose": {
-    "at25": "En 1987, José Hernández, titulaire depuis 1986 d'un master de l'université de Californie à Santa Barbara, entre au Lawrence Livermore National Laboratory comme ingénieur en électronique (traitement du signal et de l'image). La NASA ne le sélectionnera qu'en 2004.",
+    "at25": "In 1987, he joins Lawrence Livermore National Laboratory as an electrical engineer. NASA selects him only in 2004.",
     "at25_sources": [
       "https://www.nasa.gov/wp-content/uploads/2016/01/hernandez_jose.Pdf",
       "https://en.wikipedia.org/wiki/Jos%C3%A9_M._Hern%C3%A1ndez"
     ]
   },
   "thatcher": {
-    "at25": "En 1950 et 1951, Margaret Roberts, future Thatcher, est chimiste chez J. Lyons and Co. à Hammersmith et vit à Dartford, où elle est candidate conservatrice. Battue en février 1950, elle s'y représente en octobre 1951 et perd à nouveau.",
+    "at25": "In 1950 and 1951, Margaret Roberts works as a chemist and runs for Parliament in Dartford, losing twice.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Margaret_Thatcher"
     ]
   },
   "jensen": {
-    "at25": "In 1988, Jensen Huang is an engineer at LSI Logic in Silicon Valley, after a first job designing microprocessors at AMD. He studies at night for a master's in electrical engineering from Stanford (1992) and will co-found Nvidia in 1993.",
+    "at25": "In 1988, he is an LSI Logic engineer, studying at night at Stanford. He co-founds Nvidia in 1993.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Jensen_Huang",
       "https://nvidianews.nvidia.com/bios/jensen-huang"
     ]
   },
   "rdj": {
-    "at25": "In 1990, Robert Downey Jr. is a working Hollywood actor, known for Less Than Zero (1987). He co-stars with Mel Gibson in Air America (1990), and two years later earns his first Oscar nomination for Chaplin (1992).",
+    "at25": "In 1990, he co-stars with Mel Gibson in Air America. Chaplin earns him an Oscar nomination in 1992.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Robert_Downey_Jr.",
       "https://en.wikipedia.org/wiki/Air_America_(film)"
     ]
   },
   "disney": {
-    "at25": "In 1927, Walt Disney runs his studio on Hyperion Avenue in Los Angeles with his brother Roy. After the Alice Comedies end in July, he and Ub Iwerks create Oswald the Lucky Rabbit for Universal; Trolley Troubles is released on September 5, 1927.",
+    "at25": "In 1927, he and Ub Iwerks create Oswald the Lucky Rabbit for Universal at his Los Angeles studio.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Walt_Disney",
       "https://en.wikipedia.org/wiki/Oswald_the_Lucky_Rabbit"

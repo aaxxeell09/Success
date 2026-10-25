@@ -1,0 +1,185 @@
+[
+  {
+    "id": "valdas",
+    "name": "Valdas Dambrauskas",
+    "category": "Football · Lituanie",
+    "lowest": "Pendant huit ans à Londres, il enchaîne les petits boulots : livreur de journaux, jardinier, employé de pub, tout en poursuivant son rêve de devenir entraîneur professionnel.",
+    "comeback": "En 2026, il mène Sabah en Ligue des champions, jusqu’à Old Trafford.",
+    "wikipedia": "Valdas Dambrauskas",
+    "lesson": "La persévérance peut prendre huit ans.",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Valdas_Dambrauskas.jpg",
+    "image_credit": "Biser Todorov — CC BY 4.0 (Wikimedia Commons)",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Valdas_Dambrauskas.jpg"
+  },
+  {
+    "id": "jose",
+    "name": "José Hernández",
+    "category": "Astronautique · États-Unis",
+    "lowest": "Enfant d’ouvriers agricoles migrants, il travaille dans les champs, puis essuie onze refus successifs de la NASA.",
+    "comeback": "Accepté à sa douzième candidature en 2004, il part dans l’espace en 2009.",
+    "wikipedia": "José M. Hernández",
+    "lesson": "Onze refus ne décident pas du douzième."
+  },
+  {
+    "id": "mandela",
+    "name": "Nelson Mandela",
+    "category": "Politique · Afrique du Sud",
+    "lowest": "Il passe vingt-sept ans en prison pour son combat contre l’apartheid.",
+    "comeback": "Libéré en 1990, il devient président de l’Afrique du Sud en 1994.",
+    "wikipedia": "Nelson Mandela",
+    "lesson": "Une vie ne se résume pas à ses années d’enfermement."
+  },
+  {
+    "id": "elon",
+    "name": "Elon Musk",
+    "category": "Entrepreneuriat · États-Unis",
+    "lowest": "Fin 2008, SpaceX a essuyé trois échecs de lancement et Tesla manque de liquidités, à quelques jours d’une possible faillite.",
+    "comeback": "SpaceX obtient un contrat de la NASA et Tesla boucle un financement décisif en décembre 2008.",
+    "wikipedia": "Elon Musk",
+    "lesson": "Le point de rupture peut précéder le retournement."
+  },
+  {
+    "id": "chesky",
+    "name": "Brian Chesky",
+    "category": "Entrepreneuriat · Airbnb",
+    "lowest": "En 2008, Airbnb a très peu de clients. Ses fondateurs s’endettent et vendent des boîtes de céréales pour continuer.",
+    "comeback": "Ils rejoignent Y Combinator, améliorent le produit et construisent Airbnb.",
+    "wikipedia": "Brian Chesky",
+    "lesson": "Survivre assez longtemps pour trouver ce qui marche."
+  },
+  {
+    "id": "collison",
+    "name": "Patrick et John Collison",
+    "category": "Entrepreneuriat · Stripe",
+    "lowest": "L’infrastructure bancaire rend les paiements en ligne compliqués à intégrer. Deux jeunes frères affrontent les réticences du secteur.",
+    "comeback": "Ils créent Stripe en 2010 et simplifient profondément les paiements pour les développeurs.",
+    "wikipedia": "Patrick Collison",
+    "lesson": "Changer les règles demande souvent de commencer petit."
+  },
+  {
+    "id": "pope",
+    "name": "Léon XIV",
+    "category": "Religieux · Vatican",
+    "lowest": "Vers quarante ans, Robert Prevost travaille au Pérou comme prêtre et formateur, loin du centre du pouvoir de l’Église.",
+    "comeback": "Il devient supérieur général, évêque, cardinal, puis pape en 2025 à 69 ans.",
+    "wikipedia": "Pope Leo XIV",
+    "lesson": "L’ascension peut suivre une longue vie de terrain."
+  },
+  {
+    "id": "kariko",
+    "name": "Katalin Karikó",
+    "category": "Recherche · Médecine",
+    "lowest": "En 1995, faute de financement pour ses travaux sur l’ARN messager, elle est rétrogradée à l’université de Pennsylvanie.",
+    "comeback": "Elle poursuit ses recherches et reçoit le prix Nobel de médecine en 2023.",
+    "wikipedia": "Katalin Karikó",
+    "lesson": "La reconnaissance n’arrive pas toujours à temps."
+  },
+  {
+    "id": "rdj",
+    "name": "Robert Downey Jr.",
+    "category": "Cinéma · États-Unis",
+    "lowest": "Sa carrière s’effondre dans les années 1990, marquées par les addictions, des condamnations et une incarcération.",
+    "comeback": "Il revient avec Iron Man en 2008, puis remporte un Oscar en 2024.",
+    "wikipedia": "Robert Downey Jr.",
+    "lesson": "Une carrière peut se reconstruire."
+  },
+  {
+    "id": "dej",
+    "name": "John Paul DeJoria",
+    "category": "Entrepreneuriat · Paul Mitchell",
+    "lowest": "Il connaît des périodes sans logement et vend des produits capillaires de porte en porte.",
+    "comeback": "Avec Paul Mitchell, il lance une marque avec 700 dollars de départ et construit un groupe mondial.",
+    "wikipedia": "John Paul DeJoria",
+    "lesson": "Partir sans capital ne signifie pas être sans avenir."
+  },
+  {
+    "id": "jensen",
+    "name": "Jensen Huang",
+    "category": "Entrepreneuriat · Nvidia",
+    "lowest": "Dans les années 1990, Nvidia se rapproche d’une impasse financière après l’échec de sa première stratégie produit.",
+    "comeback": "L’entreprise change d’architecture, lance la RIVA 128 et poursuit son ascension.",
+    "wikipedia": "Jensen Huang",
+    "lesson": "Reconnaître l’erreur peut sauver le projet."
+  },
+  {
+    "id": "dyson",
+    "name": "James Dyson",
+    "category": "Invention · Royaume-Uni",
+    "lowest": "Il travaille pendant des années sur des milliers de prototypes d’aspirateur et rencontre des refus industriels.",
+    "comeback": "Il lance son produit sous sa propre marque et bâtit Dyson.",
+    "wikipedia": "James Dyson",
+    "lesson": "Chaque prototype raté apporte une information."
+  },
+  {
+    "id": "melanie",
+    "name": "Melanie Perkins",
+    "category": "Entrepreneuriat · Canva",
+    "lowest": "Elle reçoit plus de cent refus d’investisseurs pour son idée de rendre le design accessible à tous.",
+    "comeback": "Elle trouve des soutiens, lance Canva et développe la plateforme à l’international.",
+    "wikipedia": "Melanie Perkins",
+    "lesson": "Cent refus ne sont pas une preuve d’impossibilité."
+  },
+  {
+    "id": "jobs",
+    "name": "Steve Jobs",
+    "category": "Technologie · Apple",
+    "lowest": "En 1985, il est écarté d’Apple, l’entreprise qu’il a cofondée.",
+    "comeback": "Il crée NeXT, développe Pixar et revient chez Apple en 1997.",
+    "wikipedia": "Steve Jobs",
+    "lesson": "Une exclusion peut devenir un nouveau départ."
+  },
+  {
+    "id": "tina",
+    "name": "Tina Turner",
+    "category": "Musique · États-Unis",
+    "lowest": "En 1976, elle quitte un mariage violent et doit reconstruire seule sa carrière musicale.",
+    "comeback": "Elle revient sur le devant de la scène avec Private Dancer en 1984.",
+    "wikipedia": "Tina Turner",
+    "lesson": "Recommencer n’efface pas le talent."
+  },
+  {
+    "id": "knight",
+    "name": "Phil Knight",
+    "category": "Entrepreneuriat · Nike",
+    "lowest": "Au milieu des années 1970, la croissance de sa société provoque une grave crise de trésorerie et un conflit bancaire.",
+    "comeback": "Un nouveau soutien financier permet à Nike de traverser la crise et de poursuivre son développement.",
+    "wikipedia": "Phil Knight",
+    "lesson": "Grandir exige parfois de survivre à sa croissance."
+  },
+  {
+    "id": "jan",
+    "name": "Jan Koum",
+    "category": "Entrepreneuriat · WhatsApp",
+    "lowest": "Arrivé adolescent aux États-Unis, il grandit dans une famille qui dépend des aides sociales.",
+    "comeback": "Il cofonde WhatsApp, racheté par Facebook en 2014 dans une opération annoncée à 19 milliards de dollars.",
+    "wikipedia": "Jan Koum",
+    "lesson": "Les débuts ne déterminent pas la destination."
+  },
+  {
+    "id": "thatcher",
+    "name": "Margaret Thatcher",
+    "category": "Politique · Royaume-Uni",
+    "lowest": "Fille d’épicier, elle perd deux élections législatives en 1950 et 1951, puis traverse une crise de popularité majeure en 1981.",
+    "comeback": "Elle devient Première ministre en 1979 et remporte une nouvelle élection en 1983.",
+    "wikipedia": "Margaret Thatcher",
+    "lesson": "Une défaite n’achève pas nécessairement un parcours."
+  },
+  {
+    "id": "trump",
+    "name": "Donald Trump",
+    "category": "Politique · États-Unis",
+    "lowest": "En mai 2024, il est reconnu coupable de 34 chefs d’accusation à New York. Une peine de prison est alors légalement possible.",
+    "comeback": "Il remporte l’élection présidentielle de novembre 2024 et reprend ses fonctions en janvier 2025.",
+    "wikipedia": "Donald Trump",
+    "lesson": "Un retournement politique peut être spectaculaire."
+  },
+  {
+    "id": "niel",
+    "name": "Xavier Niel",
+    "category": "Entrepreneuriat · France",
+    "lowest": "En 2004, il est placé en détention provisoire pendant un mois. Il bénéficiera d’un non-lieu pour proxénétisme, puis sera condamné pour recel d’abus de biens sociaux.",
+    "comeback": "Il poursuit le développement de ses activités, notamment avec Free Mobile lancé en 2012.",
+    "wikipedia": "Xavier Niel",
+    "lesson": "Un revers judiciaire ne se confond pas avec une fin de carrière."
+  }
+]

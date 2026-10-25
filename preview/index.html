@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mur des retournements — Aperçu</title>
+<style>
+:root{color-scheme:dark;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif}
+*{box-sizing:border-box}body{min-height:100vh;display:grid;place-items:center;padding:35px;background:radial-gradient(ellipse at 70% 15%,#5e8bb4 0%,transparent 55%),linear-gradient(145deg,#183454,#132034 70%,#0a1627);color:white}
+#card{width:440px;max-width:95vw;border:1px solid #ffffff36;overflow:hidden;border-radius:26px;background:rgba(20,29,48,.89);box-shadow:0 18px 48px #0006;backdrop-filter:blur(28px);transition:width .18s}
+.top{display:flex;justify-content:space-between;align-items:center;padding:20px 22px 14px;color:#b9cde5;text-transform:uppercase;letter-spacing:1.3px;font-size:13px;font-weight:750}.num{font-size:12px;color:#b8c6d7;letter-spacing:0}
+.hero{height:238px;background:linear-gradient(125deg,#263c5e,#1a2c45);position:relative;overflow:hidden}.hero img{width:100%;height:100%;object-fit:cover;object-position:center 28%}.avatar{font-size:72px;font-weight:800;color:#ffffff4a;display:grid;place-items:center;height:100%}.shade{position:absolute;inset:0;background:linear-gradient(0deg,#0a121ffc 0%,transparent 70%);pointer-events:none}.identity{position:absolute;bottom:16px;left:22px;right:22px}.category{color:#c3d7f0;font-size:12px;margin-bottom:3px}.name{font-weight:800;font-size:29px;line-height:1.1}.body{padding:21px 22px 18px}.eyebrow{font-size:10px;letter-spacing:1.9px;font-weight:800;margin-bottom:7px}.low{color:#f6b0ad}.high{color:#8fe0bd}.body p{font-size:14px;line-height:1.53;margin:0 0 18px}.lesson{border-top:1px solid #ffffff29;padding-top:11px;font-size:12px;font-style:italic;color:#a9c1dd}.bar{border-top:1px solid #ffffff1a;background:#0002;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}.controls,.sizes{display:flex;gap:6px}button{appearance:none;border:1px solid #ffffff33;background:#ffffff1c;border-radius:12px;min-width:32px;height:32px;padding:0 8px;color:white;font-size:18px;cursor:pointer}.sizes button{font-size:11px;min-width:27px;height:28px}.active{background:#ffffff55}footer{margin-top:22px;color:#cfdfed;font-size:12px;text-align:center;max-width:450px}footer a{color:#c4ddff}
+</style>
+</head>
+<body>
+<div><article id="card"><header class="top"><span>Le mur des retournements</span><span class="num" id="count"></span></header><section class="hero"><div id="avatar" class="avatar">?</div><img id="photo" alt="" hidden><div class="shade"></div><div class="identity"><div class="category" id="category"></div><div class="name" id="name"></div></div></section><div class="body"><div class="eyebrow low">AU PLUS BAS</div><p id="lowest"></p><div class="eyebrow high">LE RETOURNEMENT</div><p id="comeback"></p><div class="lesson" id="lesson"></div></div><nav class="bar"><div class="controls"><button id="prev" title="Précédent">‹</button><button id="next" title="Suivant">›</button><button id="pause" title="Pause">Ⅱ</button></div><div class="sizes"><button data-size="340">S</button><button data-size="440" class="active">M</button><button data-size="560">L</button></div></nav></article><footer>Prévisualisation web — le vrai widget s'affiche sur le bureau macOS avec <a href="https://tracesof.net/uebersicht/">Übersicht</a>.</footer></div>
+<script>
+let stories = [], index=0, paused=false, photoMap={};
+const $=id=>document.getElementById(id);
+const render=()=>{
+ const s=stories[index];if(!s)return;
+ $('count').textContent=`${index+1} / ${stories.length}`;
+ for(const id of ['name','category','lowest','comeback'])$(id).textContent=s[id]||'';
+ $('lesson').textContent=s.lesson?`« ${s.lesson} »`:'';
+ const img=s.image_url||photoMap[s.wikipedia];$('avatar').textContent=s.name.split(' ').slice(0,2).map(x=>x[0]).join('');
+ $('photo').hidden=!img;$('avatar').hidden=!!img;if(img)$('photo').src=img;
+};
+const step=d=>{index=(index+d+stories.length)%stories.length;render()};
+$('prev').onclick=()=>step(-1);$('next').onclick=()=>step(1);
+$('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'▶':'Ⅱ'};
+for(const b of document.querySelectorAll('[data-size]'))b.onclick=()=>{document.querySelectorAll('[data-size]').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('card').style.width=b.dataset.size+'px'};
+$('photo').onerror=()=>{$('photo').hidden=true;$('avatar').hidden=false};
+setInterval(()=>{if(!paused&&stories.length)step(1)},20*60*1000);
+fetch('../stories.json').then(r=>r.json()).then(d=>{stories=d;render();const titles=[...new Set(d.map(x=>x.wikipedia).filter(Boolean))];const q=new URLSearchParams({action:'query',prop:'pageimages',pithumbsize:'750',titles:titles.join('|'),format:'json',origin:'*'});return fetch('https://en.wikipedia.org/w/api.php?'+q).then(r=>r.json()).then(x=>{Object.values(x?.query?.pages||{}).forEach(p=>{if(p.thumbnail)photoMap[p.title]=p.thumbnail.source});render()})}).catch(()=>{$('name').textContent='Servez ce dossier avec un serveur local pour voir l’aperçu';});
+</script>
+</body>
+</html>

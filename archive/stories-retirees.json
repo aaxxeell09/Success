@@ -18,24 +18,6 @@
     ]
   },
   {
-    "id": "rdj",
-    "name": "Robert Downey Jr.",
-    "category": "Cinéma · États-Unis",
-    "lowest": "Arrêté en juin 1996 en possession d’héroïne, de cocaïne et d’une arme, il multiplie les rechutes. En 1999, il est condamné à trois ans de détention à la prison d’État de Corcoran, puis, après une nouvelle arrestation en 2001, il est renvoyé de la série Ally McBeal.",
-    "comeback": "Sobre, il obtient le rôle de Tony Stark dans Iron Man, sorti le 2 mai 2008, qui relance sa carrière. En mars 2024, il remporte l’Oscar du meilleur second rôle pour Oppenheimer.",
-    "lesson": "Une carrière peut se reconstruire.",
-    "wikipedia": "Robert Downey Jr.",
-    "photo": "photos/rdj.jpg",
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/RobertDowneyJr-byPhilipRomano7_%28cropped%29.jpg/500px-RobertDowneyJr-byPhilipRomano7_%28cropped%29.jpg",
-    "image_credit": "PhilipRomano, CC BY-SA 4.0",
-    "image_license": "CC BY-SA 4.0",
-    "image_source": "https://commons.wikimedia.org/wiki/File:RobertDowneyJr-byPhilipRomano7_(cropped).jpg",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Robert_Downey_Jr.",
-      "https://www.oscars.org/oscars/ceremonies/2024"
-    ]
-  },
-  {
     "id": "dej",
     "name": "John Paul DeJoria",
     "category": "Entrepreneuriat · Paul Mitchell",
@@ -51,24 +33,6 @@
     "sources": [
       "https://en.wikipedia.org/wiki/John_Paul_DeJoria",
       "https://en.wikipedia.org/wiki/Patr%C3%B3n"
-    ]
-  },
-  {
-    "id": "jensen",
-    "name": "Jensen Huang",
-    "category": "Entrepreneuriat · Nvidia",
-    "lowest": "La première puce de Nvidia, NV1 (1995), échoue : son rendu par quadrilatères est incompatible avec Direct3D. Sega, pour qui elle conçoit la puce d’une future console, choisit un autre fournisseur. En 1996, Jensen Huang licencie plus de la moitié du personnel (de 100 à 40 personnes).",
-    "comeback": "Sega investit tout de même 5 millions de dollars. Lancée en août 1997, alors qu’il ne reste qu’un mois de salaires en caisse, la RIVA 128 se vend à environ un million d’exemplaires en quatre mois et sauve l’entreprise.",
-    "lesson": "Reconnaître l’erreur peut sauver le projet.",
-    "wikipedia": "Jensen Huang",
-    "photo": "photos/jensen.jpg",
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Jen-Hsun_Huang_2025.jpg/500px-Jen-Hsun_Huang_2025.jpg",
-    "image_credit": "Daniel Torok (Maison-Blanche), Domaine public",
-    "image_license": "Domaine public",
-    "image_source": "https://commons.wikimedia.org/wiki/File:Jen-Hsun_Huang_2025.jpg",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Nvidia",
-      "https://en.wikipedia.org/wiki/NV1"
     ]
   },
   {
@@ -196,6 +160,29 @@
     "sources": [
       "https://fr.wikipedia.org/wiki/Xavier_Niel",
       "https://fr.wikipedia.org/wiki/Free_Mobile"
+    ]
+  },
+  {
+    "id": "trump",
+    "name": "Donald Trump",
+    "headline": "Convicted, then re-elected",
+    "category": "Politics · United States",
+    "lowest": "On May 30, 2024, a New York jury finds him guilty on 34 counts of falsifying business records: he becomes the first former US president convicted of a crime.",
+    "comeback": "He wins the presidential election on November 5, 2024 and is sworn in on January 20, 2025 for a second term. Ten days earlier, he had been sentenced to an unconditional discharge.",
+    "lesson": "A political comeback can be spectacular.",
+    "wikipedia": "Donald Trump",
+    "photo": "photos/trump.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Official_Presidential_Portrait_of_President_Donald_J._Trump_%282025%29.jpg/500px-Official_Presidential_Portrait_of_President_Donald_J._Trump_%282025%29.jpg",
+    "image_credit": "Daniel Torok, Domaine public",
+    "image_license": "Domaine public",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Official_Presidential_Portrait_of_President_Donald_J._Trump_(2025).jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Prosecution_of_Donald_Trump_in_New_York",
+      "https://en.wikipedia.org/wiki/2024_United_States_presidential_election"
+    ],
+    "at25": "In 1971, Donald Trump, a 1968 graduate of the University of Pennsylvania, becomes president of Trump Management, his father's real estate company in New York's outer boroughs. He moves to Manhattan and adopts the name Trump Organization.",
+    "at25_sources": [
+      "https://en.wikipedia.org/wiki/Donald_Trump"
     ]
   }
 ]

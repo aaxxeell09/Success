@@ -74,29 +74,6 @@
     ]
   },
   {
-    "id": "trump",
-    "name": "Donald Trump",
-    "headline": "Convicted, then re-elected",
-    "category": "Politics · United States",
-    "lowest": "On May 30, 2024, a New York jury finds him guilty on 34 counts of falsifying business records: he becomes the first former US president convicted of a crime.",
-    "comeback": "He wins the presidential election on November 5, 2024 and is sworn in on January 20, 2025 for a second term. Ten days earlier, he had been sentenced to an unconditional discharge.",
-    "lesson": "A political comeback can be spectacular.",
-    "wikipedia": "Donald Trump",
-    "photo": "photos/trump.jpg",
-    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Official_Presidential_Portrait_of_President_Donald_J._Trump_%282025%29.jpg/500px-Official_Presidential_Portrait_of_President_Donald_J._Trump_%282025%29.jpg",
-    "image_credit": "Daniel Torok, Domaine public",
-    "image_license": "Domaine public",
-    "image_source": "https://commons.wikimedia.org/wiki/File:Official_Presidential_Portrait_of_President_Donald_J._Trump_(2025).jpg",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Prosecution_of_Donald_Trump_in_New_York",
-      "https://en.wikipedia.org/wiki/2024_United_States_presidential_election"
-    ],
-    "at25": "In 1971, Donald Trump, a 1968 graduate of the University of Pennsylvania, becomes president of Trump Management, his father's real estate company in New York's outer boroughs. He moves to Manhattan and adopts the name Trump Organization.",
-    "at25_sources": [
-      "https://en.wikipedia.org/wiki/Donald_Trump"
-    ]
-  },
-  {
     "id": "chesky",
     "name": "Brian Chesky",
     "headline": "In debt, almost no customers",
@@ -215,6 +192,56 @@
     "at25": "In 1950 and 1951, Margaret Roberts, the future Thatcher, is a chemist at J. Lyons and Co. in Hammersmith and lives in Dartford, where she is the Conservative candidate. Beaten in February 1950, she runs again in October 1951 and loses again.",
     "at25_sources": [
       "https://en.wikipedia.org/wiki/Margaret_Thatcher"
+    ]
+  },
+  {
+    "id": "jensen",
+    "name": "Jensen Huang",
+    "headline": "Close to running out of cash",
+    "category": "Entrepreneurship · Nvidia",
+    "lowest": "Nvidia's first chip, the NV1 (1995), flops: its quadrilateral rendering is incompatible with Direct3D, and Sega drops it for its next console. With the company close to running out of cash, Jensen Huang lays off more than half the staff in 1996 (from about 100 to 40).",
+    "comeback": "Launched in August 1997 with about a month of payroll left, the RIVA 128 sells around a million units in four months and saves the company. Nvidia then introduces the GeForce 256 GPU in 1999, and its chips go on to power the AI boom, making it the leader in AI computing.",
+    "lesson": "Admitting a mistake can save the project.",
+    "wikipedia": "Jensen Huang",
+    "photo": "photos/jensen.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Jen-Hsun_Huang_2025.jpg/500px-Jen-Hsun_Huang_2025.jpg",
+    "image_credit": "Daniel Torok (Maison-Blanche), Domaine public",
+    "image_license": "Domaine public",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Jen-Hsun_Huang_2025.jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Nvidia",
+      "https://en.wikipedia.org/wiki/NV1",
+      "https://en.wikipedia.org/wiki/RIVA_128",
+      "https://en.wikipedia.org/wiki/GeForce_256"
+    ],
+    "at25": "In 1988, Jensen Huang is an engineer at LSI Logic in Silicon Valley, after a first job designing microprocessors at AMD. He studies at night for a master's in electrical engineering from Stanford (1992) and will co-found Nvidia in 1993.",
+    "at25_sources": [
+      "https://en.wikipedia.org/wiki/Jensen_Huang",
+      "https://nvidianews.nvidia.com/bios/jensen-huang"
+    ]
+  },
+  {
+    "id": "rdj",
+    "name": "Robert Downey Jr.",
+    "headline": "From prison to Iron Man",
+    "category": "Film · United States",
+    "lowest": "Arrested in June 1996 with heroin, cocaine and a gun, he relapses again and again. In 1999, he is sentenced to three years at Corcoran state prison and his career seems ruined. After another arrest in 2001, he is fired from Ally McBeal.",
+    "comeback": "Sober, he lands the role of Tony Stark in Iron Man, released on May 2, 2008, which relaunches his career. In March 2024, he wins the Oscar for Best Supporting Actor for Oppenheimer.",
+    "lesson": "A career can be rebuilt.",
+    "wikipedia": "Robert Downey Jr.",
+    "photo": "photos/rdj.jpg",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/RobertDowneyJr-byPhilipRomano7_%28cropped%29.jpg/500px-RobertDowneyJr-byPhilipRomano7_%28cropped%29.jpg",
+    "image_credit": "PhilipRomano, CC BY-SA 4.0",
+    "image_license": "CC BY-SA 4.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:RobertDowneyJr-byPhilipRomano7_(cropped).jpg",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Robert_Downey_Jr.",
+      "https://www.oscars.org/oscars/ceremonies/2024"
+    ],
+    "at25": "In 1990, Robert Downey Jr. is a working Hollywood actor, known for Less Than Zero (1987). He co-stars with Mel Gibson in Air America (1990), and two years later earns his first Oscar nomination for Chaplin (1992).",
+    "at25_sources": [
+      "https://en.wikipedia.org/wiki/Robert_Downey_Jr.",
+      "https://en.wikipedia.org/wiki/Air_America_(film)"
     ]
   }
 ]

@@ -30,7 +30,10 @@ Les modules `lib/*.js` sont des **modules ES purs** (pas de JSX, pas d'import de
 | `lowest` | oui | L'épreuve (au plus bas), ≤ 400 caractères |
 | `comeback` | oui | Le retournement, ≤ 400 caractères |
 | `category` | non | « Domaine · Pays » |
-| `lesson` | non | Une phrase |
+| `headline` | non | Accroche affichée sous le nom, ≤ 120 caractères |
+| `at25` | non | Section « À 25 ANS », factuelle, ≤ 400 caractères (masquée si absente) |
+| `at25_sources` | non | URL justifiant `at25` |
+| `lesson` | non | Conservé dans les données, non affiché |
 | `wikipedia` | non | Titre exact de la page Wikipédia anglaise (repli photo) |
 | `photo` | non | Chemin relatif au dossier du widget, ex. `photos/mandela.jpg` |
 | `image_url` | non | URL https d'une vraie photographie (repli distant) |
@@ -54,7 +57,7 @@ Le widget n'exige que `id`, `name`, `lowest`, `comeback` (chaînes non vides). L
 ```js
 export const DATA_URL = 'https://raw.githubusercontent.com/aaxxeell09/Success/main/stories.json';
 export const SYNC_INTERVAL_MS = 5 * 60 * 1000;
-export const CACHE_KEY = 'mur-des-retournements-stories-cache-v1';
+export const CACHE_KEY = 'mur-des-retournements-stories-cache-v2';
 export function validateStories(data) // -> { stories: Story[], rejected: [{ index, id, reason }] }
 export function readCache(storage)    // -> { stories, savedAt } | null (ne lève jamais)
 export function writeCache(storage, stories, now) // ne lève jamais
@@ -72,9 +75,9 @@ Une seule requête en vol à la fois, délai d'expiration, URL anti-cache (`?t=`
 ## `lib/state.js` (état de l'interface)
 
 ```js
-export const SIZES = [{ key: 'S', width: 320 }, { key: 'M', width: 420 }, { key: 'L', width: 540 }];
+export const CARD_WIDTH = 420; // largeur fixe, réduite si l'écran est plus étroit
 export const ROTATION_MS = 20 * 60 * 1000;
-export const PREFS_KEY = 'mur-des-retournements-settings-v2';
+export const PREFS_KEY = 'mur-des-retournements-settings-v3';
 export function createInitialState(localStories, now)
 export function reducer(state, event)
 export function loadPrefs(storage)        // -> { currentId, size, paused } validés, ne lève jamais
@@ -82,10 +85,17 @@ export function savePrefs(storage, state) // ne lève jamais
 export function photoCandidates(story, wikiPhotos) // -> string[] (voir ordre ci-dessus)
 ```
 
-État : `{ stories, currentId, size (0..2), paused, lastAdvanceAt, photos, lastSync, syncError, source }`.
-Événements : `RESTORE {prefs, now}`, `NEXT {now}`, `PREV {now}`, `TICK {now}` (avance si non en pause et `now - lastAdvanceAt >= ROTATION_MS`), `SIZE {size}`, `TOGGLE_PAUSE {now}`, `DATA`, `SYNC_OK`, `SYNC_FAIL`, `PHOTOS {photos}`.
+État : `{ stories, currentId, paused, lastAdvanceAt, photos, lastSync, syncError, source }`.
+Événements : `RESTORE {prefs, now}`, `NEXT {now}`, `PREV {now}`, `TICK {now}` (avance si non en pause et `now - lastAdvanceAt >= ROTATION_MS`), `TOGGLE_PAUSE {now}`, `DATA`, `SYNC_OK`, `SYNC_FAIL`, `PHOTOS {photos}`.
 La personne courante est mémorisée par `id` (pas par index) : l'ajout d'une histoire ne déplace pas l'affichage. Si l'`id` disparaît, on revient à la première histoire. Navigation circulaire.
 
 ## Interaction Übersicht
 
 Les clics nécessitent le raccourci d'interaction d'Übersicht (Préférences → Interaction Shortcut) et l'autorisation Accessibilité. Le widget expose `refreshFrequency = SYNC_INTERVAL_MS`, `command(dispatch)` (appelle `syncNow`), `init(dispatch)` (cache, préférences, minuterie de rotation vérifiée chaque minute), `updateState`, `render`.
+
+## Version 2 (simplification)
+
+- `stories.json` est une **liste blanche** de 9 cartes (valdas, elon, mandela, trump, chesky, collison, pope, jose, thatcher) ; les autres histoires sont archivées dans `archive/stories-retirees.json`.
+- Plus de tailles S/M/L : `CARD_WIDTH = 420`, événement `SIZE` ignoré, préférences v3 `{ currentId, paused }` (migration depuis v2/v1, anciennes clés supprimées).
+- Cache v2 : l'ancien cache v1 (20 personnes) n'est plus relu.
+- Carte : pas de titre ni de crédit photo ; sections « AU PLUS BAS », « LE RETOURNEMENT », « À 25 ANS » (`data-role` low, high, at25) ; accroche `data-role="headline"` sur la photo ; 3 boutons.

@@ -66,7 +66,7 @@ Relancer `installer.command` est sans risque : il réinstalle la même version �
 
 ## 3. Autorisations : pouvoir cliquer sur le widget
 
-Übersicht place les widgets au niveau du bureau : par défaut, les clics passent « à travers ». Sans les deux réglages suivants, les flèches ‹ › , les tailles S/M/L et le bouton pause **ne fonctionnent pas** (la rotation automatique et la synchronisation, elles, fonctionnent).
+Übersicht place les widgets au niveau du bureau : par défaut, les clics passent « à travers ». Sans les deux réglages suivants, les flèches ‹ › et le bouton pause **ne fonctionnent pas** (la rotation automatique et la synchronisation, elles, fonctionnent).
 
 1. **Raccourci d'interaction** : cliquez sur l'icône Übersicht dans la barre des menus > **Preferences...** > **Interaction Shortcut**, et choisissez une touche (par exemple ⌘ ou ⌥). Ensuite, **maintenez cette touche enfoncée** pendant que vous cliquez sur le widget.
 2. **Accessibilité** : **Réglages Système > Confidentialité et sécurité > Accessibilité**, activez **Übersicht** (bouton « + » s'il n'apparaît pas). L'installateur peut ouvrir ce panneau directement ; à la main, dans le Terminal :

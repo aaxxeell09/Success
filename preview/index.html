@@ -45,9 +45,7 @@ body {
   transition: width .2s ease;
 }
 .wrap { overflow-wrap: anywhere; word-break: break-word; -webkit-hyphens: auto; hyphens: auto; }
-header.top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: calc(var(--pad) * .7) var(--pad) calc(var(--pad) * .6); }
-.brand { font-size: calc(var(--eyebrow) + .5px); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--title); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.status { display: flex; align-items: center; gap: 7px; flex-shrink: 0; font-size: calc(var(--eyebrow) + 1px); color: var(--muted); font-variant-numeric: tabular-nums; }
+.status { position: absolute; z-index: 2; top: calc(var(--pad) * .55); right: calc(var(--pad) * .65); display: flex; align-items: center; gap: 7px; padding: 5px 9px; border-radius: 999px; background: rgba(16,22,36,.62); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); font-size: calc(var(--eyebrow) + 1px); color: var(--text); font-variant-numeric: tabular-nums; }
 .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot, #8e8e93); box-shadow: 0 0 0 3px color-mix(in srgb, var(--dot, #8e8e93) 20%, transparent); }
 .offline { color: #ff9f0a; font-weight: 600; }
 .hero { position: relative; height: var(--photo); overflow: hidden; background: linear-gradient(135deg, #2b4266 0%, #1a2a44 100%); }
@@ -85,15 +83,12 @@ button svg { width: calc(var(--btn) * .5); height: calc(var(--btn) * .5); }
 </head>
 <body>
 <article id="card" aria-label="Le mur des retournements" lang="fr">
-  <header class="top">
-    <div class="brand">Le mur des retournements</div>
+  <section class="hero">
     <div class="status" id="status">
       <span class="offline" id="offline" hidden>hors connexion</span>
       <span class="dot" id="dot"></span>
       <span id="count">1 / 1</span>
     </div>
-  </header>
-  <section class="hero">
     <div class="initials" id="initials" aria-hidden="true"></div>
     <img id="photo" alt="" hidden />
     <div class="shade"></div>

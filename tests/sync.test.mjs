@@ -52,7 +52,7 @@ describe('constantes', () => {
   test('valeurs du contrat', () => {
     assert.equal(DATA_URL, 'https://raw.githubusercontent.com/aaxxeell09/Success/main/stories.json');
     assert.equal(SYNC_INTERVAL_MS, 300000);
-    assert.equal(CACHE_KEY, 'mur-des-retournements-stories-cache-v1');
+    assert.equal(CACHE_KEY, 'mur-des-retournements-stories-cache-v2');
   });
 });
 
@@ -145,10 +145,11 @@ describe('validateStories', () => {
     const r = validateStories([story('x', {
       category: 5, lesson: ['a'], wikipedia: { t: 1 }, image_credit: true, image_license: 3,
       photo: 7, image_url: 12, image_source: {}, sources: 'https://a.org',
+      at25: 25, at25_sources: 'https://a.org', headline: 8,
     })]);
     assert.equal(r.rejected.length, 0);
     assert.deepEqual(r.stories[0], story('x'));
-    assert.equal(r.warnings.length, 9);
+    assert.equal(r.warnings.length, 12);
     assert.ok(r.warnings.every((w) => w.id === 'x' && w.index === 0 && typeof w.field === 'string'));
   });
 
@@ -184,6 +185,50 @@ describe('validateStories', () => {
     assert.equal(r.warnings.length, 1);
     const empty = validateStories([story('y', { sources: [1, 2] })]);
     assert.equal(empty.stories[0].sources, undefined);
+  });
+
+  test('headline conservé (trim), vide ignoré, mauvais type retiré', () => {
+    const r = validateStories([story('x', { headline: '  8 ans de galère ' }), story('y', { headline: '   ' }), story('z', { headline: ['a'] })]);
+    assert.equal(r.stories[0].headline, '8 ans de galère');
+    assert.equal('headline' in r.stories[1], false);
+    assert.equal('headline' in r.stories[2], false);
+    assert.equal(r.warnings.length, 1);
+    assert.equal(r.warnings[0].field, 'headline');
+  });
+
+  test('at25 et at25_sources conservés (trim, filtrage comme sources)', () => {
+    const r = validateStories([story('x', {
+      at25: '  En 1996, il était étudiant.  ',
+      at25_sources: ['https://fr.wikipedia.org/wiki/X', 'http://b.org/p', 'https://fr.wikipedia.org/wiki/X', 'javascript:alert(1)', 4],
+    })]);
+    assert.equal(r.stories[0].at25, 'En 1996, il était étudiant.');
+    assert.deepEqual(r.stories[0].at25_sources, ['https://fr.wikipedia.org/wiki/X', 'http://b.org/p']);
+    assert.equal(r.warnings.length, 1);
+    assert.equal(r.warnings[0].field, 'at25_sources');
+  });
+
+  test('at25 et at25_sources de mauvais type retirés, histoire conservée', () => {
+    for (const [at25, at25_sources] of [[5, 'https://a.org'], [['a'], { u: 1 }], [{}, 7], [true, true]]) {
+      const r = validateStories([story('x', { at25, at25_sources })]);
+      assert.equal(r.rejected.length, 0);
+      assert.deepEqual(r.stories[0], story('x'));
+      assert.deepEqual(r.warnings.map((w) => w.field).sort(), ['at25', 'at25_sources']);
+    }
+  });
+
+  test('at25 vide, null ou sans adresse valide : champ absent sans rejet', () => {
+    const r = validateStories([story('x', { at25: '   ', at25_sources: [] }), story('y', { at25: null, at25_sources: null }), story('z', { at25_sources: [1, 'x'] })]);
+    assert.equal(r.stories.length, 3);
+    for (const st of r.stories) {
+      assert.equal('at25' in st, false);
+      assert.equal('at25_sources' in st, false);
+    }
+  });
+
+  test('at25 démesuré tronqué à MAX_TEXT_LENGTH', () => {
+    const r = validateStories([story('x', { at25: 'a'.repeat(MAX_TEXT_LENGTH + 10) })]);
+    assert.equal(Array.from(r.stories[0].at25).length, MAX_TEXT_LENGTH);
+    assert.equal(r.warnings[0].field, 'at25');
   });
 
   test('champs inconnus ignorés', () => {
@@ -244,7 +289,7 @@ describe('cache', () => {
     const storage = memoryStorage();
     assert.equal(writeCache(storage, [story('a')], 1234), true);
     assert.deepEqual(readCache(storage), { stories: [story('a')], savedAt: 1234 });
-    assert.equal(JSON.parse(storage.data[CACHE_KEY]).version, 1);
+    assert.equal(JSON.parse(storage.data[CACHE_KEY]).version, 2);
   });
 
   test('now peut être une fonction', () => {
@@ -279,6 +324,31 @@ describe('cache', () => {
   test('quota dépassé : writeCache ne lève pas et retourne false', () => {
     const storage = { getItem: () => null, setItem() { const e = new Error('QuotaExceededError'); e.name = 'QuotaExceededError'; throw e; } };
     assert.equal(writeCache(storage, [story('a')], 1), false);
+  });
+
+  test('ancien cache v1 (20 histoires) ignoré et supprimé', () => {
+    const v1 = 'mur-des-retournements-stories-cache-v1';
+    const old = JSON.stringify({ version: 1, savedAt: 5, stories: [story('dyson'), story('jobs')] });
+    const storage = memoryStorage({ [v1]: old });
+    assert.equal(readCache(storage), null);
+    assert.equal(v1 in storage.data, false);
+    const both = memoryStorage({ [v1]: old, [CACHE_KEY]: JSON.stringify({ version: 2, savedAt: 9, stories: [story('valdas')] }) });
+    assert.deepEqual(readCache(both), { stories: [story('valdas')], savedAt: 9 });
+    assert.equal(v1 in both.data, false);
+  });
+
+  test('suppression de l\'ancien cache qui lève : lecture v2 inchangée', () => {
+    const data = { [CACHE_KEY]: JSON.stringify({ savedAt: 1, stories: [story('a')] }) };
+    const storage = { getItem: (k) => (k in data ? data[k] : null), removeItem() { throw new Error('SecurityError'); } };
+    assert.deepEqual(readCache(storage), { stories: [story('a')], savedAt: 1 });
+  });
+
+  test('loadCached avec seulement un cache v1 : false, aucun événement', () => {
+    const events = [];
+    const storage = memoryStorage({ 'mur-des-retournements-stories-cache-v1': JSON.stringify({ savedAt: 1, stories: [story('jobs')] }) });
+    const syncer = createSyncer({ dispatch: (e) => events.push(e), storage, ...noRetry });
+    assert.equal(syncer.loadCached(), false);
+    assert.deepEqual(events, []);
   });
 
   test('liste vide ou non tableau : rien n\'est écrit', () => {
@@ -616,6 +686,7 @@ describe('cohérence avec schema/stories.schema.json', () => {
     const all = story('x', {
       category: 'c', lesson: 'l', wikipedia: 'w', photo: 'photos/x.jpg', image_url: 'https://a.org/x.jpg',
       image_credit: 'c', image_license: 'l', image_source: 'https://a.org/f', sources: ['https://a.org'],
+      at25: 'En 2000, x.', at25_sources: ['https://a.org/b'], headline: 'h',
     });
     const kept = Object.keys(validateStories([all]).stories[0]).sort();
     assert.deepEqual(kept, Object.keys(def.properties).sort());

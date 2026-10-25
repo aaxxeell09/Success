@@ -8,7 +8,10 @@
 
 export const DATA_URL = 'https://raw.githubusercontent.com/aaxxeell09/Success/main/stories.json';
 export const SYNC_INTERVAL_MS = 5 * 60 * 1000;
-export const CACHE_KEY = 'mur-des-retournements-stories-cache-v1';
+// v2 : liste blanche à 9 cartes. L'ancien cache v1 (20 histoires) n'est plus relu,
+// afin qu'aucune personne retirée ne réapparaisse.
+export const CACHE_KEY = 'mur-des-retournements-stories-cache-v2';
+export const LEGACY_CACHE_KEYS = ['mur-des-retournements-stories-cache-v1'];
 
 // Délai d'expiration d'une requête distante.
 export const FETCH_TIMEOUT_MS = 15 * 1000;
@@ -23,7 +26,9 @@ export const MAX_SOURCES = 20;
 
 const ID_PATTERN = /^[a-z0-9-]+$/;
 const REQUIRED_FIELDS = ['name', 'lowest', 'comeback'];
-const OPTIONAL_TEXT_FIELDS = ['category', 'lesson', 'wikipedia', 'image_credit', 'image_license'];
+const OPTIONAL_TEXT_FIELDS = ['category', 'headline', 'lesson', 'wikipedia', 'image_credit', 'image_license', 'at25'];
+// Tableaux d'adresses http(s) : `sources` justifie l'histoire, `at25_sources` le texte « À 25 ans ».
+const URL_LIST_FIELDS = ['sources', 'at25_sources'];
 const HTTPS_URL_FIELDS = ['image_url', 'image_source'];
 
 function isPlainObject(value) {
@@ -165,20 +170,23 @@ export function validateStories(data) {
       }
     }
 
-    if ('sources' in item && item.sources !== null && item.sources !== undefined) {
-      if (!Array.isArray(item.sources)) {
-        warnings.push({ index: index, id: id, field: 'sources', reason: 'Champ retiré : tableau d\'adresses attendu' });
-      } else {
-        const kept = [];
-        let dropped = 0;
-        for (let s = 0; s < item.sources.length; s += 1) {
-          const src = typeof item.sources[s] === 'string' ? item.sources[s].trim() : item.sources[s];
-          if (isHttpUrl(src) && kept.indexOf(src) === -1 && kept.length < MAX_SOURCES) kept.push(src);
-          else dropped += 1;
-        }
-        if (dropped > 0) warnings.push({ index: index, id: id, field: 'sources', reason: dropped + ' adresse(s) invalide(s), en double ou en trop retirée(s)' });
-        if (kept.length > 0) story.sources = kept;
+    for (let f = 0; f < URL_LIST_FIELDS.length; f += 1) {
+      const field = URL_LIST_FIELDS[f];
+      if (!(field in item) || item[field] === null || item[field] === undefined) continue;
+      if (!Array.isArray(item[field])) {
+        warnings.push({ index: index, id: id, field: field, reason: 'Champ retiré : tableau d\'adresses attendu' });
+        continue;
       }
+      const list = item[field];
+      const kept = [];
+      let dropped = 0;
+      for (let s = 0; s < list.length; s += 1) {
+        const src = typeof list[s] === 'string' ? list[s].trim() : list[s];
+        if (isHttpUrl(src) && kept.indexOf(src) === -1 && kept.length < MAX_SOURCES) kept.push(src);
+        else dropped += 1;
+      }
+      if (dropped > 0) warnings.push({ index: index, id: id, field: field, reason: dropped + ' adresse(s) invalide(s), en double ou en trop retirée(s)' });
+      if (kept.length > 0) story[field] = kept;
     }
 
     seen[id] = { index: index };
@@ -197,12 +205,22 @@ function resolveStorage(storage) {
   }
 }
 
+// Supprime les anciennes clés de cache (v1). Ne lève jamais.
+function removeLegacyCaches(store) {
+  if (!store || typeof store.removeItem !== 'function') return;
+  for (let i = 0; i < LEGACY_CACHE_KEYS.length; i += 1) {
+    try { store.removeItem(LEGACY_CACHE_KEYS[i]); } catch (_) { /* rien */ }
+  }
+}
+
 // Lit le cache. Retour : { stories, savedAt } ou null. Ne lève jamais.
 // Le cache n'est retenu que s'il contient au moins une histoire valide.
+// Seule CACHE_KEY (v2) est relue ; l'ancien cache v1 est ignoré puis supprimé.
 export function readCache(storage) {
   try {
     const store = resolveStorage(storage);
     if (!store || typeof store.getItem !== 'function') return null;
+    removeLegacyCaches(store);
     const raw = store.getItem(CACHE_KEY);
     if (typeof raw !== 'string' || raw === '') return null;
     const parsed = JSON.parse(raw);
@@ -223,7 +241,7 @@ export function writeCache(storage, stories, now) {
     if (!store || typeof store.setItem !== 'function') return false;
     if (!Array.isArray(stories) || stories.length === 0) return false;
     const savedAt = typeof now === 'number' ? now : (typeof now === 'function' ? now() : Date.now());
-    store.setItem(CACHE_KEY, JSON.stringify({ version: 1, savedAt: savedAt, stories: stories }));
+    store.setItem(CACHE_KEY, JSON.stringify({ version: 2, savedAt: savedAt, stories: stories }));
     return true;
   } catch (_) {
     return false;

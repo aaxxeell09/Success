@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Validation de stories.json selon le schéma de docs/ARCHITECTURE.md.
+"""Validation de stories.json selon le schéma de docs/ARCHITECTURE.md et le contrat v2.
+
+Liste blanche stricte (WHITELIST, ordre compris), photo, crédit et licence
+obligatoires, champ optionnel at25 (et at25_sources), archive des histoires
+retirées sans id commun avec stories.json, champ optionnel headline (≤ 120).
 
 Usage : python3 tests/validate_stories.py [racine_du_depot]
 Code de sortie 0 si tout est valide, 1 sinon (toutes les erreurs sont listées).
@@ -13,14 +17,22 @@ ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).reso
 WIDGET = ROOT / 'widget' / 'mur-des-retournements.widget'
 DATA_URL = 'https://raw.githubusercontent.com/aaxxeell09/Success/main/stories.json'
 
+ARCHIVE = ROOT / 'archive' / 'stories-retirees.json'
+
+# Liste blanche stricte : exactement ces ids, dans cet ordre.
+WHITELIST = ('valdas', 'elon', 'mandela', 'trump', 'chesky', 'collison', 'pope', 'jose', 'thatcher')
+
 REQUIRED = ('id', 'name', 'lowest', 'comeback')
+# Toujours exigés dans les données (même s'ils ne sont plus affichés sur la carte).
+REQUIRED_MEDIA = ('photo', 'image_credit', 'image_license')
 OPTIONAL_STR = ('category', 'lesson', 'wikipedia', 'photo', 'image_url',
-                'image_credit', 'image_license', 'image_source')
+                'image_credit', 'image_license', 'image_source', 'at25', 'headline')
 HTTPS_FIELDS = ('image_url', 'image_source')
 MAX_TEXT = 400
+MAX_HEADLINE = 120
 ID_RE = re.compile(r'^[a-z0-9-]+$')
 DASHES = {'—': 'tiret cadratin', '–': 'tiret demi-cadratin'}
-KNOWN = set(REQUIRED) | set(OPTIONAL_STR) | {'sources'}
+KNOWN = set(REQUIRED) | set(OPTIONAL_STR) | {'sources', 'at25_sources'}
 
 errors = []
 warnings = []
@@ -75,10 +87,13 @@ def check_story(index, item, ids):
         if sid in ids:
             err(f'ID dupliqué : {sid}')
         ids.add(sid)
-    for key in ('lowest', 'comeback'):
+    for key in ('lowest', 'comeback', 'at25'):
         value = item.get(key)
         if isinstance(value, str) and len(value) > MAX_TEXT:
             err(f'{label} : texte trop long pour {key} ({len(value)} > {MAX_TEXT})')
+    headline = item.get('headline')
+    if isinstance(headline, str) and len(headline) > MAX_HEADLINE:
+        err(f'{label} : texte trop long pour headline ({len(headline)} > {MAX_HEADLINE})')
     for key in OPTIONAL_STR:
         if key in item:
             value = item[key]
@@ -87,14 +102,19 @@ def check_story(index, item, ids):
     for key in HTTPS_FIELDS:
         if isinstance(item.get(key), str) and item[key].strip() and not is_https(item[key]):
             err(f'{label} : {key} doit être une URL https')
-    if 'sources' in item:
-        sources = item['sources']
-        if not isinstance(sources, list) or not all(isinstance(s, str) for s in sources):
-            err(f'{label} : sources doit être un tableau de chaînes')
-        else:
-            for s in sources:
-                if not is_https(s):
-                    err(f'{label} : source non https : {s}')
+    for key in ('sources', 'at25_sources'):
+        if key in item:
+            sources = item[key]
+            if not isinstance(sources, list) or not all(isinstance(s, str) for s in sources):
+                err(f'{label} : {key} doit être un tableau de chaînes')
+            else:
+                for s in sources:
+                    if not is_https(s):
+                        err(f'{label} : {key} : URL non https : {s}')
+    for key in REQUIRED_MEDIA:
+        value = item.get(key)
+        if not isinstance(value, str) or not value.strip():
+            err(f'{label} : {key} requis (photo authentique avec crédit et licence)')
     photo = item.get('photo')
     if isinstance(photo, str) and photo.strip():
         rel = Path(photo)
@@ -102,13 +122,39 @@ def check_story(index, item, ids):
             err(f'{label} : photo doit être un chemin relatif au dossier du widget')
         elif not (WIDGET / rel).is_file():
             err(f'{label} : photo introuvable : widget/mur-des-retournements.widget/{photo}')
-        for key in ('image_credit', 'image_license'):
-            if not isinstance(item.get(key), str) or not item[key].strip():
-                err(f'{label} : {key} requis quand photo est renseigné')
     unknown = set(item) - KNOWN
     if unknown:
         warnings.append(f'{label} : champs non documentés : {", ".join(sorted(unknown))}')
     check_dashes(item, label)
+
+
+def check_whitelist(data):
+    ids = [item.get('id') for item in data if isinstance(item, dict)]
+    extra = [i for i in ids if i not in WHITELIST]
+    missing = [i for i in WHITELIST if i not in ids]
+    if extra:
+        err(f'liste blanche : id(s) non autorisé(s) : {", ".join(map(str, extra))}')
+    if missing:
+        err(f'liste blanche : id(s) manquant(s) : {", ".join(missing)}')
+    if not extra and not missing and tuple(ids) != WHITELIST:
+        err(f'liste blanche : ordre attendu {", ".join(WHITELIST)}, reçu {", ".join(ids)}')
+
+
+def check_archive(data):
+    if not ARCHIVE.exists():
+        return
+    archived = load(ARCHIVE)
+    if archived is None:
+        return
+    if not isinstance(archived, list):
+        err('archive/stories-retirees.json doit être un tableau')
+        return
+    current = {item.get('id') for item in data if isinstance(item, dict)}
+    archived_ids = {item.get('id') for item in archived if isinstance(item, dict)}
+    common = sorted(i for i in current & archived_ids if isinstance(i, str))
+    if common:
+        err(f'archive/stories-retirees.json : id(s) aussi présent(s) dans stories.json : {", ".join(common)}')
+    check_dashes(archived, 'archive')
 
 
 def main():
@@ -120,6 +166,8 @@ def main():
             ids = set()
             for index, item in enumerate(data):
                 check_story(index, item, ids)
+            check_whitelist(data)
+            check_archive(data)
         local = load(WIDGET / 'stories.json')
         if local is not None and local != data:
             err('La copie locale du widget ne correspond pas à la source')
@@ -138,7 +186,7 @@ def main():
             print(f'ERREUR : {e}', file=sys.stderr)
         print(f'ÉCHEC : {len(errors)} erreur(s)', file=sys.stderr)
         return 1
-    print(f'OK: {len(data)} histoires vérifiées ; copie locale identique')
+    print(f'OK: {len(data)} histoires vérifiées (liste blanche respectée) ; copie locale identique')
     return 0
 
 

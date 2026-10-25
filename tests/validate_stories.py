@@ -22,7 +22,7 @@ DATA_URL = 'https://raw.githubusercontent.com/aaxxeell09/Success/main/stories.js
 ARCHIVE = ROOT / 'archive' / 'stories-retirees.json'
 
 # Liste blanche stricte : exactement ces ids, dans cet ordre.
-WHITELIST = ('valdas', 'elon', 'mandela', 'trump', 'chesky', 'collison', 'pope', 'jose', 'thatcher')
+WHITELIST = ('valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj')
 
 REQUIRED = ('id', 'name', 'lowest', 'comeback')
 # Toujours exigés dans les données (même s'ils ne sont plus affichés sur la carte).

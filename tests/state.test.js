@@ -1,5 +1,5 @@
 // Tests du module pur widget/mur-des-retournements.widget/lib/state.js
-// selon le contrat v2 (plus de taille, CARD_WIDTH, préférences v3). Lancement : node --test tests/
+// selon le contrat v3 (plus de taille, carte fixe CARD_WIDTH x CARD_HEIGHT, préférences v3). Lancement : node --test tests/
 import test, { describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
@@ -11,7 +11,7 @@ const STATE_PATH = path.join(ROOT, 'widget/mur-des-retournements.widget/lib/stat
 
 assert.ok(existsSync(STATE_PATH), `Module introuvable : ${STATE_PATH} (exigé par docs/ARCHITECTURE.md)`);
 const mod = await import(pathToFileURL(STATE_PATH).href);
-const { CARD_WIDTH, ROTATION_MS, PREFS_KEY, createInitialState, reducer, loadPrefs, savePrefs, photoCandidates } = mod;
+const { CARD_WIDTH, CARD_HEIGHT, ROTATION_MS, PREFS_KEY, createInitialState, reducer, loadPrefs, savePrefs, photoCandidates } = mod;
 
 const PREFS_V2 = 'mur-des-retournements-settings-v2';
 const PREFS_V1 = 'mur-des-retournements-settings-v1';
@@ -65,8 +65,9 @@ const assertValidPrefs = (p) => {
 };
 
 describe('constantes du contrat', () => {
-  test('CARD_WIDTH, ROTATION_MS, PREFS_KEY', () => {
-    assert.equal(CARD_WIDTH, 420);
+  test('CARD_WIDTH, CARD_HEIGHT, ROTATION_MS, PREFS_KEY', () => {
+    assert.equal(CARD_WIDTH, 350);
+    assert.equal(CARD_HEIGHT, 490);
     assert.equal(ROTATION_MS, 20 * 60 * 1000);
     assert.equal(PREFS_KEY, 'mur-des-retournements-settings-v3');
   });

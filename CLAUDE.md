@@ -6,7 +6,10 @@
 - Ce projet utilise **Übersicht**, pas un fond d'écran statique ni un widget natif Apple.
 
 ## Objectif produit
-Widget permanent sur le bureau macOS, une personnalité à la fois : vraie photo, nom, épreuve (« Au plus bas »), retournement. Flèches précédent/suivant, tailles S/M/L, rotation 20 minutes, pause, préférences mémorisées. `stories.json` sur `main` est la source de vérité : lecture depuis GitHub toutes les 5 minutes, cache local et copie embarquée en repli hors connexion.
+Widget permanent sur le bureau macOS, une personnalité à la fois : vraie photo, nom, épreuve (« Au plus bas »), retournement. Carte minimaliste : pas de titre ni de crédit affiché, accroche, sections « AU PLUS BAS », « LE RETOURNEMENT », « À 25 ANS ». Largeur fixe 420 px (réduite si écran étroit), 3 boutons : précédent, suivant, pause. Rotation 20 minutes, personne et pause mémorisées. `stories.json` sur `main` est la source de vérité : lecture depuis GitHub toutes les 5 minutes, cache local et copie embarquée en repli hors connexion.
+
+## Liste blanche
+`stories.json` = 9 cartes choisies par l'utilisateur (valdas, elon, mandela, trump, chesky, collison, pope, jose, thatcher), vérifiées par `WHITELIST` dans `tests/validate_stories.py`. N'ajouter AUCUNE personne de sa propre initiative ; les histoires retirées sont dans `archive/stories-retirees.json`. Textes « Au plus bas » / « Le retournement » de 7 cartes fournis par l'utilisateur : ne pas les reformuler. Champ `at25` : factuel et sourcé (`at25_sources`, détails dans `docs/A-25-ANS.md`), jamais inventé.
 
 ## Architecture (détails : docs/ARCHITECTURE.md)
 - `widget/mur-des-retournements.widget/mur-des-retournements.jsx` : point d'entrée Übersicht (UI, bloc CONFIG personnalisable).
@@ -35,7 +38,7 @@ npm install && npm test
 (`node --test 'tests/*.test.*js'`, `python3 tests/validate_stories.py`, `tests/static_checks.sh`, `tests/install.test.sh`). Le test de rendu est sauté si esbuild, React ou Playwright manquent.
 
 ## Ajouter une histoire
-Modifier `stories.json` ET la copie du widget (identiques), photo dans `widget/.../photos/<id>.jpg` avec crédit et licence, puis `npm test`. Une histoire ajoutée seulement dans `stories.json` sur GitHub apparaît quand même sur les Mac installés (photo via `image_url` ou le chemin `photo` lu sur GitHub).
+Seulement à la demande explicite de l'utilisateur (puis ajouter l'id à `WHITELIST`). Modifier `stories.json` ET la copie du widget (identiques), photo dans `widget/.../photos/<id>.jpg` avec crédit et licence, puis `npm test`. Une histoire ajoutée seulement dans `stories.json` sur GitHub apparaît quand même sur les Mac installés (photo via `image_url` ou le chemin `photo` lu sur GitHub).
 
 ## Suites
 - Tester affichage et clics sur un vrai Mac avec Übersicht.

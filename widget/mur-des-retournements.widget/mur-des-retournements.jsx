@@ -180,12 +180,14 @@ const startRotationTimer = () => {
 
 export const init = (dispatch) => {
   const s = ensureSyncer(dispatch);
-  try { s.loadCached(); } catch (_) { /* cache illisible : on garde les données embarquées */ }
+  // Préférences lues AVANT le cache : le DATA du cache ne doit pas les écraser.
   const prefs = loadPrefs(getStorage(), {
     size: CONFIG.defaultSize,
     paused: !CONFIG.rotationEnabledByDefault,
   });
+  try { s.loadCached(); } catch (_) { /* cache illisible : on garde les données embarquées */ }
   dispatch({ type: 'RESTORE', prefs, now: Date.now() });
+  prefsRestored = true;
   fetchWikiPhotos(localStories);
   startRotationTimer();
 };
@@ -197,11 +199,13 @@ export const command = (dispatch) => {
 
 // Événements après lesquels la personne courante, la taille ou la pause
 // peuvent changer : on enregistre alors les préférences.
+let prefsRestored = false;
 const PERSISTED = new Set(['NEXT', 'PREV', 'TICK', 'SIZE', 'TOGGLE_PAUSE', 'DATA']);
 
 export const updateState = (event, previousState) => {
   const next = reducer(previousState || initialState, event);
-  if (event && PERSISTED.has(event.type) && next !== previousState) savePrefs(getStorage(), next);
+  if (event && event.type === 'RESTORE') prefsRestored = true;
+  if (prefsRestored && event && PERSISTED.has(event.type) && next !== previousState) savePrefs(getStorage(), next);
   return next;
 };
 

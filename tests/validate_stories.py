@@ -4,6 +4,8 @@
 Liste blanche stricte (WHITELIST, ordre compris), photo, crédit et licence
 obligatoires, champ optionnel at25 (et at25_sources), archive des histoires
 retirées sans id commun avec stories.json, champ optionnel headline (≤ 120).
+Contrat v5 (aucun défilement) : nombre de mots limité (headline ≤ 7, lowest ≤ 24,
+comeback ≤ 24, at25 ≤ 18).
 Contrat v3 (widget en anglais) : les champs affichés ne contiennent pas de mots
 français évidents, et la catégorie de thatcher vaut « Politics · United Kingdom ».
 
@@ -22,7 +24,8 @@ DATA_URL = 'https://raw.githubusercontent.com/aaxxeell09/Success/main/stories.js
 ARCHIVE = ROOT / 'archive' / 'stories-retirees.json'
 
 # Liste blanche stricte : exactement ces ids, dans cet ordre.
-WHITELIST = ('valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj')
+WHITELIST = ('valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj',
+             'disney', 'ford')
 
 REQUIRED = ('id', 'name', 'lowest', 'comeback')
 # Toujours exigés dans les données (même s'ils ne sont plus affichés sur la carte).
@@ -32,6 +35,8 @@ OPTIONAL_STR = ('category', 'lesson', 'wikipedia', 'photo', 'image_url',
 HTTPS_FIELDS = ('image_url', 'image_source')
 MAX_TEXT = 400
 MAX_HEADLINE = 120
+# Contrat v5 (aucun défilement) : nombre maximal de mots (séparés par des espaces).
+MAX_WORDS = {'headline': 7, 'lowest': 24, 'comeback': 24, 'at25': 18}
 ID_RE = re.compile(r'^[a-z0-9-]+$')
 DASHES = {'—': 'tiret cadratin', '–': 'tiret demi-cadratin'}
 # Contrat v3 : textes affichés en anglais.
@@ -101,6 +106,12 @@ def check_story(index, item, ids):
     headline = item.get('headline')
     if isinstance(headline, str) and len(headline) > MAX_HEADLINE:
         err(f'{label} : texte trop long pour headline ({len(headline)} > {MAX_HEADLINE})')
+    for key, limit in MAX_WORDS.items():
+        value = item.get(key)
+        if isinstance(value, str):
+            words = len(value.split())
+            if words > limit:
+                err(f'{label} : trop de mots pour {key} ({words} > {limit}) : le texte ne tiendrait pas sur la carte sans défilement')
     for key in OPTIONAL_STR:
         if key in item:
             value = item[key]

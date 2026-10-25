@@ -1,6 +1,6 @@
 // Vérifie que tests/validate_stories.py détecte bien chaque défaut du schéma
 // et des contrats v2/v3 (liste blanche, at25, photo et crédit obligatoires, archive,
-// textes affichés en anglais, catégorie de thatcher),
+// textes affichés en anglais, catégorie de thatcher, limites de mots du contrat v5),
 // sur des dépôts factices créés dans un dossier temporaire.
 import test, { describe } from 'node:test';
 import assert from 'node:assert/strict';
@@ -13,7 +13,11 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SCRIPT = path.join(HERE, 'validate_stories.py');
 const DATA_URL = 'https://raw.githubusercontent.com/aaxxeell09/Success/main/stories.json';
-const WHITELIST = ['valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj'];
+const WHITELIST = ['valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj', 'disney', 'ford'];
+const N = WHITELIST.length;
+// Contrat v5 : nombre maximal de mots (séparés par des espaces) par champ affiché.
+const MAX_WORDS = { headline: 7, lowest: 24, comeback: 24, at25: 18 };
+const words = (n) => Array.from({ length: n }, (_, i) => `word${i + 1}`).join(' ');
 
 const python = ['python3', 'python'].find((p) => spawnSync(p, ['--version']).status === 0);
 
@@ -30,7 +34,7 @@ const entry = (id) => ({
   image_source: `https://commons.wikimedia.org/wiki/File:${id}.jpg`,
   sources: [`https://fr.wikipedia.org/wiki/${id}`],
 });
-// Les 10 histoires de la liste blanche, dans l'ordre.
+// Les N histoires de la liste blanche, dans l'ordre.
 const base = () => WHITELIST.map(entry);
 // Modifie la 3e histoire (mandela).
 const withM = (patch) => base().map((s) => (s.id === 'mandela' ? { ...s, ...patch } : s));
@@ -72,9 +76,9 @@ const expectFail = (stories, pattern, opts) => {
 };
 
 describe('validate_stories.py', { skip: python ? false : 'python3 indisponible' }, () => {
-  test('données conformes acceptées (10 histoires de la liste blanche)', () => {
+  test(`données conformes acceptées (${N} histoires de la liste blanche)`, () => {
     const out = expectOk(base(), { sync: `export const DATA_URL = '${DATA_URL}';\n` });
-    assert.match(out, /OK: 10 histoires/);
+    assert.match(out, new RegExp(`OK: ${N} histoires`));
   });
   test('optionnels absents ou présents acceptés (wikipedia, category, sources, at25, headline)', () => {
     expectOk(base().map(({ wikipedia, category, sources, image_source, ...rest }) => (rest.id === 'thatcher' ? { ...rest, category } : rest)));
@@ -140,6 +144,30 @@ describe('validate_stories.py', { skip: python ? false : 'python3 indisponible' 
     test('headline vide refusé', () => expectFail(withM({ headline: ' ' }), /headline/));
     test('headline non textuel refusé', () => expectFail(withM({ headline: 3 }), /headline/));
     test('headline avec tiret cadratin refusé', () => expectFail(withM({ headline: 'Prisonnier — président' }), /cadratin/));
+  });
+
+  describe('contrat v5 : limites de mots (aucun défilement)', () => {
+    for (const [key, max] of Object.entries(MAX_WORDS)) {
+      test(`${key} de ${max} mots accepté`, () => expectOk(withM({ [key]: words(max) })));
+      test(`${key} de ${max + 1} mots refusé`, () => expectFail(withM({ [key]: words(max + 1) }),
+        new RegExp(`mandela.*trop de mots pour ${key} \\(${max + 1} > ${max}\\)`)));
+    }
+    test('mots comptés sur les espaces (espaces multiples et retours à la ligne ignorés)', () => {
+      expectOk(withM({ lowest: `  ${words(MAX_WORDS.lowest).split(' ').join('   ')}\n` }));
+      expectFail(withM({ comeback: words(MAX_WORDS.comeback + 1).split(' ').join('\n') }), /trop de mots pour comeback/);
+    });
+    test('ponctuation collée au mot : un seul mot (« 1990, »)', () => {
+      expectOk(withM({ headline: 'Freed in 1990, president by 1994.' }));
+    });
+    test('plusieurs champs trop longs : chaque erreur listée', () => {
+      const { code, out } = validate(makeRepo(withM({ lowest: words(30), at25: words(19) })));
+      assert.equal(code, 1, out);
+      assert.match(out, /trop de mots pour lowest \(30 > 24\)/);
+      assert.match(out, /trop de mots pour at25 \(19 > 18\)/);
+    });
+    test('name et catégorie non concernés par les limites de mots', () => {
+      expectOk(withM({ name: words(12) }));
+    });
   });
 
   describe('archive des histoires retirées', () => {

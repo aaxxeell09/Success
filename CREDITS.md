@@ -6,19 +6,20 @@ Toutes les photos sont de vraies photographies issues de Wikimedia Commons (aucu
 
 Les crédits ne sont plus affichés sur la carte du widget : ils restent consultables dans ce fichier et dans les champs `image_credit`, `image_license` et `image_source` de `stories.json`, ce qui garantit, conformément aux licences CC BY et CC BY-SA, l'accès à l'attribution, à la licence et au lien vers la source.
 
-### Photos affichées (9)
+### Photos affichées (10)
 
 | Personne | Fichier | Auteur | Licence | Source |
 |---|---|---|---|---|
 | Valdas Dambrauskas | `photos/valdas.jpg` | Biser Todorov | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.fr) | [Valdas Dambrauskas.jpg](https://commons.wikimedia.org/wiki/File:Valdas_Dambrauskas.jpg) |
 | Elon Musk | `photos/elon.jpg` | Gage Skidmore | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) | [Elon Musk - 54820081119 (cropped).jpg](https://commons.wikimedia.org/wiki/File:Elon_Musk_-_54820081119_(cropped).jpg) |
 | Nelson Mandela | `photos/mandela.jpg` | Kingkongphoto & www.celebrity-photos.com | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/deed.fr) | [Nelson Mandela 1994.jpg](https://commons.wikimedia.org/wiki/File:Nelson_Mandela_1994.jpg) |
-| Donald Trump | `photos/trump.jpg` | Daniel Torok | [Domaine public](https://commons.wikimedia.org/wiki/File:Official_Presidential_Portrait_of_President_Donald_J._Trump_(2025).jpg) | [Official Presidential Portrait of President Donald J. Trump (2025).jpg](https://commons.wikimedia.org/wiki/File:Official_Presidential_Portrait_of_President_Donald_J._Trump_(2025).jpg) |
 | Brian Chesky | `photos/chesky.jpg` | Celeste Sloman | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) | [Brian Chesky 2025.jpg](https://commons.wikimedia.org/wiki/File:Brian_Chesky_2025.jpg) |
 | Patrick et John Collison (photo : Patrick) | `photos/collison.jpg` | JD Lasica | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/deed.fr) | [Patrick Collison (cropped).jpg](https://commons.wikimedia.org/wiki/File:Patrick_Collison_(cropped).jpg) |
 | Léon XIV (Robert Prevost) | `photos/pope.jpg` | Edgar Beltrán (The Pillar) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) | [Pope Leo XIV 3 (3x4 cropped).png](https://commons.wikimedia.org/wiki/File:Pope_Leo_XIV_3_(3x4_cropped).png) |
 | José Hernández | `photos/jose.jpg` | NASA | [Domaine public](https://commons.wikimedia.org/wiki/File:Jose_Hernandez_v2.jpg) | [Jose Hernandez v2.jpg](https://commons.wikimedia.org/wiki/File:Jose_Hernandez_v2.jpg) |
 | Margaret Thatcher | `photos/thatcher.jpg` | Margaret Thatcher Foundation (recadrage : Begoon) | [Libre de droits (Copyrighted free use)](https://commons.wikimedia.org/wiki/File:Margaret_Thatcher_stock_portrait_(cropped).jpg) | [Margaret Thatcher stock portrait (cropped).jpg](https://commons.wikimedia.org/wiki/File:Margaret_Thatcher_stock_portrait_(cropped).jpg) |
+| Jensen Huang | `photos/jensen.jpg` | Daniel Torok (Maison-Blanche) | [Domaine public](https://commons.wikimedia.org/wiki/File:Jen-Hsun_Huang_2025.jpg) | [Jen-Hsun Huang 2025.jpg](https://commons.wikimedia.org/wiki/File:Jen-Hsun_Huang_2025.jpg) |
+| Robert Downey Jr. | `photos/rdj.jpg` | PhilipRomano | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) | [RobertDowneyJr-byPhilipRomano7 (cropped).jpg](https://commons.wikimedia.org/wiki/File:RobertDowneyJr-byPhilipRomano7_(cropped).jpg) |
 
 ### Photos archivées (non affichées)
 
@@ -27,9 +28,7 @@ Ces photos correspondent aux histoires retirées du widget et conservées dans `
 | Personne | Fichier | Auteur | Licence | Source |
 |---|---|---|---|---|
 | Katalin Karikó | `photos/kariko.jpg` | Christopher Michel | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) | [Katalin Karik%C3%B3 by Christopher Michel in 2024 02.jpg](https://commons.wikimedia.org/wiki/File:Katalin_Karik%C3%B3_by_Christopher_Michel_in_2024_02.jpg) |
-| Robert Downey Jr. | `photos/rdj.jpg` | PhilipRomano | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) | [RobertDowneyJr-byPhilipRomano7 (cropped).jpg](https://commons.wikimedia.org/wiki/File:RobertDowneyJr-byPhilipRomano7_(cropped).jpg) |
 | John Paul DeJoria | `photos/dej.jpg` | Gage Skidmore | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/deed.fr) | [John Paul DeJoria by Gage Skidmore.jpg](https://commons.wikimedia.org/wiki/File:John_Paul_DeJoria_by_Gage_Skidmore.jpg) |
-| Jensen Huang | `photos/jensen.jpg` | Daniel Torok (Maison-Blanche) | [Domaine public](https://commons.wikimedia.org/wiki/File:Jen-Hsun_Huang_2025.jpg) | [Jen-Hsun Huang 2025.jpg](https://commons.wikimedia.org/wiki/File:Jen-Hsun_Huang_2025.jpg) |
 | James Dyson | `photos/dyson.jpg` | The Royal Society | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) | [Sir James Dyson CBE FREng FRS.jpg](https://commons.wikimedia.org/wiki/File:Sir_James_Dyson_CBE_FREng_FRS.jpg) |
 | Melanie Perkins | `photos/melanie.jpg` | Melanie Perkins (Flickr) | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/deed.fr) | [M Perkins.jpg](https://commons.wikimedia.org/wiki/File:M_Perkins.jpg) |
 | Steve Jobs | `photos/jobs.jpg` | Matthew Yohe | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/deed.fr) | [Steve Jobs Headshot 2010 (cropped 4).jpg](https://commons.wikimedia.org/wiki/File:Steve_Jobs_Headshot_2010_(cropped_4).jpg) |
@@ -37,6 +36,7 @@ Ces photos correspondent aux histoires retirées du widget et conservées dans `
 | Phil Knight | `photos/knight.jpg` | Neon Tommy | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/deed.fr) | [Philknightfootball.jpg](https://commons.wikimedia.org/wiki/File:Philknightfootball.jpg) |
 | Jan Koum | `photos/jan.jpg` | Dan Taylor (Tech.eu) | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/deed.fr) | [Jan Koum - Whatsapp - 4 Years from Now (12791516533).jpg](https://commons.wikimedia.org/wiki/File:Jan_Koum_-_Whatsapp_-_4_Years_from_Now_(12791516533).jpg) |
 | Xavier Niel | `photos/niel.jpg` | Christopher Michel | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/deed.fr) | [Xavier Niel004.jpg](https://commons.wikimedia.org/wiki/File:Xavier_Niel004.jpg) |
+| Donald Trump | `photos/trump.jpg` | Daniel Torok | [Domaine public](https://commons.wikimedia.org/wiki/File:Official_Presidential_Portrait_of_President_Donald_J._Trump_(2025).jpg) | [Official Presidential Portrait of President Donald J. Trump (2025).jpg](https://commons.wikimedia.org/wiki/File:Official_Presidential_Portrait_of_President_Donald_J._Trump_(2025).jpg) |
 
 Pour les images du domaine public ou en « Copyrighted free use », le lien de licence renvoie à la page Commons qui détaille le statut (œuvre du gouvernement fédéral américain, publication sans mention de copyright, autorisation du titulaire).
 

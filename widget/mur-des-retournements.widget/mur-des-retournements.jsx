@@ -212,6 +212,9 @@ export const updateState = (event, previousState) => {
 // ---------------------------------------------------------------------------
 // Rendu
 // ---------------------------------------------------------------------------
+// Couleur d'étiquette de « À 25 ANS » (lavande sobre), remplaçable par CONFIG.theme.at25.
+const AT25_COLOR = '#b9b8f2';
+
 // Les textes affichés n'utilisent ni tiret cadratin ni demi-cadratin.
 const clean = (t) => (typeof t === 'string' ? t.replace(/\s*[\u2014\u2013]\s*/g, ', ').trim() : '');
 
@@ -241,9 +244,6 @@ const onPhotoError = (e) => {
   } else {
     img.setAttribute('data-candidate', 'initiales');
     img.style.display = 'none';
-    const card = typeof img.closest === 'function' ? img.closest('article') : null;
-    const credit = card && card.querySelector('[data-role="credit"]');
-    if (credit) credit.style.display = 'none';
   }
 };
 
@@ -286,7 +286,12 @@ export const render = (state, dispatch) => {
   const send = (event) => { if (typeof dispatch === 'function') dispatch(event); };
   const candidates = photoCandidates(story, (state && state.photos) || {});
   const photo = candidates.find((u) => !failedPhotos.has(u));
-  const credit = clean(story.image_credit) || 'Wikimedia Commons';
+  // Sections du corps, dans l'ordre ; « À 25 ANS » n'existe que si at25 est renseigné.
+  const sections = [
+    { key: 'low', label: 'AU PLUS BAS', color: T.low, text: clean(story.lowest) },
+    { key: 'high', label: 'LE RETOURNEMENT', color: T.high, text: clean(story.comeback) },
+    { key: 'at25', label: 'À 25 ANS', color: T.at25 || AT25_COLOR, text: clean(story.at25) },
+  ].filter((sec) => sec.text);
   const sync = syncInfo(state || {});
   const paused = !!(state && state.paused);
 
@@ -342,14 +347,12 @@ export const render = (state, dispatch) => {
       </div>
 
       <div style={{ padding: `${L.pad * 0.9}px ${L.pad}px ${L.pad * 0.8}px` }}>
-        <div style={{ fontSize: L.eyebrow, fontWeight: 800, letterSpacing: 1.8, color: T.low, marginBottom: 6 }}>AU PLUS BAS</div>
-        <p style={{ fontSize: L.body, lineHeight: 1.5, margin: `0 0 ${L.gap}px`, color: T.text, ...wrapText }}>{clean(story.lowest)}</p>
-        <div style={{ fontSize: L.eyebrow, fontWeight: 800, letterSpacing: 1.8, color: T.high, marginBottom: 6 }}>LE RETOURNEMENT</div>
-        <p style={{ fontSize: L.body, lineHeight: 1.5, margin: 0, color: T.text, ...wrapText }}>{clean(story.comeback)}</p>
-        {story.lesson && <div style={{ marginTop: L.gap, paddingTop: L.gap * 0.75, borderTop: `1px solid ${T.border}`,
-          fontSize: L.lesson, lineHeight: 1.45, fontStyle: 'italic', color: T.lesson, ...wrapText }}>« {clean(story.lesson)} »</div>}
-        {photo && <div data-role="credit" style={{ marginTop: L.gap * 0.7, fontSize: 9.5, lineHeight: 1.35,
-          color: T.faint, ...wrapText }}>Photo : {credit}</div>}
+        {sections.map((sec, i) => (
+          <section key={sec.key} data-role={sec.key} style={{ marginBottom: i < sections.length - 1 ? L.gap : 0 }}>
+            <div style={{ fontSize: L.eyebrow, fontWeight: 800, letterSpacing: 1.8, color: sec.color, marginBottom: 6 }}>{sec.label}</div>
+            <p style={{ fontSize: L.body, lineHeight: 1.5, margin: 0, color: T.text, ...wrapText }}>{sec.text}</p>
+          </section>
+        ))}
       </div>
 
       <nav aria-label="Commandes du widget" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',

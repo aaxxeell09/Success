@@ -30,6 +30,7 @@ ACCESSIBILITY_URL="x-apple.systempreferences:com.apple.preference.security?Priva
 NONINTERACTIVE="${SUCCESS_NONINTERACTIVE:-0}"
 ASSUME_YES="${SUCCESS_ASSUME_YES:-0}"
 SKIP_OS_CHECK="${SUCCESS_SKIP_OS_CHECK:-0}"
+MACOS_ANCIEN=0
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 SOURCE="$ROOT/widget/$WIDGET_NAME"
@@ -147,7 +148,8 @@ verifier_macos() {
     if ! confirmer "Continuer quand même ?" n; then exit 3; fi
   elif [ "$majeur" -lt 12 ]; then
     warn "macOS $version détecté : la version actuelle d'Übersicht demande macOS 12 (Monterey) ou plus récent."
-    info "Une ancienne version d'Übersicht déjà installée peut fonctionner, mais son installation automatique risque d'échouer."
+    info "Une ancienne version d'Übersicht déjà installée peut fonctionner ; l'installation automatique d'Übersicht est désactivée sur ce Mac."
+    MACOS_ANCIEN=1
   else
     ok "macOS $version"
   fi
@@ -204,6 +206,12 @@ installer_ubersicht() {
   if ! interactif; then
     info "Mode non interactif : installation de l'application ignorée."
     info "Téléchargez Übersicht depuis $DOWNLOAD_PAGE"
+    return 1
+  fi
+  if [ "$MACOS_ANCIEN" = "1" ]; then
+    warn "La version actuelle d'Übersicht ne fonctionne pas sous ce macOS (12 minimum)."
+    info "Installez manuellement une ancienne version compatible depuis $DOWNLOAD_PAGE, puis relancez ce programme."
+    open "$DOWNLOAD_PAGE" >/dev/null 2>&1 || true
     return 1
   fi
   if command -v brew >/dev/null 2>&1; then

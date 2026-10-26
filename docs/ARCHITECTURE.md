@@ -97,7 +97,7 @@ Les clics nécessitent le raccourci d'interaction d'Übersicht (Préférences �
 
 ## Version 2 (simplification)
 
-- `stories.json` est une **liste blanche** de 12 cartes (valdas, elon, mandela, chesky, collison, pope, jose, thatcher, jensen, rdj, disney, ford ; Trump retiré en v3) ; les autres histoires sont archivées dans `archive/stories-retirees.json`.
+- `stories.json` est une **liste blanche** de 13 cartes (valdas, elon, mandela, chesky, collison, pope, jose, thatcher, jensen, rdj, disney, ford, sam ; Trump retiré en v3) ; les autres histoires sont archivées dans `archive/stories-retirees.json`.
 - Plus de tailles S/M/L : `CARD_WIDTH = 420`, événement `SIZE` ignoré, préférences v3 `{ currentId, paused }` (migration depuis v2/v1, anciennes clés supprimées).
 - Cache v2 : l'ancien cache v1 (20 personnes) n'est plus relu.
 - Carte : pas de titre ni de crédit photo ; sections « AU PLUS BAS », « LE RETOURNEMENT », « À 25 ANS » (`data-role` low, high, at25) ; accroche `data-role="headline"` sur la photo ; 3 boutons.
@@ -118,3 +118,7 @@ Les clics nécessitent le raccourci d'interaction d'Übersicht (Préférences �
 
 - Photo 170 px, zone de texte 274 px (marge verticale 11 px), nav 46 px ; carte toujours 350 × 490 sans défilement.
 - Bloc catégorie / nom / accroche posé à 8 px du bas de la photo (testé : entre 4 et 12 px du bord).
+
+## Ajout de Sam Walton (carte 13)
+
+Son portrait Wikimedia Commons est servi directement depuis `image_url` avec crédit et licence CC BY 2.0, sans fichier photo local. Cette option permet l'affichage des nouvelles cartes depuis GitHub sans réinstallation. Le widget utilise `photo` en priorité quand un portrait est présent dans son dossier.

@@ -8,8 +8,8 @@
 <style>
 /* Self-contained preview, faithful to the widget (same colours, sizes and
    behaviour as the CONFIG block of widget/mur-des-retournements.widget/mur-des-retournements.jsx).
-   Fixed size 350 x 490 px (CARD_WIDTH x CARD_HEIGHT): photo 150 px, text area
-   294 px, buttons 46 px. The width shrinks only on a narrow window. Nothing
+   Fixed size 350 x 490 px (CARD_WIDTH x CARD_HEIGHT): photo 170 px, text area
+   274 px, buttons 46 px. The width shrinks only on a narrow window. Nothing
    scrolls: the word limits keep every text whole inside the card. */
 :root {
   --bg: 16, 22, 36;
@@ -27,7 +27,7 @@
   --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --card-width: 350px; --card-height: 490px;
   --name: 21px; --category: 10.5px; --headline: 11.5px; --body: 12.5px; --eyebrow: 9.5px; --line: 1.42;
-  --photo: 150px; --content: 294px; --nav: 46px; --pad: 14px; --pad-y: 13px; --gap: 13px; --btn: 26px;
+  --photo: 170px; --content: 274px; --nav: 46px; --pad: 14px; --pad-y: 11px; --gap: 13px; --btn: 26px;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -44,7 +44,7 @@ body {
 #card {
   flex: none; width: min(var(--card-width), calc(100vw - 32px)); height: var(--card-height);
   display: flex; flex-direction: column; overflow: hidden;
-  /* Outline drawn inwards rather than a border: the three blocks keep exactly 150 + 294 + 46 px. */
+  /* Outline drawn inwards rather than a border: the three blocks keep exactly 170 + 274 + 46 px. */
   border-radius: 24px; outline: 1px solid var(--border); outline-offset: -1px;
   background: rgba(var(--bg), var(--bg-opacity));
   -webkit-backdrop-filter: blur(30px) saturate(160%); backdrop-filter: blur(30px) saturate(160%);
@@ -58,7 +58,7 @@ body {
 .initials { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding-bottom: calc(var(--photo) * .24); font-family: var(--display); font-size: calc(var(--photo) * .3); font-weight: 700; letter-spacing: 2px; color: rgba(255,255,255,.30); }
 .hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
 .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, rgba(var(--bg), .96) 0%, rgba(var(--bg), .55) 32%, rgba(var(--bg), 0) 62%); }
-.identity { position: absolute; left: var(--pad); right: var(--pad); bottom: 10px; }
+.identity { position: absolute; left: var(--pad); right: var(--pad); bottom: 8px; }
 .category { font-size: var(--category); font-weight: 600; line-height: 1.25; letter-spacing: .4px; color: var(--title); margin-bottom: 2px; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
 .name { font-family: var(--display); font-size: var(--name); font-weight: 760; line-height: 1.1; letter-spacing: -.3px; text-shadow: 0 2px 16px rgba(0,0,0,.55); }
 .headline { margin-top: 2px; font-size: var(--headline); font-weight: 600; line-height: 1.3; color: var(--text); opacity: .9; text-shadow: 0 1px 10px rgba(0,0,0,.6); }

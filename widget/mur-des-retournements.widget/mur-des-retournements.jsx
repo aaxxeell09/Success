@@ -359,8 +359,6 @@ export const render = (state, dispatch) => {
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
           background: `linear-gradient(0deg, rgba(${T.background}, 0.96) 0%, rgba(${T.background}, 0.55) 32%, rgba(${T.background}, 0) 62%)` }} />
         <div style={{ position: 'absolute', left: L.pad, right: L.pad, bottom: 8 }}>
-          {story.category && <div style={{ fontSize: L.category, fontWeight: 600, lineHeight: 1.25, letterSpacing: 0.4, color: T.title,
-            marginBottom: 2, textShadow: '0 1px 8px rgba(0, 0, 0, 0.5)', ...wrapText }}>{clean(story.category)}</div>}
           <div style={{ fontFamily: DISPLAY_FONT, fontSize: L.name, fontWeight: 760, lineHeight: 1.1,
             letterSpacing: -0.3, textShadow: '0 2px 16px rgba(0, 0, 0, 0.55)', ...wrapText }}>{clean(story.name)}</div>
           {clean(story.headline) && <div data-role="headline" style={{ fontSize: L.headline, fontWeight: 600, lineHeight: 1.3,

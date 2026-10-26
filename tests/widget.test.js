@@ -419,7 +419,9 @@ function assertV3Card(s, story) {
   assert.doesNotMatch(s.text, /au plus bas|le retournement|à 25 ans/i, 'anciens libellés français');
   if (story) {
     assert.ok(s.text.includes(story.name), `nom « ${story.name} » affiché`);
-    if (story.category) assert.ok(s.text.includes(story.category.split(' · ')[0]), 'catégorie affichée');
+    // La catégorie reste une métadonnée mais ne doit pas être affichée.
+    assert.equal(await p.locator('#widget [data-role="category"], #widget .category').count(), 0,
+      'aucune catégorie visible sur la carte');
     assert.ok(s.text.includes(story.lowest.slice(0, 30)), 'récit « au plus bas » affiché');
     assert.ok(s.text.includes(story.comeback.slice(0, 30)), 'récit du retournement affiché');
     for (const k of ['image_credit', 'image_license']) {

@@ -6,7 +6,7 @@ Toutes les photos sont de vraies photographies issues de Wikimedia Commons (aucu
 
 Les crédits ne sont plus affichés sur la carte du widget : ils restent consultables dans ce fichier et dans les champs `image_credit`, `image_license` et `image_source` de `stories.json`, ce qui garantit, conformément aux licences CC BY et CC BY-SA, l'accès à l'attribution, à la licence et au lien vers la source.
 
-### Photos affichées (12)
+### Photos affichées (13)
 
 | Personne | Fichier | Auteur | Licence | Source |
 |---|---|---|---|---|
@@ -22,6 +22,7 @@ Les crédits ne sont plus affichés sur la carte du widget : ils restent consult
 | Robert Downey Jr. | `photos/rdj.jpg` | PhilipRomano | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) | [RobertDowneyJr-byPhilipRomano7 (cropped).jpg](https://commons.wikimedia.org/wiki/File:RobertDowneyJr-byPhilipRomano7_(cropped).jpg) |
 | Walt Disney | `photos/disney.jpg` | Boy Scouts of America | [Domaine public](https://commons.wikimedia.org/wiki/Template:PD-US-no_notice) | [Walt Disney 1946.JPG](https://commons.wikimedia.org/wiki/File:Walt_Disney_1946.JPG) |
 | Henry Ford | `photos/ford.jpg` | Fred Hartsook (Library of Congress, cph.3c11278) | [Domaine public](https://commons.wikimedia.org/wiki/File:Henry_ford_1919_(cropped).jpg) | [Henry ford 1919 (cropped).jpg](https://commons.wikimedia.org/wiki/File:Henry_ford_1919_(cropped).jpg) |
+| Sam Walton | [Portrait distant](https://upload.wikimedia.org/wikipedia/commons/d/d0/Sam-Walton.jpg) | Janice Waltzer | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) | [Sam-Walton.jpg](https://commons.wikimedia.org/wiki/File:Sam-Walton.jpg) |
 
 ### Photos archivées (non affichées)
 

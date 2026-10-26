@@ -150,7 +150,7 @@ const CARDS_DIR = process.env.SUCCESS_CARDS_DIR
 const FRENCH = /(?<![\p{L}\p{N}])(?:le|la|les|de|des|du|au|aux|une|est|et|il|elle|sur|pour|avec|dans|à|où|qui|personne|précédente|suivante|reprendre|hors connexion|en pause|ans)(?![\p{L}\p{N}])|synchronis/iu;
 
 // Contrat v2/v5 : liste blanche stricte, dans cet ordre.
-const WHITELIST = ['valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj', 'disney', 'ford'];
+const WHITELIST = ['valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj', 'disney', 'ford', 'sam'];
 const N = WHITELIST.length;
 // Les 11 personnes retirées (ancienne liste à 20) : ne doivent plus jamais revenir.
 const RETIRED = ['kariko', 'dej', 'dyson', 'melanie', 'jobs', 'tina', 'knight', 'jan', 'niel', 'trump'];
@@ -507,8 +507,12 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
       assert.deepEqual(s.counter, [i + 1, N]);
       assert.ok(s.text.includes(story.name), `nom exact « ${story.name} »`);
       assertV3Card(s, story);
-      assert.ok(s.loadedImage && s.imageWidth > 1, `photo chargée pour ${story.id} (naturalWidth ${s.imageWidth})`);
-      assert.ok(s.imageSrc.startsWith(`${ORIGIN}/mur-des-retournements.widget/photos/`), `photo servie localement : ${s.imageSrc}`);
+      assert.ok(s.loadedImage && s.imageWidth > 0, `photo chargée pour ${story.id} (naturalWidth ${s.imageWidth})`);
+      if (story.photo) {
+        assert.ok(s.imageSrc.startsWith(`${ORIGIN}/mur-des-retournements.widget/photos/`), `photo servie localement : ${s.imageSrc}`);
+      } else {
+        assert.equal(s.imageSrc, story.image_url, 'photo distante de Wikimedia Commons');
+      }
       await click(page, 'next');
     }
     const back = await snapshot(page);
@@ -815,7 +819,11 @@ describe('aperçu navigateur (preview/index.html, Chromium)', { skip }, () => {
       assert.deepEqual(s.counter, [i + 1, N]);
       const story = local[i];
       assertV3Card(s, story);
-      assert.ok(s.imageSrc.startsWith(`${ORIGIN}/repo/widget/mur-des-retournements.widget/photos/`), `photo locale : ${s.imageSrc}`);
+      if (story.photo) {
+        assert.ok(s.imageSrc.startsWith(`${ORIGIN}/repo/widget/mur-des-retournements.widget/photos/`), `photo locale : ${s.imageSrc}`);
+      } else {
+        assert.equal(s.imageSrc, story.image_url, 'photo distante de Wikimedia Commons dans l’aperçu');
+      }
       assert.equal(story.id, WHITELIST[i], 'aperçu : ordre de ../stories.json');
       const g = await layout(p, '#card');
       assertV5Layout(g, `aperçu ${story.id}`);

@@ -25,11 +25,11 @@ ARCHIVE = ROOT / 'archive' / 'stories-retirees.json'
 
 # Liste blanche stricte : exactement ces ids, dans cet ordre.
 WHITELIST = ('valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj',
-             'disney', 'ford')
+             'disney', 'ford', 'sam')
 
 REQUIRED = ('id', 'name', 'lowest', 'comeback')
 # Toujours exigés dans les données (même s'ils ne sont plus affichés sur la carte).
-REQUIRED_MEDIA = ('photo', 'image_credit', 'image_license')
+REQUIRED_MEDIA = ('image_credit', 'image_license')
 OPTIONAL_STR = ('category', 'lesson', 'wikipedia', 'photo', 'image_url',
                 'image_credit', 'image_license', 'image_source', 'at25', 'headline')
 HTTPS_FIELDS = ('image_url', 'image_source')
@@ -134,6 +134,9 @@ def check_story(index, item, ids):
         if not isinstance(value, str) or not value.strip():
             err(f'{label} : {key} requis (photo authentique avec crédit et licence)')
     photo = item.get('photo')
+    # Une photo Wikimedia distante est autorisée pour une histoire ajoutée en direct.
+    if not (isinstance(photo, str) and photo.strip()) and not is_https(item.get('image_url')):
+        err(f'{label} : photo locale ou image_url https requis')
     if isinstance(photo, str) and photo.strip():
         rel = Path(photo)
         if rel.is_absolute() or '..' in rel.parts or photo.startswith(('http:', 'https:')):

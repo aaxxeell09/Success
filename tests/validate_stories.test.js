@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SCRIPT = path.join(HERE, 'validate_stories.py');
 const DATA_URL = 'https://raw.githubusercontent.com/aaxxeell09/Success/main/stories.json';
-const WHITELIST = ['valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj', 'disney', 'ford'];
+const WHITELIST = ['valdas', 'elon', 'mandela', 'chesky', 'collison', 'pope', 'jose', 'thatcher', 'jensen', 'rdj', 'disney', 'ford', 'sam'];
 const N = WHITELIST.length;
 // Contrat v5 : nombre maximal de mots (séparés par des espaces) par champ affiché.
 const MAX_WORDS = { headline: 7, lowest: 24, comeback: 24, at25: 18 };
@@ -79,6 +79,11 @@ describe('validate_stories.py', { skip: python ? false : 'python3 indisponible' 
   test(`données conformes acceptées (${N} histoires de la liste blanche)`, () => {
     const out = expectOk(base(), { sync: `export const DATA_URL = '${DATA_URL}';\n` });
     assert.match(out, new RegExp(`OK: ${N} histoires`));
+  });
+  test('photo Wikimedia distante avec licence accepte une entrée sans fichier local', () => {
+    const records = withM({ image_url: 'https://upload.wikimedia.org/wikipedia/commons/d/d0/Sam-Walton.jpg' })
+      .map((s) => { if (s.id !== 'mandela') return s; const { photo, ...remote } = s; return remote; });
+    expectOk(records);
   });
   test('optionnels absents ou présents acceptés (wikipedia, category, sources, at25, headline)', () => {
     expectOk(base().map(({ wikipedia, category, sources, image_source, ...rest }) => (rest.id === 'thatcher' ? { ...rest, category } : rest)));

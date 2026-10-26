@@ -293,5 +293,28 @@
       "https://www.thehenryford.org/collections/explore/artifact/347631",
       "https://en.wikipedia.org/wiki/Henry_Ford"
     ]
+  },
+  {
+    "id": "sam",
+    "name": "Sam Walton",
+    "headline": "Lost his store. Built Walmart.",
+    "category": "Business · United States",
+    "lowest": "In 1950, after building a thriving Newport store, he loses its lease when the landlord gives the location to his son.",
+    "comeback": "He starts again in tiny Bentonville. Twelve years later, he opens the first Walmart in Rogers, Arkansas, launching a global retail company.",
+    "at25": "In 1943, he serves in the U.S. Army, two years before opening his first store.",
+    "wikipedia": "Sam Walton",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Sam-Walton.jpg",
+    "image_credit": "Janice Waltzer, CC BY 2.0",
+    "image_license": "CC BY 2.0",
+    "image_source": "https://commons.wikimedia.org/wiki/File:Sam-Walton.jpg",
+    "sources": [
+      "https://corporate.walmart.com/about/sam-walton",
+      "https://encyclopediaofarkansas.net/entries/samuel-moore-walton-1792/",
+      "https://me.walmart.com/content/walmart-world/en_us/articles/2022/07/a-second-chance-for-walmart-in-newport.html"
+    ],
+    "at25_sources": [
+      "https://corporate.walmart.com/about/sam-walton",
+      "https://www.okhistory.org/publications/enc/entry?entry=WA015"
+    ]
   }
 ]

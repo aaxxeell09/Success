@@ -59,7 +59,6 @@ body {
 .hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
 .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, rgba(var(--bg), .96) 0%, rgba(var(--bg), .55) 32%, rgba(var(--bg), 0) 62%); }
 .identity { position: absolute; left: var(--pad); right: var(--pad); bottom: 8px; }
-.category { font-size: var(--category); font-weight: 600; line-height: 1.25; letter-spacing: .4px; color: var(--title); margin-bottom: 2px; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
 .name { font-family: var(--display); font-size: var(--name); font-weight: 760; line-height: 1.1; letter-spacing: -.3px; text-shadow: 0 2px 16px rgba(0,0,0,.55); }
 .headline { margin-top: 2px; font-size: var(--headline); font-weight: 600; line-height: 1.3; color: var(--text); opacity: .9; text-shadow: 0 1px 10px rgba(0,0,0,.6); }
 /* Fixed height, no scrolling: overflow hidden is only a safeguard. */
@@ -98,7 +97,6 @@ button#pause svg { width: calc(var(--btn) * .46); height: calc(var(--btn) * .46)
     <img id="photo" alt="" hidden />
     <div class="shade"></div>
     <div class="identity">
-      <div class="category wrap" id="category"></div>
       <div class="name wrap" id="name"></div>
       <div class="headline wrap" id="headline" data-role="headline" hidden></div>
     </div>
@@ -198,7 +196,6 @@ button#pause svg { width: calc(var(--btn) * .46); height: calc(var(--btn) * .46)
     $('offline').hidden = !state.syncError;
 
     $('name').textContent = clean(s.name);
-    $('category').textContent = clean(s.category); $('category').hidden = !s.category;
     $('lowest').textContent = clean(s.lowest); $('comeback').textContent = clean(s.comeback);
     const headline = clean(s.headline);
     $('headline').textContent = headline; $('headline').hidden = !headline;

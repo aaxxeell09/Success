@@ -120,7 +120,7 @@ describe('validate_stories.py', { skip: python ? false : 'python3 indisponible' 
   });
 
   describe('photo, crédit et licence toujours exigés', () => {
-    test('photo absente des données refusée', () => expectFail(withoutField('photo'), /photo requis/));
+    test('photo locale et image_url absentes refusées', () => expectFail(withoutField('photo'), /photo locale ou image_url https requis/));
     test('photo introuvable', () => expectFail(base(), /photo introuvable/, { photo: false }));
     test('photo hors du dossier du widget', () => expectFail(withM({ photo: '../secret.jpg' }), /relatif/));
     test('crédit manquant', () => expectFail(withoutField('image_credit'), /image_credit/));

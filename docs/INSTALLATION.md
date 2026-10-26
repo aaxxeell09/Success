@@ -128,3 +128,9 @@ Double-cliquez sur **`desinstaller.command`**. Après confirmation, il supprime 
 | `SUCCESS_REMOVE_LOGIN_ITEM=1` | désinstaller | Retire aussi Übersicht des éléments de connexion (équivaut à `--retirer-ouverture`). |
 
 Tests : `bash tests/install.test.sh` (et `BASH_BIN=/chemin/bash-3.2 bash tests/install.test.sh` pour le bash de macOS).
+
+## Mise à jour automatique du code (optionnelle)
+
+Après la première installation, lancer `bash activer-maj-auto.command` depuis le répertoire du dépôt. Le LaunchAgent utilisateur `com.success.widget.autoupdate` vérifie `main` toutes les heures et ne réinstalle que si un nouveau commit est présent. Il préserve la ligne locale `CONFIG.position` (ce qui maintient par exemple le placement sous le Calendrier). Les histoires restent synchronisées toutes les cinq minutes sans ce mécanisme.
+
+Le processus automatique exécute du code issu de votre dépôt GitHub : ne donner un accès en écriture qu'aux personnes de confiance. Pour arrêter : `bash desactiver-maj-auto.command` (le widget reste installé). Journal : `~/Library/Application Support/Success/auto-update.log`. Cette option n'a pas encore été vérifiée sur un vrai Mac.

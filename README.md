@@ -150,3 +150,9 @@ Chaque photographie est une vraie photo, avec auteur, licence et source indiqué
 - Le délai d'apparition d'une modification dépend du cache de GitHub (environ 5 minutes) en plus du cycle du widget.
 - Les préférences sont stockées dans la vue web d'Übersicht : une réinitialisation de ses données les efface.
 - La synchronisation est une lecture publique en HTTPS : aucun identifiant GitHub n'est demandé ni stocké.
+
+### Mises à jour automatiques du code (facultatif)
+
+Le widget synchronise déjà les histoires depuis GitHub toutes les cinq minutes. Pour éviter aussi les réinstallations lors des **changements de design**, exécutez une seule fois `activer-maj-auto.command` sur le Mac. Cela installe un LaunchAgent utilisateur qui vérifie `main` **toutes les heures** et ne réinstalle le widget qu'après un changement GitHub. Le script garde votre réglage local de position.
+
+La mise à jour automatique est facultative : elle télécharge et exécute le code publié sur votre dépôt GitHub. Elle doit être activée volontairement, uniquement si vous faites confiance aux contributeurs du dépôt. Désactivation : `desactiver-maj-auto.command`. Non testé sur un vrai Mac.

@@ -376,7 +376,7 @@ function assertV5Layout(g, where, width = CARD_W) {
   for (const b of g.buttons) {
     assert.ok(b.top >= g.nav.top - 0.5 && b.bottom <= g.nav.bottom + 0.5, `${where} : bouton « ${b.label} » dans la nav`);
   }
-  // Nom, catégorie et accroche superposés au bloc photo.
+  // Nom et accroche superposés au bloc photo.
   assert.ok(g.identity.length >= 1, `${where} : nom affiché sur la photo`);
   for (const t of g.identity) {
     assert.ok(t.inPhoto, `${where} : « ${t.text} » doit être dans le bloc photo`);
@@ -525,12 +525,12 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
       assertV5Layout(g, id);
       assertNoScroll(g, id);
       const story = byId(id);
-      for (const t of [story.name, story.category, story.headline].filter(Boolean)) {
+      for (const t of [story.name, story.headline].filter(Boolean)) {
         assert.ok(g.identity.some((x) => x.inPhoto && x.text === t), `${id} : « ${t} » affiché dans le bloc photo`);
       }
       // Bloc d'identité (catégorie, nom, accroche) posé bas sur la photo, sans toucher le bord.
       const photoBottom = g.photo.top + g.photo.height;
-      const idBottom = Math.max(...g.identity.filter((x) => x.inPhoto && [story.name, story.category, story.headline].includes(x.text)).map((x) => x.top + x.height));
+      const idBottom = Math.max(...g.identity.filter((x) => x.inPhoto && [story.name, story.headline].includes(x.text)).map((x) => x.top + x.height));
       assert.ok(photoBottom - idBottom >= 4 && photoBottom - idBottom <= 12,
         `${id} : bloc d'identité bas sur la photo (${(photoBottom - idBottom).toFixed(1)} px du bord)`);
       const expected = ['low', 'high', ...(story.at25 ? ['at25'] : [])];
@@ -562,7 +562,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     assert.equal((await snapshot(page)).currentId, WHITELIST[0]);
   });
 
-  test('catégorie de Thatcher : « Politics · United Kingdom » (données et rendu)', async () => {
+  test('catégorie de Thatcher conservée dans les données, masquée sur la carte', async () => {
     assert.equal(byId('thatcher').category, 'Politics · United Kingdom');
     const steps = WHITELIST.length - WHITELIST.indexOf('thatcher');
     for (let i = 0; i < steps; i += 1) await click(page, 'prev');
@@ -570,7 +570,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
     assert.equal(s.currentId, 'thatcher');
     const shown = await page.evaluate(() => [...document.querySelectorAll('#widget article div')]
       .some((el) => el.children.length === 0 && el.textContent.trim() === 'Politics · United Kingdom'));
-    assert.ok(shown, 'catégorie affichée telle quelle');
+    assert.equal(shown, false, 'la catégorie est une métadonnée et ne doit pas être affichée');
     for (let i = 0; i < steps; i += 1) await click(page, 'next');
     assert.equal((await snapshot(page)).currentId, WHITELIST[0]);
   });
@@ -820,7 +820,7 @@ describe('aperçu navigateur (preview/index.html, Chromium)', { skip }, () => {
       const g = await layout(p, '#card');
       assertV5Layout(g, `aperçu ${story.id}`);
       assertNoScroll(g, `aperçu ${story.id}`);
-      for (const t of [story.name, story.category, story.headline].filter(Boolean)) {
+      for (const t of [story.name, story.headline].filter(Boolean)) {
         assert.ok(g.identity.some((x) => x.inPhoto && x.text === t), `aperçu ${story.id} : « ${t} » dans le bloc photo`);
       }
       await capture(p, story.id, '#card', 'preview-');

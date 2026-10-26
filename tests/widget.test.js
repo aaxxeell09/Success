@@ -244,6 +244,7 @@ const snapshot = (page, rootSel = '#widget') => page.evaluate((sel) => {
     imageWidth: imgs.length ? imgs[0].naturalWidth : 0,
     headline: hlVisible ? hl.textContent.trim() : null,
     headlineOnPhoto: hlVisible && !!photoBox && photoBox.contains(hl),
+    categoryVisible: [...root.querySelectorAll('[data-role="category"], .category')].some((el) => !el.hidden && getComputedStyle(el).display !== 'none' && el.textContent.trim()),
     at25Visible: !!at25 && at25.offsetParent !== null && getComputedStyle(at25).display !== 'none',
     buttons: buttons.map((b) => ({ text: b.textContent.trim(), label: `${b.getAttribute('aria-label') || ''} ${b.getAttribute('title') || ''}`.trim() })),
     errors: h ? h.errors : [],
@@ -420,8 +421,7 @@ function assertV3Card(s, story) {
   if (story) {
     assert.ok(s.text.includes(story.name), `nom « ${story.name} » affiché`);
     // La catégorie reste une métadonnée mais ne doit pas être affichée.
-    assert.equal(await p.locator('#widget [data-role="category"], #widget .category').count(), 0,
-      'aucune catégorie visible sur la carte');
+    assert.equal(s.categoryVisible, false, 'aucune catégorie visible sur la carte');
     assert.ok(s.text.includes(story.lowest.slice(0, 30)), 'récit « au plus bas » affiché');
     assert.ok(s.text.includes(story.comeback.slice(0, 30)), 'récit du retournement affiché');
     for (const k of ['image_credit', 'image_license']) {

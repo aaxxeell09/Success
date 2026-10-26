@@ -9,9 +9,9 @@
 // (CONTENT_HEIGHT) et barre de boutons (NAV_HEIGHT) se partagent CARD_HEIGHT.
 export const CARD_WIDTH = 350;
 export const CARD_HEIGHT = 490;
-export const PHOTO_HEIGHT = 150;
+export const PHOTO_HEIGHT = 170;
 export const NAV_HEIGHT = 46;
-export const CONTENT_HEIGHT = CARD_HEIGHT - PHOTO_HEIGHT - NAV_HEIGHT; // 294
+export const CONTENT_HEIGHT = CARD_HEIGHT - PHOTO_HEIGHT - NAV_HEIGHT; // 274
 export const ROTATION_MS = 20 * 60 * 1000;
 export const PREFS_KEY = 'mur-des-retournements-settings-v3';
 

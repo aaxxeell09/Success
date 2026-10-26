@@ -61,7 +61,7 @@ const CONFIG = {
 
   // Typographie et espacements, en pixels : tailles de police (name, category,
   // headline, body, eyebrow), interligne du texte (lineHeight), hauteurs fixes
-  // de la photo, de la zone de texte et de la barre de boutons (150 + 294 + 46
+  // de la photo, de la zone de texte et de la barre de boutons (170 + 274 + 46
   // = 490), marges latérales (pad) et verticales (padY) de la zone de texte,
   // écart entre sections (gap) et taille des boutons. Valeurs mesurées pour
   // que les textes les plus longs autorisés (24 + 24 + 18 mots de 8 à 10
@@ -69,7 +69,7 @@ const CONFIG = {
   // police ou une marge peut couper la fin du texte.
   layout: {
     name: 21, category: 10.5, headline: 11.5, body: 12.5, eyebrow: 9.5, lineHeight: 1.42,
-    photo: PHOTO_HEIGHT, content: CONTENT_HEIGHT, nav: NAV_HEIGHT, pad: 14, padY: 13, gap: 13, button: 26,
+    photo: PHOTO_HEIGHT, content: CONTENT_HEIGHT, nav: NAV_HEIGHT, pad: 14, padY: 11, gap: 13, button: 26,
   },
 };
 
@@ -328,7 +328,7 @@ export const render = (state, dispatch) => {
       width, height: CONFIG.height, boxSizing: 'border-box', overflow: 'hidden',
       display: 'flex', flexDirection: 'column',
       // Contour en outline (dessiné vers l'intérieur) plutôt qu'en border : les
-      // trois blocs gardent exactement 150 + 294 + 46 px.
+      // trois blocs gardent exactement 170 + 274 + 46 px.
       borderRadius: CONFIG.radius, outline: `1px solid ${T.border}`, outlineOffset: -1,
       background: `rgba(${T.background}, ${CONFIG.backgroundOpacity})`,
       backdropFilter: `blur(${CONFIG.blur}px) saturate(160%)`, WebkitBackdropFilter: `blur(${CONFIG.blur}px) saturate(160%)`,
@@ -358,7 +358,7 @@ export const render = (state, dispatch) => {
             objectPosition: 'center 25%' }} />}
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none',
           background: `linear-gradient(0deg, rgba(${T.background}, 0.96) 0%, rgba(${T.background}, 0.55) 32%, rgba(${T.background}, 0) 62%)` }} />
-        <div style={{ position: 'absolute', left: L.pad, right: L.pad, bottom: 10 }}>
+        <div style={{ position: 'absolute', left: L.pad, right: L.pad, bottom: 8 }}>
           {story.category && <div style={{ fontSize: L.category, fontWeight: 600, lineHeight: 1.25, letterSpacing: 0.4, color: T.title,
             marginBottom: 2, textShadow: '0 1px 8px rgba(0, 0, 0, 0.5)', ...wrapText }}>{clean(story.category)}</div>}
           <div style={{ fontFamily: DISPLAY_FONT, fontSize: L.name, fontWeight: 760, lineHeight: 1.1,

@@ -134,11 +134,11 @@ const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp' };
 
 // Contrat v5 : carte en anglais, taille fixe CARD_WIDTH x CARD_HEIGHT découpée en
-// bloc photo 150 px + zone de texte 294 px + nav 46 px ; AUCUN défilement.
+// bloc photo 170 px + zone de texte 274 px + nav 46 px ; AUCUN défilement.
 const CARD_W = 350;
 const CARD_H = 490;
-const PHOTO_H = 150;
-const CONTENT_H = 294;
+const PHOTO_H = 170;
+const CONTENT_H = 274;
 const NAV_H = 46;
 // Captures PNG de chaque carte (best effort : jamais bloquant). En CI : dossier temporaire du système.
 const CARDS_DIR = process.env.SUCCESS_CARDS_DIR
@@ -346,7 +346,7 @@ async function assertNoFrench(page, rootSel, where) {
   }
 }
 
-// Contrôle de la géométrie v5 : taille fixe, structure, 150 / 294 / 46, nav en bas.
+// Contrôle de la géométrie v5 : taille fixe, structure, 170 / 274 / 46, nav en bas.
 // Ne dit rien du texte : assertNoScroll vérifie qu'il tient.
 function assertV5Layout(g, where, width = CARD_W) {
   assert.ok(Math.abs(g.card.width - width) <= 0.5, `${where} : largeur ${g.card.width} (attendu ${width} ± 0,5)`);
@@ -526,6 +526,11 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
       for (const t of [story.name, story.category, story.headline].filter(Boolean)) {
         assert.ok(g.identity.some((x) => x.inPhoto && x.text === t), `${id} : « ${t} » affiché dans le bloc photo`);
       }
+      // Bloc d'identité (catégorie, nom, accroche) posé bas sur la photo, sans toucher le bord.
+      const photoBottom = g.photo.top + g.photo.height;
+      const idBottom = Math.max(...g.identity.filter((x) => x.inPhoto && [story.name, story.category, story.headline].includes(x.text)).map((x) => x.top + x.height));
+      assert.ok(photoBottom - idBottom >= 4 && photoBottom - idBottom <= 12,
+        `${id} : bloc d'identité bas sur la photo (${(photoBottom - idBottom).toFixed(1)} px du bord)`);
       const expected = ['low', 'high', ...(story.at25 ? ['at25'] : [])];
       assert.deepEqual(g.content.sections, expected, `${id} : sections visibles`);
       await capture(page, id);
@@ -692,7 +697,7 @@ describe('rendu réel du widget (Chromium)', { skip }, () => {
   });
 
   // Preuve que les tests sans défilement échoueraient : un « lowest » de 80 mots
-  // (bien au-delà de la limite de 24) déborde de la zone de 294 px.
+  // (bien au-delà de la limite de 24) déborde de la zone de 274 px.
   test('débordement détecté : un lowest distant de 80 mots dépasse la zone (scrollHeight > clientHeight)', async () => {
     const lowest = Array.from({ length: 80 }, (_, i) => (i % 8 === 7 ? 'setbacks.' : 'through')).join(' ');
     assert.equal(lowest.split(' ').length, 80);

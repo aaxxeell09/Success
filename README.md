@@ -10,7 +10,7 @@ Ouvrez [`preview/index.html`](./preview/index.html) dans un navigateur pour voir
 
 ## Fonctionnalités
 
-- **Douze personnalités choisies**, une à la fois : grande photo, nom, catégorie, accroche, puis « LOWEST POINT », « TURNAROUND », « AT 25 ». **Interface et textes en anglais.** Compteur et indicateur de synchronisation discrets sur la photo. Aucun titre, aucun crédit affiché sur la carte (attributions dans [CREDITS.md](./CREDITS.md)).
+- **Douze personnalités choisies**, une à la fois : grande photo, nom, accroche, puis « LOWEST POINT », « TURNAROUND », « AT 25 ». **Interface et textes en anglais.** Compteur et indicateur de synchronisation discrets sur la photo. Aucun titre, aucun crédit affiché sur la carte (attributions dans [CREDITS.md](./CREDITS.md)).
 - **Liste blanche** : seules les personnes présentes dans `stories.json` s'affichent ; les 11 histoires retirées sont archivées dans `archive/stories-retirees.json`.
 - **‹ / ›** : personne précédente ou suivante (navigation circulaire).
 - **Taille fixe et compacte de 350 × 490 px**, pensée pour se placer sous les widgets macOS : la hauteur ne change jamais et **tout le texte est visible sans défilement** (photo et boutons fixes). Limites de mots : accroche 7, LOWEST POINT 24, TURNAROUND 24, AT 25 18. La largeur est réduite si l'écran est plus étroit.
